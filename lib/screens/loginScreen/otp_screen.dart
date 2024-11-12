@@ -7,7 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:project_smart_parking_app/models/user_model.dart';
 import 'package:project_smart_parking_app/utils/login_with_otp.dart';
-import '../home_screen.dart';
+// import '../home_screen.dart';
 
 class OtpScreen extends StatelessWidget {
   final String phoneNumber;
@@ -199,7 +199,7 @@ class OTPInputRowState extends State<OTPInputRow> {
       EasyLoading.show(status: 'Verifying...');
       await Future.delayed(const Duration(seconds: 3));
       EasyLoading.dismiss();
-      Get.to(HomeScreen());
+      // Get.to(HomeScreen());
     } else {
       _showErrorDialog();
       print('Login failed. Please check your credentials.');

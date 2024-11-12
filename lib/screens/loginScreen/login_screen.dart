@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
       EasyLoading.show(status: 'Verifying...');
       await Future.delayed(const Duration(seconds: 3));
       EasyLoading.dismiss();
-      Get.to(HomeScreen());
+      // Get.to(HomeScreen());
     } else {
       // Handle login error
       setState(() {
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       EasyLoading.show(status: 'Verifying...');
       await Future.delayed(const Duration(seconds: 3));
       EasyLoading.dismiss();
-      Get.to(HomeScreen());
+      // Get.to(HomeScreen());
     } else {
       // Handle login error
       setState(() {
