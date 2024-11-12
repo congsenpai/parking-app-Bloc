@@ -94,7 +94,8 @@ class LoginWithOTP {
   }
 
   // Xác thực OTP và lưu UserModel vào UserProvider
-  Future<UserModel?> verifyOtp(String otp) async {
+  Future<UserModel?> signInWithOTP(String phoneNumber,String otp) async {
+    sendOtp(phoneNumber);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: _verificationId,
@@ -114,6 +115,7 @@ class LoginWithOTP {
       return null;
     }
   }
+
 
   // Đăng xuất
   Future<void> signOut() async {

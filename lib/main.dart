@@ -1,3 +1,4 @@
+import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,23 +8,11 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'AIzaSyCNU5TcOg4mFmXTIn6bGlsO6PLzLYazmVg',
-      appId: '1:758916961611:android:23781ef02fcdf25e94c4ce',
-      messagingSenderId: "758916961611",
-      projectId: 'smartparkingproject-5cd2f',
-      storageBucket: 'smartparkingproject-5cd2f.appspot.com',
-    ),
-  );
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Initialize EasyLoading here
   configLoading();
-
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(),

@@ -32,6 +32,7 @@ class LoginWithEmail {
 
   // Sign in with email and password
   Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,

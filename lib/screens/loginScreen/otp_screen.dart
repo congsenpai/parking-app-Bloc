@@ -191,21 +191,21 @@ class OTPInputRowState extends State<OTPInputRow> {
     );
   }
 
-  void _login() async {
-    String otp = getOtp();
-    print(otp);
-    UserModel? user = await _loginWithOTP.verifyOtp(otp);
-    if (user != null) {
-      print('Login successful: ${user.username}');
-      EasyLoading.show(status: 'Verifying...');
-      await Future.delayed(const Duration(seconds: 3));
-      EasyLoading.dismiss();
-      // Get.to(HomeScreen());
-    } else {
-      _showErrorDialog();
-      print('Login failed. Please check your credentials.');
-    }
-  }
+  // void _login() async {
+  //   String otp = getOtp();
+  //   print(otp);
+  //   UserModel? user = await _loginWithOTP.verifyOtp(otp);
+  //   if (user != null) {
+  //     print('Login successful: ${user.username}');
+  //     EasyLoading.show(status: 'Verifying...');
+  //     await Future.delayed(const Duration(seconds: 3));
+  //     EasyLoading.dismiss();
+  //     // Get.to(HomeScreen());
+  //   } else {
+  //     _showErrorDialog();
+  //     print('Login failed. Please check your credentials.');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +274,9 @@ class OTPInputRowState extends State<OTPInputRow> {
         SizedBox(height: Get.height / 20),
         if (getOtp().length == 6)
           ElevatedButton(
-            onPressed: _login,
+            onPressed:(){
+
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4040FD),
               padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
