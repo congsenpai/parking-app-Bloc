@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:project_smart_parking_app/models/user_model.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
-import 'package:project_smart_parking_app/utils/login_with_email.dart';
-import 'package:project_smart_parking_app/utils/login_with_google.dart';
+import 'package:project_smart_parking_app/services/login_with_email.dart';
+
+
+import '../../services/login_with_google.dart';
+import '../home_screen.dart';
+import 'login_with_phone_number.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

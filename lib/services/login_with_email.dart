@@ -1,16 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 
-class LoginWithGoogle {
+class LoginWithEmail {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final UserProvider _userProvider = UserProvider();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Tạo tài liệu người dùng trong Firestore nếu chưa có
-  Future<void> _createUserDocument(User? user) async {
+  // Create document for the user
+  Future<void> createUserDocument(User? user) async {
     if (user == null) return;
 
     final userDoc = _firestore.collection('users').doc(user.uid);
@@ -19,7 +17,7 @@ class LoginWithGoogle {
         'username': user.email?.split('@')[0] ?? '',
         'email': user.email,
         'phone': '',
-        'userImg': user.photoURL ?? '',
+        'userImg': '',
         'userDeviceToken': '',
         'country': '',
         'userAddress': '',
@@ -32,7 +30,25 @@ class LoginWithGoogle {
     }
   }
 
-  // Lấy thông tin người dùng từ Firestore và tạo UserModel
+  // Sign in with email and password
+  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      UserModel? model=await _getUserModel(userCredential.user);
+      await _userProvider.login(model!);
+      // Retrieve user data from Firestore
+      return model;
+
+    } catch (e) {
+      print('Error signing in: $e');
+      return null; // Return null if an error occurs
+    }
+  }
+
+  // Helper method to get UserModel from Firestore
   Future<UserModel?> _getUserModel(User? user) async {
     if (user == null) return null;
 
@@ -41,7 +57,7 @@ class LoginWithGoogle {
     if (userDoc.exists) {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
       return UserModel(
-        uId: user.uid,
+        userID: user.uid,
         username: userData['username'] ?? '',
         email: userData['email'] ?? '',
         phone: userData['phone'] ?? '',
@@ -57,48 +73,20 @@ class LoginWithGoogle {
       );
     } else {
       print('User document does not exist, creating a new one.');
-      await _createUserDocument(user);
+      await createUserDocument(user);
       return await _getUserModel(user); // Re-fetch after creating the user document
     }
   }
 
-  // Đăng nhập với Google và lưu UserModel vào UserProvider
-  Future<UserModel?> signInWithGoogle() async {
-    try {
-      // Google Authentication
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-
-      // Firebase credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Firebase login
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-
-      // Tạo hoặc lấy UserModel từ Firestore
-      UserModel? model = await _getUserModel(userCredential.user);
-      if (model != null) {
-        await _userProvider.login(model); // Lưu model vào UserProvider
-      }
-      return model; // Trả về UserModel đã đăng nhập
-    } catch (e) {
-      print('Error signing in with Google: $e');
-      return null;
-    }
-  }
-
-  // Đăng xuất
+  // Sign out
   Future<void> signOut() async {
     await _auth.signOut();
-    await _googleSignIn.signOut();
-    await _userProvider.logout(); // Đăng xuất khỏi UserProvider
+    await _userProvider.logout();
   }
 
-  // Lấy người dùng hiện tại
+  // Get the current user
   User? getCurrentUser() {
     return _auth.currentUser;
   }
+
 }

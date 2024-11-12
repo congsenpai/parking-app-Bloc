@@ -5,11 +5,11 @@ import 'package:flutter_auth_provider/flutter_auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
-import '../utils/login_with_email.dart'; // Import this for JSON encoding/decoding
+import '../services/login_with_email.dart'; // Import this for JSON encoding/decoding
 
 // UserModel class definition
 class UserModel {
-  final String uId;
+  final String userID;
   final String username;
   final String email;
   final String phone;
@@ -25,7 +25,7 @@ class UserModel {
 
   UserModel({
     required this.vehical,
-    required this.uId,
+    required this.userID,
     required this.username,
     required this.email,
     required this.phone,
@@ -42,7 +42,7 @@ class UserModel {
   // Convert to Map for JSON encoding
   Map<String, dynamic> toMap() {
     return {
-      'uId': uId,
+      'uId': userID,
       'username': username,
       'email': email,
       'phone': phone,
@@ -66,7 +66,7 @@ class UserModel {
               (e) => Map<String, String>.from(e as Map),
         ),
       ),
-      uId: json['uId'],
+      userID: json['uId'],
       username: json['username'],
       email: json['email'],
       phone: json['phone'],
@@ -148,7 +148,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
     if (uId != null && username != null) {
       return UserModel(
         vehical: vehical,
-        uId: uId,
+        userID: uId,
         username: username,
         email: email ?? '',
         phone: phone ?? '',
@@ -167,7 +167,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
 
   @override
   Future<void> save(UserModel user) async {
-    await _storage.write(key: userIdKey, value: user.uId);
+    await _storage.write(key: userIdKey, value: user.userID);
     await _storage.write(key: usernameKey, value: user.username);
     await _storage.write(key: emailKey, value: user.email);
     await _storage.write(key: phoneKey, value: user.phone);
