@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/auth/auth_event.dart';
 import 'package:project_smart_parking_app/blocs/auth/auth_state.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';

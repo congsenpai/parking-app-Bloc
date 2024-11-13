@@ -5,8 +5,6 @@ import 'package:flutter_auth_provider/flutter_auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
-import '../services/login_with_email.dart'; // Import this for JSON encoding/decoding
-
 // UserModel class definition
 class UserModel {
   final String userID;
@@ -100,7 +98,7 @@ const String tokenKey = 'token';
 const String refreshTokenKey = 'refreshToken';
 
 class SecureStore implements AuthStore<UserModel>, TokenStore {
-  static final SecureStore _instance = const SecureStore._();
+  static const SecureStore _instance = SecureStore._();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   const SecureStore._();
