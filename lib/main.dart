@@ -1,17 +1,18 @@
+import 'package:project_smart_parking_app/screens/home_screen.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
+import 'package:project_smart_parking_app/models/user_model.dart';
 import 'firebase_options.dart';
-import 'models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Initialize EasyLoading here
   configLoading();
   runApp(
     ChangeNotifierProvider(
@@ -32,6 +33,17 @@ void configLoading() {
 }
 
 class MyApp extends StatelessWidget {
+  Future<bool> _isFirstLaunch() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
+    if (isFirstLaunch) {
+      await prefs.setBool('isFirstLaunch', false); // Set to false after first launch
+    }
+
+    return isFirstLaunch;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -39,18 +51,31 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      builder: EasyLoading.init(), // Initialize EasyLoading in the builder
-      home: FutureBuilder<UserModel?>(
-        future: SecureStore().retrieve(), // Check user information
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator()); // Show loading
-          } else if (snapshot.hasData && snapshot.data != null) {
-            // If user data is present, navigate to Home
-            return LoginScreen();
+      builder: EasyLoading.init(),
+      home: FutureBuilder<bool>(
+        future: _isFirstLaunch(),
+        builder: (context, firstLaunchSnapshot) {
+          if (firstLaunchSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (firstLaunchSnapshot.data == true) {
+            // If first launch, show WelcomeScreen
+            return const WelcomeScreen();
           } else {
-            // If no user data, navigate to Welcome
-            return WelcomeScreen();
+            // Otherwise, check if the user is logged in
+            return FutureBuilder<UserModel?>(
+              future: SecureStore().retrieve(),
+              builder: (context, userSnapshot) {
+                if (userSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (userSnapshot.hasData && userSnapshot.data != null) {
+                  return HomeScreen(user: userSnapshot.data!);
+                } else {
+                  return const LoginScreen();
+                }
+              },
+            );
           }
         },
       ),

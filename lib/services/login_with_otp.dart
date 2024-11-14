@@ -94,7 +94,7 @@ class LoginWithOTP {
   }
 
   // Xác thực OTP và lưu UserModel vào UserProvider
-  Future<UserModel?> signInWithOTP(String phoneNumber,String otp) async {
+  Future<UserModel?> signInWithOTP(String phoneNumber,String otp, {bool isRemember=false}) async {
     sendOtp(phoneNumber);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -106,7 +106,10 @@ class LoginWithOTP {
       // Tạo hoặc lấy UserModel từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
       if (model != null) {
-        await _userProvider.login(model); // Lưu vào UserProvider
+        if(isRemember){
+          await _userProvider.login(model); // Lưu vào UserProvider
+        }
+
       }
       print('Người dùng đã đăng nhập thành công!');
       return model;

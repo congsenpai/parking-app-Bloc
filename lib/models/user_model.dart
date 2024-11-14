@@ -1,9 +1,14 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_provider/flutter_auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:project_smart_parking_app/services/login_with_email.dart';
 import 'dart:convert';
+import 'package:project_smart_parking_app/services/login_with_google.dart';
+import 'package:project_smart_parking_app/services/login_with_otp.dart';
+import 'package:provider/provider.dart';
 
 // UserModel class definition
 class UserModel {
@@ -207,6 +212,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
   }
 }
 
+
 class UserProvider with ChangeNotifier {
   final SecureStore _secureStore = SecureStore();
   UserModel? _user;
@@ -235,3 +241,4 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+

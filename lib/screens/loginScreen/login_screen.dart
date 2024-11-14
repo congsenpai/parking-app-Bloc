@@ -41,8 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Show loading indicator
                 EasyLoading.show(status: 'Verifying...');
               } else if (state is AuthAuthenticated) {
+                final user = state.user;
                 EasyLoading.dismiss();
-                Get.to(const HomeScreen());
+                Get.to(HomeScreen(user: user));
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
@@ -151,11 +152,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             children: [
                               Checkbox(
-                                value: isChecked,
+                                value:
+                                    context.read<AuthBloc>().state.isRemember,
                                 onChanged: (value) {
-                                  setState(() {
-                                    isChecked = value ?? false;
-                                  });
+                                  if (value != null) {
+                                    context
+                                        .read<AuthBloc>()
+                                        .add(ToggleRememberMeEvent(value));
+                                    print('Đã checked');
+                                  }
                                 },
                                 activeColor: Colors.blue,
                               ),

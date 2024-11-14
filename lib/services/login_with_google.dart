@@ -63,7 +63,7 @@ class LoginWithGoogle {
   }
 
   // Đăng nhập với Google và lưu UserModel vào UserProvider
-  Future<UserModel?> signInWithGoogle() async {
+  Future<UserModel?> signInWithGoogle({bool isRemember=false}) async {
     try {
       // Google Authentication
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -81,7 +81,10 @@ class LoginWithGoogle {
       // Tạo hoặc lấy UserModel từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
       if (model != null) {
-        await _userProvider.login(model); // Lưu model vào UserProvider
+        if(isRemember){
+          await _userProvider.login(model); // Lưu model vào UserProvider
+        }
+
       }
       return model; // Trả về UserModel đã đăng nhập
     } catch (e) {

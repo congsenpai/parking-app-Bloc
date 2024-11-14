@@ -31,7 +31,7 @@ class LoginWithEmail {
   }
 
   // Sign in with email and password
-  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+  Future<UserModel?> signInWithEmailPassword(String email, String password, {bool isRemember=false}) async {
 
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -39,7 +39,11 @@ class LoginWithEmail {
         password: password,
       );
       UserModel? model=await _getUserModel(userCredential.user);
-      await _userProvider.login(model!);
+      if(isRemember){
+        await _userProvider.login(model!);
+        print('đã lưu thông tin người dùng vào Provider');
+      }
+
       // Retrieve user data from Firestore
       return model;
 
