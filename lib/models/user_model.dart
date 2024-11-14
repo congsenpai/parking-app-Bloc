@@ -66,7 +66,7 @@ class UserModel {
     return UserModel(
       vehical: List<Map<String, String>>.from(
         (json['vehical'] as List<dynamic>).map(
-              (e) => Map<String, String>.from(e as Map),
+          (e) => Map<String, String>.from(e as Map),
         ),
       ),
       userID: json['uId'],
@@ -212,9 +212,9 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
   }
 }
 
-
 class UserProvider with ChangeNotifier {
   final SecureStore _secureStore = SecureStore();
+
   UserModel? _user;
 
   UserModel? get user => _user;
@@ -224,21 +224,23 @@ class UserProvider with ChangeNotifier {
   // Phương thức đăng nhập
   Future<void> login(UserModel userModel) async {
     _user = userModel;
-    await _secureStore.save(userModel); // Lưu thông tin người dùng vào SecureStore
+    await _secureStore
+        .save(userModel); // Lưu thông tin người dùng vào SecureStore
     notifyListeners();
   }
 
   // Phương thức đăng xuất
   Future<void> logout() async {
-    _user = null;
-    await _secureStore.delete(); // Xóa thông tin người dùng khỏi SecureStore
+    _user=null;
+    await _secureStore.delete();
+    await _secureStore.clear();// Xóa thông tin người dùng khỏi SecureStore
     notifyListeners();
   }
 
   // Tải thông tin người dùng từ SecureStore
   Future<void> loadUser() async {
-    _user = await _secureStore.retrieve(); // Lấy thông tin người dùng từ SecureStore
+    _user = await _secureStore
+        .retrieve(); // Lấy thông tin người dùng từ SecureStore
     notifyListeners();
   }
 }
-

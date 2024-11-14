@@ -82,7 +82,8 @@ class LoginWithGoogle {
       UserModel? model = await _getUserModel(userCredential.user);
       if (model != null) {
         if(isRemember){
-          await _userProvider.login(model); // Lưu model vào UserProvider
+          await _userProvider.login(model);
+          // Lưu model vào UserProvider
         }
 
       }
