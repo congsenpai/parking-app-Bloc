@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 EasyLoading.show(status: 'Verifying...');
               } else if (state is AuthAuthenticated) {
                 EasyLoading.dismiss();
-                Get.to(const HomeScreen());
+                Get.to( HomeScreen());
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
