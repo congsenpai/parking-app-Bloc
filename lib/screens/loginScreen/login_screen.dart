@@ -11,7 +11,7 @@ import 'package:project_smart_parking_app/services/login_with_otp.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';
-import '../home_screen.dart';
+import '../homeScreens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

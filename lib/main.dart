@@ -1,6 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/home_screen.dart';
+import 'package:project_smart_parking_app/screens/homeScreens/home_screen.dart';
 
+import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +19,18 @@ void main() async {
   // Initialize EasyLoading here
   configLoading();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: Home(),
-    ),
-  );
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => UserProvider(),
+          ),
+          BlocProvider(
+            create: (context) => HomeScreenBloc(ParkingSpotRepository()),
+          ),
+        ],
+        child: Home(),
+  )
+      );
 }
 
 void configLoading() {

@@ -19,8 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginWithPhoneNumberEvent>(_onLoginWithOTP);
   }
 
-  void _onLoginWithOTP(
-      LoginWithPhoneNumberEvent event, Emitter<AuthState> emit) async {
+  void _onLoginWithOTP(LoginWithPhoneNumberEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
       UserModel? user =

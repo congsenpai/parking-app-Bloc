@@ -2,7 +2,9 @@ import '../../models/parking_spot_model.dart';
 
 abstract class HomeScreenState {}
 
-class HomeScreenInitial extends HomeScreenState {}
+class HomeScreenInitial extends HomeScreenState {
+
+}
 
 class HomeScreenLoading extends HomeScreenState {}
 

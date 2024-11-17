@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../home_screen.dart';
+import '../homeScreens/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../services/login_with_otp.dart';
