@@ -1,17 +1,9 @@
-abstract class HomeEvent{}
+abstract class HomeScreenEvent {}
 
-class FetchNearbyParkingSpots extends HomeEvent{
+class LoadParkingSpotsEvent extends HomeScreenEvent {}
 
+class SearchParkingSpotsEvent extends HomeScreenEvent {
+  final String query;
+
+  SearchParkingSpotsEvent(this.query);
 }
-class FetchRecentlyParkingSpots extends HomeEvent{
-
-}
-class OrderParkingSpots extends HomeEvent{
-
-}
-class SearchParkingSpots extends HomeEvent{
-
-}
-
-
-
