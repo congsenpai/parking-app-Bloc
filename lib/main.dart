@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/homeScreens/home_screen.dart';
+import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 
 import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';

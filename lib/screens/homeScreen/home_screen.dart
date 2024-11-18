@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:project_smart_parking_app/blocs/home/home_bloc.dart';
 import 'package:project_smart_parking_app/blocs/home/home_event.dart';
 import 'package:project_smart_parking_app/blocs/home/home_state.dart';
-import 'package:project_smart_parking_app/screens/homeScreens/parking_sport_by_search.dart';
+import 'package:project_smart_parking_app/screens/homeScreen/parking_sport_by_search.dart';
 
 import '../../models/parking_spot_model.dart';
 import '../../repositories/parking_spot_repository.dart';
