@@ -82,13 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(child: CircularProgressIndicator(),);
             }
             else if(state is HomeScreenLoaded){
-
               parkingSpots =state.parkingSpots;
               parkingSpotsBySearch = state.parkingSpotsBySearch;
               parkingSpots = state.parkingSpots;
-
             }
-
             return Scaffold(
 
               appBar: PreferredSize(

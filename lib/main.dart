@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/repositories/parking_controller.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
+import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 
 import 'blocs/home/home_bloc.dart';
@@ -72,11 +75,12 @@ class MyApp extends StatelessWidget {
 
 class Home extends StatelessWidget {
   const Home({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: HomeScreen(),
+    return const GetMaterialApp(
+      home: ParkingSpotScreen(documentId: 'spotID1'),
     );
   }
 }
