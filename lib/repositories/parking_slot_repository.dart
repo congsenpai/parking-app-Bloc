@@ -2,10 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/parking_slot_model.dart';
 
 class ParkingSlotData {
+  // danh sach vị trí bị chiếm ( đã có xe )
   final List<String> occupiedSlotsCar;
   final List<String> occupiedSlotsMoto;
+  // danh sach vị trí chưa đặt
   final List<String> parkingSectionCar;
   final List<String> parkingSectionMoto;
+  // danh sách vị trí đã được order nhưng xe chưa di chuyển đến
+  final List<String> bookingReservationCar;
+  final List<String> bookingReservationMoto;
+
   final String spotName;
   final String spotID;
 
@@ -16,43 +22,63 @@ class ParkingSlotData {
     required this.parkingSectionMoto,
     required this.spotID,
     required this.spotName,
+    required this.bookingReservationCar,
+    required this.bookingReservationMoto,
   });
 }
-
+/*
+0 : chưa có xe đỗ
+1 : có nhưng xe chưa đến
+2 : có và xe đã đến chỗ
+ */
 Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
   try {
     print('Fetching document: $documentId');
-
     // Lấy document từ Firestore
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
         .collection('ParkingSlots')
         .doc(documentId)
         .get();
-
     if (snapshot.exists) {
       // Chuyển dữ liệu sang SpotSlotsModel
       SpotSlotsModel spotSlot = SpotSlotsModel.fromJson(snapshot.data()!);
-
+      print(spotSlot);
+      String spotName = spotSlot.spotName;
+      print(spotSlot.spotName);
+      print(spotSlot.spotID);
+      String spotID = spotSlot.spotID;
       // Chuẩn bị dữ liệu
       List<String> occupiedSlotsCar = [];
       List<String> occupiedSlotsMoto = [];
       List<String> parkingSectionCar = [];
       List<String> parkingSectionMoto = [];
+      List<String> bookingReservationCar = [];
+      List<String> bookingReservationMoto = [];
+
 
       // Xử lý car slots
       spotSlot.carSlots.forEach((key, value) {
         parkingSectionCar.add(key);
-        if (!value) {
+        if (value == 2) {
           occupiedSlotsCar.add(key);
         }
+        else{if(value == 1){
+          bookingReservationCar.add(key);
+        }
+        }
       });
-
       // Xử lý moto slots
       spotSlot.motoSlots.forEach((key, value) {
         parkingSectionMoto.add(key);
-        if (!value) {
+        if (value == 2) {
           occupiedSlotsMoto.add(key);
         }
+        else {
+          if (value == 1) {
+            bookingReservationMoto.add(key);
+          }
+        }
+
       });
 
       // In thông tin kiểm tra
@@ -67,8 +93,10 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
         occupiedSlotsMoto: occupiedSlotsMoto,
         parkingSectionCar: parkingSectionCar,
         parkingSectionMoto: parkingSectionMoto,
-        spotID: spotSlot.spotID,
-        spotName: spotSlot.spotName,
+        spotID: spotID,
+        spotName: spotName,
+        bookingReservationCar: bookingReservationCar,
+        bookingReservationMoto: bookingReservationMoto
       );
     } else {
       print("Document không tồn tại.");

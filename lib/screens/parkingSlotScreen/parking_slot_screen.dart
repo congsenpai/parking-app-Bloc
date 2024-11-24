@@ -31,6 +31,8 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
   List<String> occupiedSlotsMoto = [];
   List<String> parkingSectionCar = [];
   List<String> parkingSectionMoto = [];
+  List<String> bookingReservationCar = [];
+  List<String> bookingReservationMoto = [];
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ParkingSlotData?>(
@@ -45,18 +47,25 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
           SpostName = data.spotName;
           SpostID= data.spotID;
           // Cập nhật danh sách các vị trí đã chiếm dụng nếu chúng chưa có dữ liệu
-          if (occupiedSlotsCar.isEmpty && occupiedSlotsMoto.isEmpty && parkingSectionMoto.isEmpty && parkingSectionCar.isEmpty) {
+          if (occupiedSlotsCar.isEmpty
+              && occupiedSlotsMoto.isEmpty
+              && parkingSectionMoto.isEmpty
+              && parkingSectionCar.isEmpty
+              && bookingReservationMoto.isEmpty
+              && bookingReservationCar.isEmpty) {
             occupiedSlotsCar = data.occupiedSlotsCar;
             occupiedSlotsMoto = data.occupiedSlotsMoto;
             parkingSectionMoto = data.parkingSectionMoto;
             parkingSectionCar = data.parkingSectionCar;
+            bookingReservationCar = data.bookingReservationCar;
+            bookingReservationMoto = data.bookingReservationMoto;
           }
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
-              title:  Text(
-                SpostName!,
+              title: Text('Học viện Ngân hàng'
+                ,
                 style: TextStyle(color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
@@ -67,41 +76,46 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
               ),
               actions: [],
             ),
-            body: Column(
-              children: [
-                // Floor Selector
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildFloorButton('Car'),
-                      _buildFloorButton('Motor'),
-                    ],
-                  ),
-                ),
-                // Parking Lots Section
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 30),
-                    children: [
-                      if (selectedFloor == 'Car') ...[
-                        _buildParkingSectionCar(
-                          languageSelector.translate('Slots', language),
-                          parkingSectionCar,
-                          occupiedSlotsCar,
-                        ),
-                      ] else ...[
-                        _buildParkingSectionMoto(
-                          languageSelector.translate('Slots', language),
-                          parkingSectionMoto,
-                          occupiedSlotsMoto,
-                        ),
+            body: Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  // Floor Selector
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildFloorButton('Car'),
+                        _buildFloorButton('Motor'),
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  // Parking Lots Section
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 30),
+                      children: [
+                        if (selectedFloor == 'Car') ...[
+                          _buildParkingSectionCar(
+                            languageSelector.translate('Slots', language),
+                            parkingSectionCar,
+                            occupiedSlotsCar,
+                            bookingReservationCar
+                          ),
+                        ] else ...[
+                          _buildParkingSectionMoto(
+                            languageSelector.translate('Slots', language),
+                            parkingSectionMoto,
+                            occupiedSlotsMoto,
+                            bookingReservationMoto,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         } else {
@@ -139,7 +153,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
   }
 
   // Parking section widget
-  Widget _buildParkingSectionCar(String section, List<String> slots, List<String> occupiedSlots) {
+  Widget _buildParkingSectionCar(String section, List<String> slots, List<String> occupiedSlots, List<String> reservationSlots) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.width / 25),
       child: Column(
@@ -174,9 +188,11 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
             itemBuilder: (context, index) {
               String slot = slots[index];
               bool isOccupied = occupiedSlots.contains(slot);
+              bool isReservated = reservationSlots.contains(slot);
+
               return GestureDetector(
                 onTap: () {
-                  if (!isOccupied) {
+                  if (!isOccupied && !isReservated) {
                     setState(() {
                       lostSlotCar = slot; // Cập nhật vị trí chọn
                     });
@@ -184,9 +200,13 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                   }
                 },
                 child: Container(
+
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: lostSlotCar == slot ? Colors.blue : Colors.grey[200],
+                    color: lostSlotCar == slot ? Colors.blue :
+                         isOccupied ? Colors.red :
+                             isReservated ? Colors.yellow :
+                                 Colors.lightGreenAccent,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: isOccupied
@@ -209,7 +229,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
     );
   }
 
-  Widget _buildParkingSectionMoto(String section, List<String> slots, List<String> occupiedSlots) {
+  Widget _buildParkingSectionMoto(String section, List<String> slots, List<String> occupiedSlots, List<String> reservationSlots) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.width / 25),
       child: Column(
@@ -244,6 +264,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
             itemBuilder: (context, index) {
               String slot = slots[index];
               bool isOccupied = occupiedSlots.contains(slot);
+              bool isReservated = reservationSlots.contains(slot);
               return GestureDetector(
                 onTap: () {
                   if (!isOccupied) {
@@ -257,7 +278,10 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: lostSlotMoto == slot ? Colors.blue : Colors.grey[200],
+                    color: lostSlotMoto == slot ? Colors.blue :
+                      isOccupied ? Colors.red :
+                        isReservated ? Colors.yellow :
+                          Colors.lightGreenAccent,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: isOccupied

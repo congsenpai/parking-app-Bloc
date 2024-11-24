@@ -1,6 +1,6 @@
 class SpotSlotsModel {
-  final Map<String, bool> carSlots;
-  final Map<String, bool> motoSlots;
+  final Map<String, int> carSlots;
+  final Map<String, int> motoSlots;
   final String spotID;
   final String spotName;
 
@@ -14,10 +14,10 @@ class SpotSlotsModel {
   /// Phương thức khởi tạo `SpotSlotsModel` từ `Map<String, dynamic>`
   factory SpotSlotsModel.fromJson(Map<String, dynamic> json) {
     return SpotSlotsModel(
-      spotID: json['SpotID'] ?? '',
-      spotName: json['SpotName'] ?? '',
-      carSlots: Map<String, bool>.from(json['carSlots'] ?? {}),
-      motoSlots: Map<String, bool>.from(json['motoSlots'] ?? {}),
+      spotID: json['spotID'],
+      spotName: json['spotName'],
+      carSlots: Map<String, int>.from(json['carSlots'] ?? {}),
+      motoSlots: Map<String, int>.from(json['motoSlots'] ?? {}),
     );
   }
 
@@ -26,8 +26,8 @@ class SpotSlotsModel {
     return {
       'carSlots': carSlots,
       'motoSlots': motoSlots,
-      'SpotID': spotID,
-      'SpotName': spotName,
+      'spotID': spotID,
+      'spotName': spotName,
     };
   }
 }
