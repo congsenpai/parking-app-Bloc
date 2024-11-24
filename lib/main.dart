@@ -79,8 +79,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
-      home: ParkingSpotScreen(documentId: 'spotID1'),
+    return GetMaterialApp(
+      home: HomeScreen(),
     );
   }
 }

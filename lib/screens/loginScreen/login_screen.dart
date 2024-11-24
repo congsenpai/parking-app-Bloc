@@ -7,7 +7,6 @@ import 'package:project_smart_parking_app/blocs/auth/auth_event.dart';
 import 'package:project_smart_parking_app/blocs/auth/auth_state.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';
 import 'package:project_smart_parking_app/services/login_with_otp.dart';
-
 import '../../blocs/auth/auth_bloc.dart';
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';

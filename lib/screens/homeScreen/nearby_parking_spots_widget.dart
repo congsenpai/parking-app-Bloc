@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
 
 
 import '../../models/parking_spot_model.dart';
@@ -39,9 +40,11 @@ class NearbyParkingSpotsWidget extends StatelessWidget {
                       padding:  EdgeInsets.all(5.0),
                     ),
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ParkingSpotScreen(documentId: 'spotID1', data: spot,)),
+                      );
                     },
-
-
                     child: Column(
                       children: [
                         Container(

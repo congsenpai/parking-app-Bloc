@@ -6,7 +6,8 @@ import '../../repositories/parking_controller.dart';
 import '../../widget/Starwidget.dart';
 class ParkingSpotScreen extends StatefulWidget {
   final String documentId;
-  const ParkingSpotScreen({Key? key, required this.documentId}) : super(key: key);
+  final ParkingSpotModel data;
+  const ParkingSpotScreen({Key? key, required this.documentId, required this.data}) : super(key: key);
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
 }
@@ -21,24 +22,12 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   @override
   void initState() {
     super.initState();
-    fetchParkingSpot();
+    parkingSpot = widget.data;
+    _currentImagePath = parkingSpot!.listImage[0];
+    _imagePaths = parkingSpot!.listImage;
+    _star = parkingSpot!.star!;
+    _reviewNumber = parkingSpot!.reviewsNumber!;
   }
-
-  Future<void> fetchParkingSpot() async {
-    FirestoreService firestoreService = FirestoreService();
-    ParkingSpotModel? spot = await firestoreService.getParkingSpot(widget.documentId);
-    setState(() {
-      parkingSpot = spot;
-      if (parkingSpot != null && parkingSpot!.listImage.isNotEmpty) {
-        _currentImagePath = parkingSpot!.listImage[0];
-        _imagePaths = parkingSpot!.listImage;
-
-      }
-      _star = parkingSpot!.star!;
-      _reviewNumber = parkingSpot!.reviewsNumber!;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
