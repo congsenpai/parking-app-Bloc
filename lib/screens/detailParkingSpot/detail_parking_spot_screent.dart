@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_event.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';
 import '../../Language/language.dart';
 import '../../models/parking_spot_model.dart';
-import '../../repositories/parking_controller.dart';
 import '../../widget/Starwidget.dart';
 class ParkingSpotScreen extends StatefulWidget {
-  final String documentId;
+
   final ParkingSpotModel data;
-  const ParkingSpotScreen({Key? key, required this.documentId, required this.data}) : super(key: key);
+  const ParkingSpotScreen({Key? key,  required this.data}) : super(key: key);
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
 }
@@ -30,24 +33,34 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite_border, color: Colors.black),
-            onPressed: () {},
+    return BlocConsumer<ParkingSpotBloc,ParkingSpotState>(
+        builder: (context,state){
+        if (state is ParkingSpotLoading){
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        else if(state is ParkingSpotLoaded){
+          _currentImagePath = state.CurrentImage;
+        }
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.favorite_border, color: Colors.black),
+                onPressed: () {},
+              ),
+            ],
           ),
-        ],
-      ),
-      body: parkingSpot == null
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+          body: parkingSpot == null
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
@@ -74,9 +87,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
                       children: _imagePaths.map((imagePath) {
                         return GestureDetector(
                           onTap: () {
-                            setState(() {
-                              _currentImagePath = imagePath;
-                            });
+                            context.read<ParkingSpotBloc>().add(ChangeImageEvent(imagePath));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 8),
@@ -108,8 +119,13 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
                 ],
               ),
             ),
-      ),
-    );
+          ),
+        );
+        },
+        listener: (context,state){
+
+        }
+        );
   }
 
   // Hàm Widget chứa các chi tiết thông tin

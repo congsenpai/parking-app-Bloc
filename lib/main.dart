@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
-import 'package:project_smart_parking_app/repositories/parking_controller.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/parkingSlotScreen/parking_slot_screen.dart';
 
 import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';
@@ -30,6 +32,9 @@ void main() async {
           BlocProvider(
             create: (context) => HomeScreenBloc(ParkingSpotRepository()),
           ),
+          BlocProvider(
+              create: (context)=> ParkingSpotBloc()),
+
         ],
         child: Home(),
   )
@@ -80,7 +85,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: HomeScreen(),
+      home: ParkingSlotScreen(documentId: 'spotID1',),
     );
   }
 }

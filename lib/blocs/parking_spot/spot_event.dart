@@ -1,8 +1,11 @@
 abstract class ParkingSpotEvent {}
 
 class ChangeImageEvent extends ParkingSpotEvent {
-  final String Image;
-  ChangeImageEvent(this.Image);
+  final String CurrentImage;
+  ChangeImageEvent(this.CurrentImage);
+
 }
-class AddFavoriteEvent extends ParkingSpotEvent{
+class FavoriteStateEvent extends ParkingSpotEvent{
+  final bool favorite;
+  FavoriteStateEvent(this.favorite);
 }
