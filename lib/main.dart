@@ -5,6 +5,7 @@ import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_booking_screen.dart';
 import 'package:project_smart_parking_app/screens/parkingSlotScreen/parking_slot_screen.dart';
 
 import 'blocs/home/home_bloc.dart';
@@ -85,7 +86,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: ParkingSlotScreen(documentId: 'spotID1',),
+      home: ParkingBookingDetailScreen(),
     );
   }
 }

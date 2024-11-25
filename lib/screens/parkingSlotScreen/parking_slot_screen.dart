@@ -20,7 +20,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
     // Khởi tạo fetch dữ liệu khi widget được tạo
     _futureSpotSlot = fetchSpotSlot(widget.documentId);
   }
-  String ?SpostName ;
+  String ?SpostName;
   String ?SpostID;
   String selectedFloor = 'Car';
   String lostSlotCar = ''; // Lưu vị trí đã chọn
@@ -64,8 +64,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
-              title: Text('Học viện Ngân hàng'
-                ,
+              title: Text('Học viện Ngân hàng',
                 style: TextStyle(color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
@@ -124,16 +123,17 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
       },
     );
   }
-
-
   // Floor button widget
   Widget _buildFloorButton(String floor) {
     return ElevatedButton(
+
       style: ElevatedButton.styleFrom(
-        backgroundColor: selectedFloor == floor ? Colors.blue : Colors.black,
+        backgroundColor: selectedFloor == floor ? Colors.blue : Colors.white30,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
+
         ),
+        minimumSize:Size(Get.width/2.3, Get.width/8)
       ),
       onPressed: () {
         setState(() {
@@ -147,11 +147,12 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
         floor,
         style: TextStyle(
           color: selectedFloor == floor ? Colors.white : Colors.grey[400],
+          fontSize: Get.width/25,
+          fontWeight: FontWeight.bold
         ),
       ),
     );
   }
-
   // Parking section widget
   Widget _buildParkingSectionCar(String section, List<String> slots, List<String> occupiedSlots, List<String> reservationSlots) {
     return Padding(
@@ -189,7 +190,6 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
               String slot = slots[index];
               bool isOccupied = occupiedSlots.contains(slot);
               bool isReservated = reservationSlots.contains(slot);
-
               return GestureDetector(
                 onTap: () {
                   if (!isOccupied && !isReservated) {
@@ -200,7 +200,6 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                   }
                 },
                 child: Container(
-
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: lostSlotCar == slot ? Colors.blue :
@@ -228,7 +227,6 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
       ),
     );
   }
-
   Widget _buildParkingSectionMoto(String section, List<String> slots, List<String> occupiedSlots, List<String> reservationSlots) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: Get.width / 25),

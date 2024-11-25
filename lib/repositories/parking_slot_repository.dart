@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/parking_slot_model.dart';
-
 class ParkingSlotData {
   // danh sach vị trí bị chiếm ( đã có xe )
   final List<String> occupiedSlotsCar;
@@ -11,10 +10,8 @@ class ParkingSlotData {
   // danh sách vị trí đã được order nhưng xe chưa di chuyển đến
   final List<String> bookingReservationCar;
   final List<String> bookingReservationMoto;
-
   final String spotName;
   final String spotID;
-
   ParkingSlotData({
     required this.occupiedSlotsCar,
     required this.occupiedSlotsMoto,
@@ -54,8 +51,6 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
       List<String> parkingSectionMoto = [];
       List<String> bookingReservationCar = [];
       List<String> bookingReservationMoto = [];
-
-
       // Xử lý car slots
       spotSlot.carSlots.forEach((key, value) {
         parkingSectionCar.add(key);
@@ -64,8 +59,7 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
         }
         else{if(value == 1){
           bookingReservationCar.add(key);
-        }
-        }
+        }}
       });
       // Xử lý moto slots
       spotSlot.motoSlots.forEach((key, value) {
@@ -78,15 +72,46 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
             bookingReservationMoto.add(key);
           }
         }
-
       });
+      parkingSectionCar.sort((a, b) {
+        // Tách chữ và số từ tên slot
+        final letterA = a[0];
+        final letterB = b[0];
 
+        // Lấy số từ tên slot
+        final numberA = int.parse(RegExp(r'\d+').stringMatch(a)!);
+        final numberB = int.parse(RegExp(r'\d+').stringMatch(b)!);
+
+        // So sánh theo chữ cái trước
+        if (letterA != letterB) {
+          return letterA.compareTo(letterB);
+        }
+
+        // Nếu chữ cái giống nhau, so sánh theo số
+        return numberA.compareTo(numberB);
+      });
+      parkingSectionMoto.sort((a, b) {
+        // Tách chữ và số từ tên slot
+        final letterA = a[0];
+        final letterB = b[0];
+
+        // Lấy số từ tên slot
+        final numberA = int.parse(RegExp(r'\d+').stringMatch(a)!);
+        final numberB = int.parse(RegExp(r'\d+').stringMatch(b)!);
+
+        // So sánh theo chữ cái trước
+        if (letterA != letterB) {
+          return letterA.compareTo(letterB);
+        }
+
+        // Nếu chữ cái giống nhau, so sánh theo số
+        return numberA.compareTo(numberB);
+      });
       // In thông tin kiểm tra
       print("Occupied Car Slots: $occupiedSlotsCar");
       print("Occupied Moto Slots: $occupiedSlotsMoto");
       print("Parking Section Car: $parkingSectionCar");
       print("Parking Section Moto: $parkingSectionMoto");
-
       // Trả về đối tượng ParkingSlotData
       return ParkingSlotData(
         occupiedSlotsCar: occupiedSlotsCar,
