@@ -67,7 +67,7 @@ class GoogleMapsService {
         throw Exception('Lỗi khi lấy dữ liệu từ Google Maps API');
       }
     } catch (e) {
-      print('Lỗi: $e');
+      //print('Lỗi: $e');
       return 0; // Trả về 0 nếu có lỗi
     }
   }

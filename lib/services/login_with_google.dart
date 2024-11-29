@@ -56,7 +56,7 @@ class LoginWithGoogle {
         vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
       );
     } else {
-      print('User document does not exist, creating a new one.');
+      //print('User document does not exist, creating a new one.');
       await _createUserDocument(user);
       return await _getUserModel(user); // Re-fetch after creating the user document
     }

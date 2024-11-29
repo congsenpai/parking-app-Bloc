@@ -23,6 +23,7 @@ class ParkingSlotData {
     required this.bookingReservationMoto,
   });
 }
+
 /*
 0 : chưa có xe đỗ
 1 : có nhưng xe chưa đến
@@ -30,7 +31,7 @@ class ParkingSlotData {
  */
 Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
   try {
-    print('Fetching document: $documentId');
+    //print('Fetching document: $documentId');
     // Lấy document từ Firestore
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
         .collection('ParkingSlots')
@@ -132,3 +133,5 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
     return null;
   }
 }
+
+

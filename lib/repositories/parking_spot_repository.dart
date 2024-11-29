@@ -3,23 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:project_smart_parking_app/services/GoogleMap.dart';
-
-
 import '../models/parking_spot_model.dart';
-
-
-
 class ParkingSpotRepository {
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Future<List<ParkingSpotModel>> getAllParkingSpots() async {
     try {
       List<ParkingSpotModel> parkingSpots = [];
       QuerySnapshot snapshot = await _firestore.collection('ParkingSpots').get();
       for (var doc in snapshot.docs) {
         parkingSpots.add(ParkingSpotModel.fromJson(doc.data() as Map<String, dynamic>));
-        print(parkingSpots);
+        //print(parkingSpots);
       }
       return parkingSpots;
     } catch (e) {
@@ -108,19 +101,18 @@ class _ParkingSpotListWidgetBySearchState
       Position currentPosition = await Geolocator.getCurrentPosition();
       // Tính khoảng cách từ vị trí hiện tại đến vị trí đỗ xe
       return await googleMapService.getDistanceFromCurrentLocation(
-          spot.location!.latitude, spot.location!.longitude);
+          spot.location.latitude, spot.location.longitude);
     } catch (e) {
       print('Error getting distance: $e');
       return 0;
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Tìm kiếm vị trí đỗ xe...',
             border: InputBorder.none,
           ),
@@ -131,11 +123,11 @@ class _ParkingSpotListWidgetBySearchState
         future: _parkingSpotsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: const CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Lỗi khi tải dữ liệu: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Không có dữ liệu'));
+            return const Center(child: Text('Không có dữ liệu'));
           }
 
           final parkingSpots = snapshot.data!;
@@ -145,7 +137,7 @@ class _ParkingSpotListWidgetBySearchState
             itemBuilder: (context, index) {
               final spot = parkingSpots[index];
               return Card(
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
                   title: Text(spot.spotName),
                   subtitle: Column(
@@ -169,28 +161,27 @@ class _ParkingSpotListWidgetBySearchState
                         Text('Đánh giá: ${spot.star} sao'),
                       if (spot.reviewsNumber != null)
                         Text('Số lượt đánh giá: ${spot.reviewsNumber}'),
-                      if (spot.location != null)
-                        Text(
-                            'Vị trí: ${spot.location!.latitude}, ${spot.location!.longitude}'),
+                      Text(
+                          'Vị trí: ${spot.location.latitude}, ${spot.location.longitude}'),
                       FutureBuilder<double>(
                         future: _getDistanceFromCurrentLocation(spot),
                         builder: (context, distanceSnapshot) {
                           if (distanceSnapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           } else if (distanceSnapshot.hasError) {
-                            return Text('Lỗi khi tính khoảng cách');
+                            return const Text('Lỗi khi tính khoảng cách');
                           } else if (distanceSnapshot.hasData) {
                             return Text(
                                 'Khoảng cách: ${distanceSnapshot.data!.toStringAsFixed(2)} km');
                           } else {
-                            return Text('Không thể tính khoảng cách');
+                            return const Text('Không thể tính khoảng cách');
                           }
                         },
                       ),
                     ],
                   ),
-                  trailing: Icon(Icons.directions_car),
+                  trailing: const Icon(Icons.directions_car),
                 ),
               );
             },

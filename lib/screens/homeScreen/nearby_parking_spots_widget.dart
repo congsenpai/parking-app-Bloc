@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
-import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
+import 'package:project_smart_parking_app/screens/detailParkingSpotScreen/detail_parking_spot_screent.dart';
 
 
 import '../../models/parking_spot_model.dart';
@@ -26,7 +26,7 @@ class NearbyParkingSpotsWidget extends StatelessWidget {
           parkingSpots.length,
               (index) {
             var spot = parkingSpots[index];
-            print(spot.spotId);
+            //print(spot.spotId);
             return Container(
               margin: EdgeInsets.symmetric(horizontal: Get.width / 40),
               child: Column(

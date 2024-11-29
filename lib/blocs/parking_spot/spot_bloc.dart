@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_event.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';
 
-import '../../repositories/parking_spot_repository.dart';
+
 
 class ParkingSpotBloc extends Bloc<ParkingSpotEvent, ParkingSpotState> {
 

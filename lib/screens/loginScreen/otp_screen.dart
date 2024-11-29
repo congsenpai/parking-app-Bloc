@@ -1,10 +1,10 @@
 import 'dart:async';
-import '../homeScreen/home_screen.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../services/login_with_otp.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:project_smart_parking_app/models/user_model.dart';
+
 // ignore_for_file: avoid_print
 
 

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps_webservices/directions.dart';
 
-abstract class HomeScreenEvent {}
 
-class LoadParkingSpotsEvent extends HomeScreenEvent {
+abstract class BookingScreenEvent {}
+
+class LoadParkingSpotsEvent extends BookingScreenEvent {
 
 }
 
-class SelectAndCheckTimeEvent extends HomeScreenEvent {
+class SelectAndCheckTimeEvent extends BookingScreenEvent {
+  late List<String> VehicalLisence;
+  late final DateTime startingDate;
+  late final DateTime endingDate;
+  late final TimeOfDay startingTime;
+  late final TimeOfDay endingTime;
+  late final double pricePerHourCar;
+  late final double insuranceDiscount;
 
-  final DateTime startingDate;
-  final DateTime endingDate;
-  final TimeOfDay startingTime;
-  final TimeOfDay endingTime;
 
 
-
-  SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime, this.endingTime);
+  SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime, this.endingTime, this.pricePerHourCar, this.insuranceDiscount);
 }
+

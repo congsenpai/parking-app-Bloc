@@ -10,11 +10,12 @@ import 'package:project_smart_parking_app/screens/homeScreen/parking_sport_by_se
 
 import '../../models/parking_spot_model.dart';
 import '../../repositories/parking_spot_repository.dart';
-import '../../widget/current_order.dart';
+
 import '../../widget/footer_widget.dart';
 import 'header_text.dart';
 import 'nearby_parking_spots_widget.dart';
 import 'order_recently_widget.dart';
+// ignore: use_key_in_widget_constructors
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<HomeScreenBloc>().add(SearchParkingSpotsEvent(currentText));
 
       // In ra giá trị để kiểm tra
-      print("Current search text: $currentText");
+      //print("Current search text: $currentText");
 
       // Thực hiện các hành động khác với currentText (ví dụ: gọi API tìm kiếm, cập nhật giao diện)
     });
@@ -51,12 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(context: context,
         builder:(context){
           return AlertDialog(
-              title: Text('Confirm Exit'),
-              content: Text('Do you want to exit this app?'),
+              title: const Text('Confirm Exit'),
+              content: const Text('Do you want to exit this app?'),
               actions: [
                 TextButton(
                   onPressed: () => print('Noooooooooo'),// Trả về "false" nếu người dùng chọn "No"
-                  child: Text('No'),
+                  child: const Text('No'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SystemNavigator.pop(); // Thoát khỏi ứng dụng nếu người dùng chọn "Yes"
                     Navigator.of(context).pop(true); // Trả về "true" sau khi gọi SystemNavigator.pop()
                   },
-                  child: Text('Yes'),
+                  child: const Text('Yes'),
                 ),
 
               ]);
@@ -79,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context,state){
 
             if(state is HomeScreenLoading){
-              return Center(child: CircularProgressIndicator(),);
+              return const Center(child: CircularProgressIndicator(),);
             }
             else if(state is HomeScreenLoaded){
               parkingSpots =state.parkingSpots;
@@ -216,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
               body: SafeArea(
                 child: SingleChildScrollView(
                   child: Container(
-                    color: Color.fromRGBO(230, 230, 230, 1.0),
+                    color: const Color.fromRGBO(230, 230, 230, 1.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,13 +238,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         ),
                         SizedBox(height: Get.width / 15),
-                        HeaderText(textInSpan1: 'Nearby', textInSpan2: 'Parking Sport',),
+                        const HeaderText(textInSpan1: 'Nearby', textInSpan2: 'Parking Sport',),
                         SizedBox(height: Get.width / 15),
                         NearbyParkingSpotsWidget(parkingSpots: parkingSpots),
                         SizedBox(height: Get.width / 10),
-                        HeaderText(textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
+                        const HeaderText(textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
                         SizedBox(height: Get.width / 20),
-                        OrderRecentlyWidget(),
+                        const OrderRecentlyWidget(),
                       ],
                     ),
                   ),
@@ -252,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-              bottomNavigationBar: SafeArea(
+              bottomNavigationBar: const SafeArea(
                 child: footerWidget(),
               ),
 

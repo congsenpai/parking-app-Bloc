@@ -6,7 +6,6 @@ class ParkingSpotLoading extends ParkingSpotState {}
 
 class ParkingSpotLoaded extends ParkingSpotState {
   final String CurrentImage;
-
   ParkingSpotLoaded(this.CurrentImage);
 }
 

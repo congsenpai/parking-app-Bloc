@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import '../../Language/language.dart';
 import '../../repositories/parking_slot_repository.dart';
 class ParkingSlotScreen extends StatefulWidget {
@@ -320,7 +320,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
             TextButton(
               child: Text(languageSelector.translate('Booking Now', language), style: TextStyle(color: Colors.blue)),
               onPressed: () {
-                print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
+                //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
                 // Navigator.of(context).pop(); // Đóng dialog
               },
             ),

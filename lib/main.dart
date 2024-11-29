@@ -1,12 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
+import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
-import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
+import 'package:project_smart_parking_app/rac.dart';
+
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/detailParkingSpot/detail_parking_spot_screent.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+
 import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_booking_screen.dart';
-import 'package:project_smart_parking_app/screens/parkingSlotScreen/parking_slot_screen.dart';
+import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
+import 'package:project_smart_parking_app/testtransaction.dart';
+
 
 import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';
@@ -35,7 +44,11 @@ void main() async {
           ),
           BlocProvider(
               create: (context)=> ParkingSpotBloc()),
-
+          BlocProvider(create: (context)=> BookingScreenBloc()),
+          BlocProvider(create: (context)=> WalletBloc(WalletRepository(), TransactionRepository())
+          ),
+          BlocProvider(create: (context)=> OrderScreenBloc(TransactionRepository())
+          )
         ],
         child: Home(),
   )
@@ -52,6 +65,7 @@ void configLoading() {
     ..maskType = EasyLoadingMaskType.clear;
 }
 
+// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -81,12 +95,10 @@ class MyApp extends StatelessWidget {
 
 class Home extends StatelessWidget {
   const Home({super.key});
-  
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: ParkingBookingDetailScreen(),
+      home: MyOrdersScreen(),
     );
   }
 }
