@@ -3,15 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TransactionModel {
   final String note; // Ghi chú
   final String typeVehical; // Loại phương tiện
-  final int budget; // Ngân sách
+  final double budget; // Ngân sách
   final Timestamp date; // Ngày tạo giao dịch
   final Timestamp endTime; // Thời gian kết thúc
   final String slotName; // Tên chỗ đỗ
   final String spotName; // Tên điểm đỗ xe
   final Timestamp startTime; // Thời gian bắt đầu
-  final int total; // Tổng chi phí
-  final int totalTime; // Tổng thời gian
-  final int transactionID; // ID giao dịch
+  final double total; // Tổng chi phí
+  final double totalTime; // Tổng thời gian
+  final double transactionID; // ID giao dịch
   final bool transactionType; // Loại giao dịch (true: thanh toán thành công)
   final String userID; // ID người dùng
   final String vehicalLicense;
@@ -39,15 +39,15 @@ class TransactionModel {
       vehicalLicense : json['vehicalLicense'] as String,
       note: json['Note'] as String,
       typeVehical: json['TypeVehical'] as String,
-      budget: json['budget'] as int,
+      budget: json['budget'] as double,
       date: json['date'] as Timestamp,
       endTime: json['endTime'] as Timestamp,
       slotName: json['slotName'] as String,
       spotName: json['spotName'] as String,
       startTime: json['startTime'] as Timestamp,
-      total: json['total'] as int,
-      totalTime: json['totalTime'] as int,
-      transactionID: json['transactionID'] as int,
+      total: json['total'] as double,
+      totalTime: json['totalTime'] as double,
+      transactionID: json['transactionID'] as double,
       transactionType: json['transactionType'] as bool,
       userID: json['userID'] as String,
     );

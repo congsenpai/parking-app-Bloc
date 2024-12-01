@@ -26,11 +26,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<OrderScreenBloc>().add(SearchMyOrder(userIDtest, _searchText));
     // Lắng nghe sự thay đổi của TextField
     _searchController.addListener(() {
-      setState(() {
         _searchText = _searchController.text; // Cập nhật giá trị nhập
-      });
       // Xử lý dữ liệu tìm kiếm tại đây (ví dụ: gọi API hoặc lọc danh sách)
       print("Search Text: $_searchText");
       context.read<OrderScreenBloc>().add(SearchMyOrder(userIDtest, _searchText));
@@ -96,10 +95,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       width: Get.width/2,
                       child: TransactionItem(
                         icon: Icons.location_on,
-                        title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                        subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                        date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                        iconColor: Colors.green, // Màu của icon tùy chỉnh
+                        // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
+                        // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
+                        // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
+                        iconColor: Colors.green, data: transaction, // Màu của icon tùy chỉnh
                       ),
                     );
                   },
@@ -114,9 +113,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                       width: Get.width/2,
                       child: TransactionItem(
                         icon: Icons.location_on,
-                        title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                        subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                        date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
+                        data: transaction,
+                        // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
+                        // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
+                        // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
                         iconColor: Colors.red, // Màu của icon tùy chỉnh
                       ),
                     );

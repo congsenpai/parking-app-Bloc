@@ -7,6 +7,7 @@ import 'package:project_smart_parking_app/blocs/wallet/wallet_event.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_state.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:project_smart_parking_app/models/wallet_model.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 import 'package:project_smart_parking_app/widget/footer_widget.dart';
 import '../../blocs/wallet/wallet_bloc.dart';
 import '../../widget/transaction_item_widget.dart';
@@ -57,7 +58,8 @@ class _WalletScreenState extends State<WalletScreen> {
                               child: WalletSection(
                                 money: walletModel.balance,
                                 userName: walletModel.userName,
-                                creditID: walletModel.walletCode,
+                                creditID: walletModel.walletCode, userID: walletModel.userID,
+
                             )
                           ),
                         ],
@@ -74,10 +76,10 @@ class _WalletScreenState extends State<WalletScreen> {
                               width: Get.width/2,
                               child: TransactionItem(
                                 icon: Icons.location_on,
-                                title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                                subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                                date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                                iconColor: Colors.blue, // Màu của icon tùy chỉnh
+                                // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
+                                // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
+                                // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
+                                iconColor: Colors.blue, data: transaction, // Màu của icon tùy chỉnh
                               ),
                             );
                           },
@@ -99,8 +101,9 @@ class WalletSection extends StatefulWidget {
   final double money;
   final String userName;
   final String creditID;
+  final String userID;
 
-  const WalletSection({super.key, required this.money, required this.userName, required this.creditID});
+  const WalletSection({super.key, required this.money, required this.userName, required this.creditID, required this.userID});
 
   @override
   State<WalletSection> createState() => _WalletSectionState();
@@ -130,22 +133,38 @@ class _WalletSectionState extends State<WalletSection> {
             padding: EdgeInsets.all(Get.width/20),
             decoration: BoxDecoration(
               color: Colors.indigo[900],
+
+              image: const DecorationImage(
+                image: AssetImage('assets/images/backgroundCreditCard.png'),
+                fit: BoxFit.cover, // Để hình nền phủ kín vùng container
+              ),
               borderRadius: BorderRadius.circular(Get.width/20),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  widget.money.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: Get.width/15,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.money.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: Get.width/15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: Get.width/20),
+                    Text(widget.userName, style: const TextStyle(color: Colors.white)),
+                    Text(widget.creditID, style: const TextStyle(color: Colors.white)),
+                  ],
                 ),
-                SizedBox(height: Get.width/20),
-                Text(widget.userName, style: TextStyle(color: Colors.white)),
-                Text(widget.creditID, style: TextStyle(color: Colors.white)),
+                SizedBox(width: Get.width/4,),
+                Center(
+                  child: ElevatedButton(
+                      onPressed: (){},
+                      child: const Text('Nạp tiền')
+                  )
+                )
               ],
             ),
           ),
@@ -160,7 +179,12 @@ class _WalletSectionState extends State<WalletSection> {
               SizedBox(width: Get.width/5),
 
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyOrdersScreen())
+                  );
+                },
 
                 child: Text(
                   'View All',
@@ -169,7 +193,7 @@ class _WalletSectionState extends State<WalletSection> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
         ],
       ),
     );

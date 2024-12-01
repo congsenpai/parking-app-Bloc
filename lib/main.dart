@@ -4,20 +4,15 @@ import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
-import 'package:project_smart_parking_app/rac.dart';
-
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
-
-import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_booking_screen.dart';
+import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
-import 'package:project_smart_parking_app/testtransaction.dart';
-
-
 import 'blocs/home/home_bloc.dart';
+import 'controlpanel/view/login.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +93,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: MyOrdersScreen(),
+      home: HomeScreen(),
     );
   }
 }

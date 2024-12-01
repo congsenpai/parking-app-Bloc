@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_event.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_state.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 
 
 
@@ -13,6 +15,7 @@ import 'package:project_smart_parking_app/blocs/booking/booking_state.dart';
 
 
 import '../../Language/language.dart';
+import '../../models/transaction_model.dart';
 import '../../widget/Starwidget.dart';
 
 
@@ -21,28 +24,54 @@ class ParkingBookingDetailScreen extends StatefulWidget {
 
 
 
-  const ParkingBookingDetailScreen({super.key});
+  const ParkingBookingDetailScreen({super.key, required this.parkingSpotModel, required this.TypeSelected});
+  final ParkingSpotModel parkingSpotModel;
+  final String TypeSelected;
+
+
 
   @override
   State<ParkingBookingDetailScreen> createState() => _ParkingBookingDetailScreenState();
+
 }
 
 class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen> {
   LanguageSelector languageSelector = LanguageSelector();
   final String language ='vi';
-  final double PriceOf1hourCar = 20000;
-  final double PriceOf1hourMoto = 20000;
+  late double PriceOf1hourCar = 0;
+  late double PriceOf1hourMoto = 0;
+  late double PriceBySelect_car_or_moto = 0;
   double Total = 0;
   double Insaurence = 0.01;
   TimeOfDay? TotalTime ;
   final List<String> VehicalLisence = ['30A-12345', '29B-67890', '51C-54321'];
-  late String SelecteVehicalLisence = '';
+  late String SelecteVehicalLisence = VehicalLisence[0];
+  late ParkingSpotModel _parkingSpotModel;
+  int star = 0;
+  int reviewnumber = 0;
+  late TransactionModel tranSactionModel;
 
   final StringURl = "assets/images/Location1_HVNH/HvnhMain.png";
   DateTime selectedDateStart = DateTime.now();
   DateTime selectedDateEnd = DateTime.now();
   TimeOfDay startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay endTime = const TimeOfDay(hour: 1,minute: 1);
+  @override
+  void initState() {
+
+    super.initState();
+    _parkingSpotModel = widget.parkingSpotModel;
+    PriceOf1hourCar = _parkingSpotModel.costPerHourCar.toDouble(); // ✅ Truy cập widget trong initState.
+    PriceOf1hourMoto = _parkingSpotModel.costPerHourMoto.toDouble();
+    star = _parkingSpotModel.star!;
+    reviewnumber = _parkingSpotModel.reviewsNumber!;
+    if(widget.TypeSelected == 'Moto'){
+      PriceBySelect_car_or_moto = PriceOf1hourMoto;
+    }
+    else{
+      PriceBySelect_car_or_moto = PriceOf1hourCar;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BookingScreenBloc,BookingScreenState>(
@@ -99,16 +128,16 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Học Viện Ngân Hàng ',
+                                Text(_parkingSpotModel.spotName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: Get.width/25)
                                 ),
-                                Text('3k/hr',
+                                Text('${PriceBySelect_car_or_moto} VNĐ/hr',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: Get.width/25)),
-                                const StarWidget(startNumber: 4,evaluateNumber: 12000,),
+                                StarWidget(startNumber: star,evaluateNumber: reviewnumber,),
                               ],
                             ),
                           ],
@@ -151,7 +180,7 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                                       selectedDateEnd,
                                                       startTime,
                                                       endTime,
-                                                      PriceOf1hourCar,
+                                                      PriceBySelect_car_or_moto,
                                                       0.1)
                                               );
                                           }
@@ -195,7 +224,7 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                                       selectedDateEnd,
                                                       startTime,
                                                       endTime,
-                                                      PriceOf1hourCar,
+                                                      PriceBySelect_car_or_moto,
                                                       0.1)
                                               );
                                           }
@@ -243,7 +272,7 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                                     selectedDateEnd,
                                                     startTime,
                                                     endTime,
-                                                    PriceOf1hourCar,
+                                                    PriceBySelect_car_or_moto,
                                                     0.1)
                                             );
                                           }
@@ -292,7 +321,7 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                                       selectedDateEnd,
                                                       startTime,
                                                       endTime,
-                                                      PriceOf1hourCar,
+                                                      PriceBySelect_car_or_moto,
                                                       0.1)
                                               );
                                           }
@@ -428,7 +457,7 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                       Container(
                                         alignment: Alignment.centerRight,
                                         padding: const EdgeInsets.all(8.0),
-                                        child:  Text("$PriceOf1hourCar VND"),
+                                        child:  Text("$PriceBySelect_car_or_moto VND"),
                                       ),
                                     ],
                                   ),
@@ -498,7 +527,25 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.blue,
                             ),
-                            child: TextButton(onPressed: (){},
+                            child: TextButton(onPressed: (){
+                              Timestamp timestampEnd = Timestamp.fromDate(combineDateAndTime(selectedDateEnd, endTime));
+                              Timestamp timestampStart = Timestamp.fromDate(combineDateAndTime(selectedDateStart, startTime));
+                              TransactionModel transaction = TransactionModel(
+                                  vehicalLicense: SelecteVehicalLisence,
+                                  note: '',
+                                  typeVehical: widget.TypeSelected,
+                                  budget: PriceBySelect_car_or_moto,
+                                  date: Timestamp.fromDate(DateTime.now()),
+                                  endTime: timestampEnd,
+                                  slotName: _parkingSpotModel.spotName,
+                                  spotName: _parkingSpotModel.spotName,
+                                  startTime: timestampStart,
+                                  total: Total,
+                                  totalTime: TotalTime!.hour.toDouble(),
+                                  transactionID: 2,
+                                  transactionType: false,
+                                  userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1');
+                            },
                                 child: Text('Thanh toán',
                                   style: TextStyle(
                                       fontSize: Get.width/20,
@@ -522,4 +569,10 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
         }
         );
   }
+
+  DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+  }
+
+  
 }

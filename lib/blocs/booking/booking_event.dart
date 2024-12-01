@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/models/transaction_model.dart';
 
 
 abstract class BookingScreenEvent {}
@@ -18,6 +19,12 @@ class SelectAndCheckTimeEvent extends BookingScreenEvent {
 
 
 
+
   SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime, this.endingTime, this.pricePerHourCar, this.insuranceDiscount);
+}
+class CheckOut extends BookingScreenEvent{
+
+  late TransactionModel transactionModel;
+  CheckOut(this.transactionModel);
 }
 

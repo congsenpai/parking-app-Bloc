@@ -52,8 +52,6 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
         List<TransactionModel>WithdrawTransactions = TransactionData.where((tran) => tran.transactionType == false).toList();
         print(WithdrawTransactions);
         emit(OrderScreenLoaded(DepositTransactions,WithdrawTransactions));}
-
-
     } catch (e) {
       emit(OrderScreenError("Failed to load parking spots"));
     }

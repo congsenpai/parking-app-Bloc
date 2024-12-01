@@ -1,12 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_booking_screen.dart';
 
 import '../../Language/language.dart';
 import '../../repositories/parking_slot_repository.dart';
 class ParkingSlotScreen extends StatefulWidget {
   final String documentId;
-  const ParkingSlotScreen({Key? key, required this.documentId}) : super(key: key);
+  final ParkingSpotModel parkingSpotModel;
+  const ParkingSlotScreen({Key? key, required this.documentId, required this.parkingSpotModel}) : super(key: key);
   @override
   State<ParkingSlotScreen> createState() => _ParkingBookingScreenState();
 }
@@ -86,7 +89,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildFloorButton('Car'),
-                        _buildFloorButton('Motor'),
+                        _buildFloorButton('Moto'),
                       ],
                     ),
                   ),
@@ -313,7 +316,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
           title: Text(languageSelector.translate('Booking Slot', language)),
 
           content: Text(
-            '${languageSelector.translate('Selected parking slot:', language)} $slot',
+            '${languageSelector.translate('Selected parking slot:', language)} $slot of $selectedFloor',
           ),
 
           actions: <Widget>[
@@ -322,6 +325,9 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
               onPressed: () {
                 //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
                 // Navigator.of(context).pop(); // Đóng dialog
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor,)),
+                );
               },
             ),
             TextButton(

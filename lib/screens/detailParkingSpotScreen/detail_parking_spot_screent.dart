@@ -7,6 +7,7 @@ import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';
 import '../../Language/language.dart';
 import '../../models/parking_spot_model.dart';
 import '../../widget/Starwidget.dart';
+import '../parkingSlotScreen/parking_slot_screen.dart';
 class ParkingSpotScreen extends StatefulWidget {
 
   final ParkingSpotModel data;
@@ -22,6 +23,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   ParkingSpotModel? parkingSpot;
   String _currentImagePath = '';
   List<String> _imagePaths = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +32,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
     _imagePaths = parkingSpot!.listImage;
     _star = parkingSpot!.star!;
     _reviewNumber = parkingSpot!.reviewsNumber!;
+
   }
   @override
   Widget build(BuildContext context) {
@@ -220,9 +223,10 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-
-
-
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!,)
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,
