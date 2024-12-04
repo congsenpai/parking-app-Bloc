@@ -79,7 +79,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
                                 // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
                                 // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                                iconColor: Colors.blue, data: transaction, // Màu của icon tùy chỉnh
+                                iconColor: transaction.transactionType == false ? Colors.red : Colors.blue, data: transaction, // Màu của icon tùy chỉnh
                               ),
                             );
                           },
@@ -158,7 +158,7 @@ class _WalletSectionState extends State<WalletSection> {
                     Text(widget.creditID, style: const TextStyle(color: Colors.white)),
                   ],
                 ),
-                SizedBox(width: Get.width/4,),
+
                 Center(
                   child: ElevatedButton(
                       onPressed: (){},
