@@ -129,9 +129,35 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
       return null;
     }
   } catch (e) {
-    print("Lỗi khi lấy dữ liệu: $e");
+    print("Lỗi khi lấy dữ liệu parking_slot_rep: $e");
+    return null;
+  }
+
+
+}
+Future<ParkingSlotData?> updateStateSlot(
+    String spotID, String typeVehical, String slotName, int newState) async {
+
+  try {
+    String Type = 'carSlots';
+    DocumentReference docRef = FirebaseFirestore.instance.collection('ParkingSlots').doc(spotID);
+    if(typeVehical == 'Moto'){
+      Type = 'motoSlots';
+    }
+    String fieldName = '$Type.$slotName';
+    print(fieldName);
+    // Cập nhật giá trị cho A1
+    await docRef.update({
+      fieldName: newState, // giá trị mới cho A1
+    });
+
+
+    // Truy cập tài liệu của Wallet dựa trên userID và cập nhật budget
+  } catch (e) {
+    print("Lỗi khi cập nhật trạng thái slot parking_slot_rep: $e");
     return null;
   }
 }
+
 
 

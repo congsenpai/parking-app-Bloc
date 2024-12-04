@@ -26,8 +26,6 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
     // emit(OrderLoading());
 
     try {
-
-
       final List<TransactionModel> TransactionData;
       TransactionData = await transactionRepository.getTransactionsByUser(event.userID);
       if(event.searchText!='' ){

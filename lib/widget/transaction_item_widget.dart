@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
+import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 
 class TransactionItem extends StatefulWidget {
   final IconData icon;
@@ -17,22 +18,30 @@ class TransactionItem extends StatefulWidget {
   });
   @override
   State<TransactionItem> createState() => _TransactionItemState();
-
-
 }
 
 class _TransactionItemState extends State<TransactionItem> {
-
-
-
   @override
-
   Widget build(BuildContext context) {
     final String title = widget.data.spotName;
     final String subtitle = '${widget.data.total} VND';
-    final String date = widget.data.date.toDate().toString();
+    final Timestamp a = widget.data.date;
+
+// Chuyển đổi Timestamp thành DateTime
+    DateTime dateTime = a.toDate();
+// Lấy ngày, tháng, năm
+    int day = dateTime.day;       // Ngày
+    int month = dateTime.month;   // Tháng
+    int year = dateTime.year;     // Năm
+// Lấy giờ, phút, giây
+    int hour = dateTime.hour;     // Giờ
+    int minute = dateTime.minute; // Phút
+    int second = dateTime.second;
+    String _date = '$day / $month / $year \t $hour:$minute:$second';
+    final String date = _date;
     return Container(
-      width: Get.width/1.4,
+      margin: EdgeInsets.only(top: Get.width /25),
+      width: Get.width/1.6,
       height: Get.width/4,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -76,6 +85,7 @@ class _TransactionItemState extends State<TransactionItem> {
           ),
           SizedBox(width: Get.width/20,),
           ElevatedButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsScreen(transactionID: widget.data.transactionID.toString())));
 
           },
               child: Text('Chi tiết')

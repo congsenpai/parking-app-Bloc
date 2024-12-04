@@ -8,6 +8,7 @@ import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_event.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_state.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 
 
 
@@ -24,9 +25,10 @@ class ParkingBookingDetailScreen extends StatefulWidget {
 
 
 
-  const ParkingBookingDetailScreen({super.key, required this.parkingSpotModel, required this.TypeSelected});
+  const ParkingBookingDetailScreen({super.key, required this.parkingSpotModel, required this.TypeSelected, required this.NameSlot});
   final ParkingSpotModel parkingSpotModel;
   final String TypeSelected;
+  final String NameSlot;
 
 
 
@@ -530,14 +532,15 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                             child: TextButton(onPressed: (){
                               Timestamp timestampEnd = Timestamp.fromDate(combineDateAndTime(selectedDateEnd, endTime));
                               Timestamp timestampStart = Timestamp.fromDate(combineDateAndTime(selectedDateStart, startTime));
+                              String slotname = widget.NameSlot;
                               TransactionModel transaction = TransactionModel(
                                   vehicalLicense: SelecteVehicalLisence,
-                                  note: '',
+                                  note: 'Thanh toán bãi đỗ : $slotname',
                                   typeVehical: widget.TypeSelected,
                                   budget: PriceBySelect_car_or_moto,
                                   date: Timestamp.fromDate(DateTime.now()),
                                   endTime: timestampEnd,
-                                  slotName: _parkingSpotModel.spotName,
+                                  slotName: widget.NameSlot,
                                   spotName: _parkingSpotModel.spotName,
                                   startTime: timestampStart,
                                   total: Total,
@@ -545,6 +548,9 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
                                   transactionID: 2,
                                   transactionType: false,
                                   userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1');
+                              context.read<BookingScreenBloc>().add(
+                                  CheckOut(transaction,widget.parkingSpotModel.spotId),
+                              );
                             },
                                 child: Text('Thanh toán',
                                   style: TextStyle(
@@ -566,13 +572,18 @@ class _ParkingBookingDetailScreenState extends State<ParkingBookingDetailScreen>
           if(state is BookingScreenError){
             BookingScreenError('Dont Load data');
           }
+          else if(state is BookingSuccess){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyOrdersScreen(),
+              ),
+            );
+          }
         }
         );
   }
-
   DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
-
-  
 }

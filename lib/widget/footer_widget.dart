@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
+import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 
 class footerWidget extends StatelessWidget {
   const footerWidget({
@@ -18,7 +20,11 @@ class footerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context)=> HomeScreen())
+              );
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min, // Điều chỉnh kích thước theo nội dung
               mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +44,9 @@ class footerWidget extends StatelessWidget {
             width: Get.width/20,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyOrdersScreen()));
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min, // Điều chỉnh kích thước theo nội dung
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +67,9 @@ class footerWidget extends StatelessWidget {
             width: Get.width/20,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min, // Điều chỉnh kích thước theo nội dung
               mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +79,8 @@ class footerWidget extends StatelessWidget {
                   "Wallet",
                   style: TextStyle(
                     fontSize: Get.width / 25,
-                    color: Colors.blue,// Giới hạn kích thước chữ
+                    color: Colors.blue,
+                    // Giới hạn kích thước chữ
                   ),
                 )
               ],

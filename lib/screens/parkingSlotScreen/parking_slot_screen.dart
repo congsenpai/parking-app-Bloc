@@ -326,7 +326,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                 //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
                 // Navigator.of(context).pop(); // Đóng dialog
                 Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor,)),
+                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot,)),
                 );
               },
             ),

@@ -1,263 +1,288 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
+import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_state.dart';
+import 'package:project_smart_parking_app/models/transaction_model.dart';
 
-class OrderDetailsScreen extends StatelessWidget {
+import '../../blocs/detailOrder/detail_order_event.dart';
+
+class OrderDetailsScreen extends StatefulWidget {
+  @override
+  const OrderDetailsScreen({super.key, required this.transactionID});
+  final String transactionID;
+  State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
+
+
+}
+
+class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+
+  late TransactionModel _transactionModel =TransactionModel
+    (vehicalLicense: '',
+      note: '',
+      typeVehical: '',
+      budget: 0,
+      date: Timestamp.fromDate(DateTime.now()),
+      endTime: Timestamp.fromDate(DateTime.now()) ,
+      slotName: '',
+      spotName: '',
+      startTime: Timestamp.fromDate(DateTime.now()),
+      total: 0,
+      totalTime: 0,
+      transactionID: 1,
+      transactionType: true,
+      userID: '');
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<OrderDetailScreenBloc>().add(
+        OrderDetailEvent(widget.transactionID)
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Order #2094811",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
+    return BlocConsumer<OrderDetailScreenBloc,OrderDetailScreenState>(builder: (context,state){
+      if(state is OrderDetailScreenLoading){
+        return Center(child: CircularProgressIndicator(),);
+      }
+      else if(state is OrderDetailScreenLoaded){
+        _transactionModel = state.transactionModel;
+      }
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Mã giao dịch ${_transactionModel.transactionID.toString()}',
+            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Top Section with Check Mark
-            Stack(
-              alignment: Alignment.topCenter,
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+
+        body: Container(
+
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.blue.shade100,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 4,
+                offset: Offset(2, 2),
+              ),
+            ],
+          ),
+          margin: EdgeInsets.all(Get.width/20),
+          padding: EdgeInsets.all(Get.width/20),
+          child: SingleChildScrollView(
+            child: Table(
+
+              // Định nghĩa các độ rộng cột
+              columnWidths: const {
+                0: FlexColumnWidth(1), // Cột 0 có chiều rộng cố định 100
+                1: FlexColumnWidth(1),    // Cột 1 chiếm gấp đôi không gian so với các cột flex khác
+                  // Cột 2 chiếm không gian bằng 1 flex
+              },
+              // Tạo viền cho bảng
               children: [
-                Container(
-                  height: 180,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/parking_image.jpg'), // Replace with your image path
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 140,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+                // tên bãi đỗ
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Tên bãi đỗ ', textAlign: TextAlign.left,
+                          style: TextStyle(
+                          fontSize: Get.width/30,
+                          color: Colors.black45,
+                          fontWeight: FontWeight.bold
                         ),
-                      ],
-                    ),
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Place and Spot Info
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Place",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "Spot",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
                         ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Angga Big Park",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            Text(
-                              "A5",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        // Enter and Leave Time
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Enter",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "Leave",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "12 Jan 2024\n03:44 AM",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "13 Jan 2024\n11:44 AM",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        // Price and Total Info
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Price",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "Total",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "\$292/hr",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "10 hours",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Insurance 53%",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              "\$19,384",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Grand Total",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              "\$95,219,384",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 120,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 28,
-                    child: const Icon(
-                      Icons.check_circle,
-                      size: 48,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            // Location Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Location",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.grey[200],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Open Maps",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Share Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  minimumSize: const Size.fromHeight(50),
+
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.spotName}', textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: Get.width/30,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.bold
+                          ),),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text(
-                  "Share to Others",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                // loại phương tiện
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Loại phương tiện ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.typeVehical}', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+                // tên vị trí đỗ
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Tên vị trí đỗ  ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.slotName}', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
+                ),
+                // Biển số xe
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Biển số xe ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.vehicalLicense}', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
+                ),
+                // tổng thời gian
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Tổng thời gian ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.totalTime.toString()} h', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
+                ),
+                // giá gửi xe
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Giá gửi xe ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.budget.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
+                ),
+                // tổng tiền
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Tổng tiền ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(':  ${_transactionModel.total.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
+                            fontSize: Get.width/30,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ),
+                    ),
+                  ],
+                ),
+
+              ],
             ),
-            const SizedBox(height: 20),
-          ],
+
+
+          ),
         ),
-      ),
+      );
+    }, listener: (context,state){
+      if(state is OrderDetailScreenError){
+        OrderDetailScreenError(
+          'Do not have data'
+        );
+      }
+    }
     );
   }
 }

@@ -32,24 +32,30 @@ class TransactionModel {
     required this.transactionType,
     required this.userID,
   });
-
   /// Tạo `TransactionModel` từ `Map` (Firestore JSON)
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
       vehicalLicense : json['vehicalLicense'] as String,
       note: json['Note'] as String,
       typeVehical: json['TypeVehical'] as String,
-      budget: json['budget'] as double,
       date: json['date'] as Timestamp,
       endTime: json['endTime'] as Timestamp,
       slotName: json['slotName'] as String,
       spotName: json['spotName'] as String,
       startTime: json['startTime'] as Timestamp,
-      total: json['total'] as double,
-      totalTime: json['totalTime'] as double,
-      transactionID: json['transactionID'] as double,
+      transactionID: (json['transactionID'] is int) ? (json['transactionID'] as int).toDouble() :
+      json['transactionID'] as double,
       transactionType: json['transactionType'] as bool,
       userID: json['userID'] as String,
+      total: (json['total'] is int) // Kiểm tra kiểu int và chuyển sang double
+          ? (json['total'] as int).toDouble()
+          : json['total'] as double,
+      budget: (json['budget'] is int)
+          ? (json['budget'] as int).toDouble()
+          : json['budget'] as double,
+      totalTime: (json['totalTime'] is int)
+          ? (json['totalTime'] as int).toDouble()
+          : json['totalTime'] as double,
     );
   }
 

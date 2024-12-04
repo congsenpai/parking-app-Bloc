@@ -23,8 +23,9 @@ class SelectAndCheckTimeEvent extends BookingScreenEvent {
   SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime, this.endingTime, this.pricePerHourCar, this.insuranceDiscount);
 }
 class CheckOut extends BookingScreenEvent{
+  late String spotID;
 
   late TransactionModel transactionModel;
-  CheckOut(this.transactionModel);
+  CheckOut(this.transactionModel,this.spotID);
 }
 

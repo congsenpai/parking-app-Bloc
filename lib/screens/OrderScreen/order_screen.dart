@@ -83,46 +83,48 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
               ],
             ),
             body: depositTransactions != [] || withdrawTransactions != [] ?
-            Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true, // Để ListView không chiếm hết không gian
-                  padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-                  itemCount: depositTransactions.length,
-                  itemBuilder: (context, index) {
-                    final transaction = depositTransactions[index];
-                    return SizedBox(
-                      width: Get.width/2,
-                      child: TransactionItem(
-                        icon: Icons.location_on,
-                        // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                        // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                        // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                        iconColor: Colors.green, data: transaction, // Màu của icon tùy chỉnh
-                      ),
-                    );
-                  },
-                ),
-                ListView.builder(
-                  shrinkWrap: true, // Để ListView không chiếm hết không gian
-                  padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-                  itemCount: withdrawTransactions.length,
-                  itemBuilder: (context, index) {
-                    final transaction = withdrawTransactions[index];
-                    return SizedBox(
-                      width: Get.width/2,
-                      child: TransactionItem(
-                        icon: Icons.location_on,
-                        data: transaction,
-                        // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                        // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                        // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                        iconColor: Colors.red, // Màu của icon tùy chỉnh
-                      ),
-                    );
-                  },
-                ),
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true, // Để ListView không chiếm hết không gian
+                    padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
+                    itemCount: depositTransactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = depositTransactions[index];
+                      return SizedBox(
+                        width: Get.width/2,
+                        child: TransactionItem(
+                          icon: Icons.location_on,
+                          // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
+                          // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
+                          // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
+                          iconColor: Colors.green, data: transaction, // Màu của icon tùy chỉnh
+                        ),
+                      );
+                    },
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true, // Để ListView không chiếm hết không gian
+                    padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
+                    itemCount: withdrawTransactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = withdrawTransactions[index];
+                      return SizedBox(
+                        width: Get.width/2,
+                        child: TransactionItem(
+                          icon: Icons.location_on,
+                          data: transaction,
+                          // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
+                          // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
+                          // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
+                          iconColor: Colors.red, // Màu của icon tùy chỉnh
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             )
             :const Center(
               child: NoDataTransactionWidget(),

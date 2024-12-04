@@ -1,6 +1,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
+import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:project_smart_parking_app/repositories/parking_spot_repository.d
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
+import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
@@ -43,7 +45,8 @@ void main() async {
           BlocProvider(create: (context)=> WalletBloc(WalletRepository(), TransactionRepository())
           ),
           BlocProvider(create: (context)=> OrderScreenBloc(TransactionRepository())
-          )
+          ),
+          BlocProvider(create: (context)=> OrderDetailScreenBloc(TransactionRepository()))
         ],
         child: Home(),
   )

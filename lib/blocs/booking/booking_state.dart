@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 
 
 abstract class BookingScreenState {}
@@ -21,6 +23,9 @@ class BookingScreenLoaded extends BookingScreenState {
 
 
   BookingScreenLoaded(this.TotalTime, this.Total, this.selectedDateStart, this.selectedDateEnd, this.startTime, this.endTime);
+}
+
+class BookingSuccess extends BookingScreenState{
 }
 
 class BookingScreenError extends BookingScreenState {

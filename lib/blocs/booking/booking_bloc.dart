@@ -1,5 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/models/transaction_model.dart';
+import 'package:project_smart_parking_app/repositories/parking_slot_repository.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'booking_event.dart';
 import 'booking_state.dart';
 class Data {
@@ -54,6 +60,7 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
   BookingScreenBloc()
       : super(BookingScreenInitial()) {
     on<SelectAndCheckTimeEvent>(_selectAndCheckTimeEvent);
+    on<CheckOut>(_checkOutBooking);
   }
   // Định nghĩa lại hàm _homeScreenLoading với đúng cú pháp và kiểu trả về
   Future<void> _selectAndCheckTimeEvent(SelectAndCheckTimeEvent event,
@@ -75,18 +82,61 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
           pricePerHourCar: pricePerHourCar,
           insuranceDiscount: insuranceDiscount);
       print(data);
-
-
       if (data?.totalTime != null) {
         emit(BookingScreenLoaded(data!.totalTime, data.total,selectedDateStart,selectedDateEnd,startTime,endTime));  // Dùng `!` để đảm bảo totalTime không phải null
       } else {
         emit(BookingScreenError("Total time is invalid"));
       }
-
     } catch (e) {
       emit(BookingScreenError("Failed to load parking spots"));
     }
   }
+  Future<void> _checkOutBooking(CheckOut event,
+      Emitter<BookingScreenState> emit) async {
+
+
+    try {
+      print(event.transactionModel.userID);
+      WalletRepository walletRepository  = WalletRepository();
+      print(walletRepository);
+      print('dđ');
+      print("00000111");
+      double balance = await walletRepository.getBalanceByUserID(event.transactionModel.userID) as double;
+      print(balance);
+      double Total = event.transactionModel.total.toDouble();
+      print(Total);
+      double RemainingBalance = balance - Total;
+      print(RemainingBalance);
+      if(RemainingBalance > 0){
+        // Lấy dữ liệu từ sự kiện
+        TransactionModel data = event.transactionModel;
+        String spotID = event.spotID;
+
+        // Khởi tạo TransactionRepository
+        TransactionRepository a = TransactionRepository();
+
+        // Chờ kết quả từ hàm addTransaction (bởi vì là async)
+        await a.addTransaction(data);
+
+        // Thông báo thành công
+        emit(BookingSuccess());
+        print(data.typeVehical);
+        await updateStateSlot(spotID, data.typeVehical, data.slotName, 1);
+
+
+        walletRepository.updateWalletBalance(event.transactionModel.userID, RemainingBalance);
+
+        print("trừ tiên thành công");
+        emit(BookingSuccess());
+      }
+      else{
+        emit(BookingScreenError("Transaction failure because your balance isn''t enough"));
+      }
+    } catch (e) {
+      emit(BookingScreenError("Failed to load parking spots"));
+    }
+  }
+
 }
 
 
