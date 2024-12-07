@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
 import '../models/user_model.dart';
 
 class LoginWithOTP {
@@ -56,7 +56,7 @@ class LoginWithOTP {
         vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
       );
     } else {
-      print('User document does not exist, creating a new one.');
+      //print('User document does not exist, creating a new one.');
       await _createUserDocument(user);
       return await _getUserModel(user); // Re-fetch after creating the user document
     }

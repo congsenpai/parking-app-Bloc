@@ -1,11 +1,11 @@
-// auth_bloc.dart
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/models/user_model.dart';
+import 'package:project_smart_parking_app/services/login_with_otp.dart';
 import 'package:project_smart_parking_app/services/login_with_email.dart';
 import 'package:project_smart_parking_app/services/login_with_google.dart';
-import 'package:project_smart_parking_app/services/login_with_otp.dart';
-import 'package:project_smart_parking_app/models/user_model.dart';
+// auth_bloc.dart
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginWithEmail _loginWithEmail;
@@ -21,14 +21,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ToggleRememberMeEvent>(_onToggleRememberMe);
   }
 
-  // Toggle the "Remember Me" value
-  void _onToggleRememberMe(ToggleRememberMeEvent event, Emitter<AuthState> emit) {
-    isRemember = event.isRemember;
-    emit(AuthInitial().copyWith(isRemember: isRemember));  // Update isRemember when toggled
-  }
-
   void _onLoginWithOTP(LoginWithPhoneNumberEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading(isRemember: isRemember));
+    emit(AuthLoading());
     try {
       UserModel? user = await _loginWithOTP.signInWithOTP(event.phoneNumber, event.otp, isRemember: isRemember);
 

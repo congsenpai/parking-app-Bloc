@@ -48,7 +48,8 @@ class LoginWithEmail {
       return model;
 
     } catch (e) {
-      print('Error signing in: $e');
+      // ignore: avoid_print
+      //print('Error signing in: $e');
       return null; // Return null if an error occurs
     }
   }

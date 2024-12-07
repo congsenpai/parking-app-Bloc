@@ -46,17 +46,17 @@ class ParkingSpotModel {
   // Phương thức này khởi tạo đối tượng ParkingSpotModel từ một Map<String, dynamic>
   factory ParkingSpotModel.fromJson(Map<String, dynamic> json) {
     return ParkingSpotModel(
-        spotId: json['spotId'],
-        spotName: json['spotName'],
-        listImage: List<String>.from(json['listImage']),
-        location: json['location'],
-        OccupiedMaxCar: json['OccupiedMaxCar'],
-        OccupiedMaxMotor : json['OccupiedMaxMotor'],
-        describe: json['describe'],
-        costPerHourMoto: json['costPerHourMoto'],
-        costPerHourCar: json['costPerHourCar'],
-        star: json['star'],
-        reviewsNumber: json['reviewsNumber']
+      spotId: json['spotID'] ?? 'Unknown Spot ID',  // Sử dụng giá trị mặc định
+      spotName: json['spotName'] ?? 'Unnamed Spot', // Sử dụng giá trị mặc định
+      listImage: List<String>.from(json['listImage'] ?? []), // Nếu không có ảnh, gán danh sách rỗng
+      location: json['location'] != null ? json['location'] as GeoPoint : GeoPoint(0, 0), // Kiểm tra location
+      OccupiedMaxCar: json['OccupiedMaxCar'] ?? 0, // Giá trị mặc định nếu là null
+      OccupiedMaxMotor: json['OccupiedMaxMotor'] ?? 0, // Giá trị mặc định nếu là null
+      describe: json['describe'] ?? '', // Gán giá trị mặc định nếu là null
+      costPerHourMoto: json['costPerHourMoto'] ?? 0, // Giá trị mặc định nếu là null
+      costPerHourCar: json['costPerHourCar'] ?? 0, // Giá trị mặc định nếu là null
+      star: json['star'] ?? 0, // Giá trị mặc định nếu là null
+      reviewsNumber: json['reviewsNumber'] ?? 0, // Giá trị mặc định nếu là null
     );
   }
 }

@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:project_smart_parking_app/blocs/auth/auth_event.dart';
-import 'package:project_smart_parking_app/blocs/auth/auth_state.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';
-import 'package:project_smart_parking_app/services/login_with_otp.dart';
-
+import 'package:flutter/material.dart';
+import '../homeScreen/home_screen.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';
-import '../home_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:project_smart_parking_app/blocs/auth/auth_event.dart';
+import 'package:project_smart_parking_app/blocs/auth/auth_state.dart';
+import 'package:project_smart_parking_app/services/login_with_otp.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               } else if (state is AuthAuthenticated) {
                 final user = state.user;
                 EasyLoading.dismiss();
-                Get.to(HomeScreen(user: user));
+                Get.to( HomeScreen());
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
