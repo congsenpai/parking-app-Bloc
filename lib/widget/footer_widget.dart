@@ -69,7 +69,7 @@ class footerWidget extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletScreen(userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1')));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WalletScreen(userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1')));
 
             },
             child: Column(

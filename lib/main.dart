@@ -11,10 +11,12 @@ import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/settingScreen/setting_screen.dart';
 import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
+import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'blocs/home/home_bloc.dart';
-import 'controlpanel/view/login.dart';
+
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -91,11 +93,28 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  ThemeMode _themeMode = ThemeMode.light; // Mặc định là sáng
+
+  void toggleTheme() {
+    setState(() {
+      _themeMode =
+      _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: lightTheme, // Chế độ sáng
+      darkTheme: darkTheme, // Chế độ tối
+      themeMode: _themeMode, // Điều khiển theme hiện tại
       home: HomeScreen(),
     );
   }

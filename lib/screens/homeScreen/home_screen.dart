@@ -7,17 +7,16 @@ import 'package:project_smart_parking_app/blocs/home/home_bloc.dart';
 import 'package:project_smart_parking_app/blocs/home/home_event.dart';
 import 'package:project_smart_parking_app/blocs/home/home_state.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/parking_sport_by_search.dart';
-
 import '../../models/parking_spot_model.dart';
 import '../../repositories/parking_spot_repository.dart';
-
 import '../../widget/footer_widget.dart';
 import 'header_text.dart';
 import 'nearby_parking_spots_widget.dart';
 import 'order_recently_widget.dart';
-// ignore: use_key_in_widget_constructors
+
 class HomeScreen extends StatefulWidget {
   @override
+
   _HomeScreenState createState() => _HomeScreenState();
 }
 class _HomeScreenState extends State<HomeScreen> {
@@ -39,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
       // Lấy giá trị hiện tại từ TextEditingController
       currentText = _searchController.text;
       context.read<HomeScreenBloc>().add(SearchParkingSpotsEvent(currentText));
-
       // In ra giá trị để kiểm tra
       //print("Current search text: $currentText");
 

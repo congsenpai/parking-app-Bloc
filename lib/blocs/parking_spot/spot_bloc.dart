@@ -6,8 +6,6 @@ import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';
 
 class ParkingSpotBloc extends Bloc<ParkingSpotEvent, ParkingSpotState> {
 
-
-
   ParkingSpotBloc()
       : super(ParkingSpotInitial()) {
     on<ChangeImageEvent>(_ChangeImage);
