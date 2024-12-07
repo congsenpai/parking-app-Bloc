@@ -1,5 +1,6 @@
   import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
   import 'package:flutter/material.dart';
   import 'package:flutter/services.dart';
   import 'package:get/get.dart';
@@ -20,7 +21,7 @@ import '../services/login_with_google.dart';
   
   class _HomeScreenState extends State<HomeScreen> {
     // Tạo một TextEditingController để kiểm soát TextField
-    TextEditingController _searchController = TextEditingController();
+    final TextEditingController _searchController = TextEditingController();
   
     get parkingSpots => null;
   
@@ -31,7 +32,9 @@ import '../services/login_with_google.dart';
   
       // Lắng nghe sự thay đổi từ TextField
       _searchController.addListener(() {
-        print("Search text: ${_searchController.text}");
+        if (kDebugMode) {
+          print("Search text: ${_searchController.text}");
+        }
         // Bạn có thể thực hiện bất kỳ hành động nào khi giá trị thay đổi
       });
     }
@@ -45,9 +48,9 @@ import '../services/login_with_google.dart';
     }
 
     bool isLogout(bool stopDefaultButtonEvent, RouteInfo info) {
-      final LoginWithGoogle _loginWithGoogle = LoginWithGoogle();
-      final LoginWithEmail _loginWithEmail = LoginWithEmail();
-      final LoginWithOTP _loginWithOTP = LoginWithOTP();
+      final LoginWithGoogle loginWithGoogle = LoginWithGoogle();
+      final LoginWithEmail loginWithEmail = LoginWithEmail();
+      final LoginWithOTP loginWithOTP = LoginWithOTP();
 
       // Get the current user authentication method from UserProvider or other management
       final User? currentUser = FirebaseAuth.instance.currentUser;
@@ -57,31 +60,31 @@ import '../services/login_with_google.dart';
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Confirm Exit'),
-            content: Text('Do you want to exit this app?'),
+            title: const Text('Confirm Exit'),
+            content: const Text('Do you want to exit this app?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),  // Close dialog if 'No' clicked
-                child: Text('No'),
+                child: const Text('No'),
               ),
               TextButton(
                 onPressed: () async {
                   // Logout from the respective method only if user is logged in
                   if (currentAuthMethod == 'google.com') {
-                    await _loginWithGoogle.signOut();  // Google logout
+                    await loginWithGoogle.signOut();  // Google logout
                   } else if (currentAuthMethod == 'password') {
-                    await _loginWithEmail.signOut();  // Email logout
+                    await loginWithEmail.signOut();  // Email logout
                   } else if (currentAuthMethod == 'phone') {
-                    await _loginWithOTP.signOut();  // OTP logout
+                    await loginWithOTP.signOut();  // OTP logout
                   }
 
                   await Provider.of<UserProvider>(context, listen: false).logout();  // UserProvider logout
-                  Get.to(LoginScreen());  // Navigate to Login screen (or wherever you want to redirect)
+                  Get.to(const LoginScreen());  // Navigate to Login screen (or wherever you want to redirect)
 
                   SystemNavigator.pop();  // Exit the app
                   Navigator.of(context).pop(true);  // Return "true" after exiting
                 },
-                child: Text('Yes'),
+                child: const Text('Yes'),
               ),
             ],
           );
@@ -93,7 +96,7 @@ import '../services/login_with_google.dart';
 
     @override
     Widget build(BuildContext context) {
-      final _userProvider = Provider.of<UserProvider>(context);
+      Provider.of<UserProvider>(context);
       return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(Get.width / 1.67),
@@ -120,12 +123,10 @@ import '../services/login_with_google.dart';
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    child: const CircleAvatar(
-                                      minRadius: 20,
-                                      backgroundColor: Colors.white,
-                                      child: Icon(Icons.person),
-                                    ),
+                                  const CircleAvatar(
+                                    minRadius: 20,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(Icons.person),
                                   ),
                                   SizedBox(
                                     width: Get.width / 40,
@@ -196,11 +197,9 @@ import '../services/login_with_google.dart';
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        child: Image.asset(
-                          "assets/images/AnhAppbar.png",
-                          width: Get.width / 2.5,
-                        ),
+                      Image.asset(
+                        "assets/images/AnhAppbar.png",
+                        width: Get.width / 2.5,
                       ),
                     ],
                   ),
@@ -231,13 +230,13 @@ import '../services/login_with_google.dart';
             : SafeArea(
                 child: SingleChildScrollView(
                   child: Container(
-                    color: Color.fromRGBO(230, 230, 230, 1.0),
+                    color: const Color.fromRGBO(230, 230, 230, 1.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: Get.width / 15),
-                        InProgressParking(
+                        const InProgressParking(
                             location: 'null', placeName: 'null', url: 'null'),
                         SizedBox(height: Get.width / 15),
                         Row(
@@ -268,7 +267,7 @@ import '../services/login_with_google.dart';
                                 ),
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Container(
                               margin: EdgeInsets.only(right: Get.width / 15),
                               child: OutlinedButton(
@@ -300,7 +299,9 @@ import '../services/login_with_google.dart';
                               parkingSpots.length,
                               (index) {
                                 var spot = parkingSpots[index];
-                                print(spot.spotId);
+                                if (kDebugMode) {
+                                  print(spot.spotId);
+                                }
                                 return Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal: Get.width / 40),
@@ -313,7 +314,7 @@ import '../services/login_with_google.dart';
                                                 BorderRadius.circular(8.0),
                                           ),
                                           backgroundColor: Colors.white,
-                                          padding: EdgeInsets.all(5.0),
+                                          padding: const EdgeInsets.all(5.0),
                                         ),
                                         onPressed: () {},
                                         child: Column(
@@ -347,16 +348,16 @@ import '../services/login_with_google.dart';
                                             SizedBox(height: Get.width / 30),
                                             Row(
                                               children: [
-                                                Icon(Icons.add_road_rounded,
+                                                const Icon(Icons.add_road_rounded,
                                                     color: Colors.black),
-                                                SizedBox(width: 5),
-                                                Text("1.3 km"),
+                                                const SizedBox(width: 5),
+                                                const Text("1.3 km"),
                                                 SizedBox(width: Get.width / 10),
-                                                Icon(
+                                                const Icon(
                                                     Icons
                                                         .monetization_on_outlined,
                                                     color: Colors.black),
-                                                SizedBox(width: 5),
+                                                const SizedBox(width: 5),
                                                 Text("${spot.costPerHourMoto}"),
                                               ],
                                             ),
@@ -399,7 +400,7 @@ import '../services/login_with_google.dart';
                                 ),
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Container(
                               margin: EdgeInsets.only(right: Get.width / 15),
                               child: OutlinedButton(
@@ -449,14 +450,14 @@ import '../services/login_with_google.dart';
                                         children: [
                                           SizedBox(height: Get.width / 25),
                                           CircleAvatar(
+                                            minRadius: Get.width / 20,
+                                            backgroundColor: Colors.lightBlue,
                                             child: Icon(Icons.park,
                                                 size: Get.width / 15,
                                                 color: Colors.white),
-                                            minRadius: Get.width / 20,
-                                            backgroundColor: Colors.lightBlue,
                                           ),
                                           SizedBox(height: Get.width / 30),
-                                          Text(
+                                          const Text(
                                             "Park Lot",
                                             style: TextStyle(
                                               fontSize: 15,
@@ -639,13 +640,13 @@ import '../services/login_with_google.dart';
                   color: Colors.black.withOpacity(0.5),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(2, 4),
+                  offset: const Offset(2, 4),
                 ),
               ],
             ),
             child: Row(
               children: [
-                Container(
+                SizedBox(
                   width: Get.width / 1.8,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -659,15 +660,15 @@ import '../services/login_with_google.dart';
                           children: [
                             TextSpan(
                               text: "${widget.placeName}\n",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
                             TextSpan(
-                              text: "${widget.location}",
-                              style: TextStyle(
+                              text: widget.location,
+                              style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
