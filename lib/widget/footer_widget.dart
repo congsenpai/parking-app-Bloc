@@ -6,9 +6,8 @@ import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart'
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 import 'package:provider/provider.dart';
-
 import '../models/user_model.dart';
-import '../screens/loginScreen/login_screen.dart';
+
 
 class footerWidget extends StatelessWidget {
   final String userID; // Thêm biến này để lưu trữ thông tin user
@@ -30,19 +29,7 @@ class footerWidget extends StatelessWidget {
               final userModel =
                   await Provider.of<UserProvider>(context, listen: false)
                       .loadUser();
-
-              if (userModel != null) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeScreen(user: userModel)),
-                );
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
-                );
-              }
+              Get.to(HomeScreen(user: userModel!));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -100,7 +87,7 @@ class footerWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => WalletScreen(
-                          userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1')));
+                          userID: userID)));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,

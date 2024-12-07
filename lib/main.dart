@@ -8,6 +8,7 @@ import 'package:project_smart_parking_app/repositories/parking_spot_repository.d
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';
@@ -43,9 +44,21 @@ void main() async {
           ),
           BlocProvider(create: (context)=> OrderDetailScreenBloc(TransactionRepository()))
         ],
-        child: MyApp(),
+        child:MyApp(),
       )
   );
+}
+
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
+      home: RegisterScreen(), // Assuming you want to show the RegisterScreen initially
+      // You can add routes or other setup if needed
+    );
+  }
 }
 
 void configLoading() {
@@ -80,6 +93,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: EasyLoading.init(),
+      debugShowCheckedModeBanner: false,
       home: FutureBuilder<bool>(
         future: _isFirstLaunch(),
         builder: (context, firstLaunchSnapshot) {

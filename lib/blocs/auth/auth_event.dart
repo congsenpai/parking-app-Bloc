@@ -16,7 +16,10 @@ class LoginWithPhoneNumberEvent extends AuthEvent {
 }
 class ToggleRememberMeEvent extends AuthEvent {
   final bool isRemember;
+  final String email;
+  final String password;
 
-  ToggleRememberMeEvent(this.isRemember);
+  ToggleRememberMeEvent({required this.isRemember, required this.email, required this.password});
 }
+
 
