@@ -11,8 +11,9 @@ import '../models/user_model.dart';
 import '../screens/loginScreen/login_screen.dart';
 
 class footerWidget extends StatelessWidget {
+  final String userID; // Thêm biến này để lưu trữ thông tin user
   const footerWidget({
-    super.key,
+    super.key, required this.userID,
   });
 
   @override
@@ -70,7 +71,7 @@ class footerWidget extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => MyOrdersScreen()));
+                  MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: userID,)));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,

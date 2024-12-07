@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_auth_provider/flutter_auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:project_smart_parking_app/services/login_with_email.dart';
 // ignore_for_file: avoid_print
 
 // UserModel class definition

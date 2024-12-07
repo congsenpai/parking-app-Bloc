@@ -15,6 +15,10 @@ import '../../widget/transaction_item_widget.dart';
 import '../loginScreen/login_screen.dart';
 
 class MyOrdersScreen extends StatefulWidget {
+  final String userID;
+
+  const MyOrdersScreen({super.key, required this.userID});
+
   @override
   State<MyOrdersScreen> createState() => _MyOrdersScreenState();
 }
@@ -23,14 +27,14 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   bool _isSearching = false; // Trạng thái hiển thị ô tìm kiếm
   final TextEditingController _searchController = TextEditingController();
   String _searchText = "";
-  String userIDtest = 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1';
+  String userIDTest = 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1';
   late List<TransactionModel> depositTransactions = [];
   late List<TransactionModel> withdrawTransactions = [];
 
   @override
   void initState() {
     super.initState();
-    context.read<OrderScreenBloc>().add(SearchMyOrder(userIDtest, _searchText));
+    context.read<OrderScreenBloc>().add(SearchMyOrder(widget.userID, _searchText));
     // Lắng nghe sự thay đổi của TextField
     _searchController.addListener(() {
       _searchText = _searchController.text; // Cập nhật giá trị nhập
@@ -38,7 +42,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       print("Search Text: $_searchText");
       context
           .read<OrderScreenBloc>()
-          .add(SearchMyOrder(userIDtest, _searchText));
+          .add(SearchMyOrder(widget.userID, _searchText));
     });
   }
 
@@ -136,7 +140,9 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
             : const Center(
                 child: NoDataTransactionWidget(),
               ),
-        bottomNavigationBar: const footerWidget(),
+        bottomNavigationBar: footerWidget(
+          userID: widget.userID,
+        ),
         backgroundColor: Colors.white,
       );
     }, listener: (context, state) {
@@ -154,6 +160,7 @@ class NoDataTransactionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final userModel = Provider.of<UserProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

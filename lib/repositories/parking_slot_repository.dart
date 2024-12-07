@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/parking_slot_model.dart';
 class ParkingSlotData {

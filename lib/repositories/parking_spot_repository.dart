@@ -1,5 +1,6 @@
+// ignore_for_file: unused_local_variable, unused_field, avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:project_smart_parking_app/services/GoogleMap.dart';
@@ -67,7 +68,7 @@ class ParkingSpotRepository {
 class ParkingSpotListWidgetBySearch extends StatefulWidget {
   final ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
 
-  ParkingSpotListWidgetBySearch({Key? key}) : super(key: key);
+  ParkingSpotListWidgetBySearch({super.key});
 
   @override
   _ParkingSpotListWidgetBySearchState createState() =>
@@ -123,7 +124,7 @@ class _ParkingSpotListWidgetBySearchState
         future: _parkingSpotsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Lỗi khi tải dữ liệu: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
