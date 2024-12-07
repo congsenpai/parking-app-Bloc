@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:project_smart_parking_app/services/login_with_email.dart';
 // ignore_for_file: avoid_print
 
-
 // UserModel class definition
 class UserModel {
   final String userID;
@@ -228,16 +227,21 @@ class UserProvider with ChangeNotifier {
 
   // Phương thức đăng xuất
   Future<void> logout() async {
-    _user=null;
+    _user = null;
     await _secureStore.delete();
-    await _secureStore.clear();// Xóa thông tin người dùng khỏi SecureStore
+    await _secureStore.clear(); // Xóa thông tin người dùng khỏi SecureStore
     notifyListeners();
   }
 
   // Tải thông tin người dùng từ SecureStore
-  Future<void> loadUser() async {
-    _user = await _secureStore
-        .retrieve(); // Lấy thông tin người dùng từ SecureStore
-    notifyListeners();
+  Future<UserModel?> loadUser() async {
+    try {
+      _user = await _secureStore.retrieve();
+      notifyListeners();
+      return _user;
+    } catch (e) {
+      print("Error loading user: $e");
+      return null;
+    }
   }
 }

@@ -1,31 +1,34 @@
-import 'firebase_options.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
+import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
+import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
+import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
+import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
+import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
+import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
+import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/settingScreen/setting_screen.dart';
+import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
+import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/home/home_bloc.dart';
-import 'controlpanel/view/login.dart';
+import 'firebase_options.dart';
+import 'models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
-import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
-import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
-import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
-import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
-import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
-import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
-import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
-import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
-import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
-import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
-import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
-
+import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Initialize EasyLoading here
   configLoading();
   runApp(
       MultiProvider(
@@ -45,9 +48,9 @@ void main() async {
           ),
           BlocProvider(create: (context)=> OrderDetailScreenBloc(TransactionRepository()))
         ],
-        child: Home(),
-  )
-      );
+        child: MyApp(),
+      )
+  );
 }
 
 void configLoading() {
@@ -67,7 +70,8 @@ class MyApp extends StatelessWidget {
     final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
 
     if (isFirstLaunch) {
-      await prefs.setBool('isFirstLaunch', false); // Set to false after first launch
+      await prefs.setBool(
+          'isFirstLaunch', false); // Set to false after first launch
     }
 
     return isFirstLaunch;
@@ -108,16 +112,6 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: HomeScreen(),
     );
   }
 }

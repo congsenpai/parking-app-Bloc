@@ -21,8 +21,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ToggleRememberMeEvent>(_onToggleRememberMe);
   }
 
+  // Toggle the "Remember Me" value
+  void _onToggleRememberMe(ToggleRememberMeEvent event, Emitter<AuthState> emit) {
+    isRemember = event.isRemember;
+    emit(AuthInitial().copyWith(isRemember: isRemember));  // Update isRemember when toggled
+  }
+
   void _onLoginWithOTP(LoginWithPhoneNumberEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
+    emit(AuthLoading( isRemember: isRemember));
     try {
       UserModel? user = await _loginWithOTP.signInWithOTP(event.phoneNumber, event.otp, isRemember: isRemember);
 

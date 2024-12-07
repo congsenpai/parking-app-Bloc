@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               } else if (state is AuthAuthenticated) {
                 final user = state.user;
                 EasyLoading.dismiss();
-                Get.to( HomeScreen());
+                Get.to(HomeScreen(user: user));
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
