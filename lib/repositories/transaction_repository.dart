@@ -2,11 +2,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/transaction_model.dart';
 
+class Income{
+  double Incomes;
+  double IncomeByBookingSlot; // thu nhập từ việc đặt chỗ gửi xe
+  double IncomeByCommission; // thu nhập từ ăn hoa hồng < nhà phát triển >
+  double IncomeByCombo; // thu nhập  từ các combo <tháng>
+  double IncomeByRecharge; // thu nhập từ việc quản lý tiền nạp
+  double IncomeByOther; // thu nhập  từ các nguồn khác
+
+  Income(
+      this.Incomes,
+      this.IncomeByBookingSlot,
+      this.IncomeByCommission,
+      this.IncomeByCombo,
+      this.IncomeByOther,
+      this.IncomeByRecharge);
+}
+
 
 class TransactionRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// Lấy danh sách các giao dịch dựa trên `userID`
+  ///
   Future<List<TransactionModel>> getTransactionsByUser(String userID) async {
     try {
       print(userID);
@@ -16,6 +34,62 @@ class TransactionRepository {
           .where('userID', isEqualTo: userID) // Lọc với userID
           .get();
       print(querySnapshot.docs);
+
+      // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
+      List<TransactionModel> transactions = querySnapshot.docs
+          .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return transactions;
+    } catch (e) {
+      print('Error fetching transactions: $e');
+      return [];
+    }
+  }
+  Future<List<TransactionModel>> getAllTransactions() async {
+    try {
+
+      // Truy vấn collection `Transactions` với `userID`
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('Transactions') // Tên collection trong Firestore
+          .get();
+      print(querySnapshot.docs);
+
+      // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
+      List<TransactionModel> transactions = querySnapshot.docs
+          .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      return transactions;
+    } catch (e) {
+      print('Error fetching transactions: $e');
+      return [];
+    }
+  }
+  Future<List<TransactionModel>> getTransactionsByNameSpot(String spotName) async {
+    try {
+      final allSpots = await getAllTransactions();
+      // Lọc các ParkingSpotModel chứa chuỗi tìm kiếm
+      final filteredSpots = allSpots
+          .where((spot) => spot.spotName.toLowerCase().contains(spotName.toLowerCase()))
+          .toList();
+      print('Filtered spots: $filteredSpots');
+      return filteredSpots;
+    } catch (e) {
+      print('Error fetching transactions: $e');
+      return [];
+    }
+  }
+  Future<List<TransactionModel>> get10RecentTransactions() async {
+    try {
+      // Truy vấn collection `Transactions` với `userID`, sắp xếp theo `transactionID` giảm dần
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('Transactions') // Tên collection trong Firestore
+          .orderBy('transactionID', descending: true) // Sắp xếp theo transactionID giảm dần
+          .limit(10) // Giới hạn chỉ lấy 10 giao dịch
+          .get();
+
+      // print(querySnapshot.docs);
 
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
@@ -62,8 +136,6 @@ class TransactionRepository {
       return null; // Trả về null trong trường hợp lỗi
     }
   }
-
-
   // Phương thức thêm giao dịch vào Firestore
   Future<void> addTransaction(TransactionModel transaction) async {
     try {
@@ -95,5 +167,46 @@ class TransactionRepository {
       print('Error adding transaction: $e');
     }
   }
+  // Lấy ra doanh thu từ toàn bộ các giao dịch
+  Future<Income?> getIncomefromTransactionsAll() async {
+    try {
+
+      // Truy vấn collection `Transactions` với `userID`
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('Transactions') // Tên collection trong Firestore
+          .get();
+      // print(querySnapshot.docs);
+
+      // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
+      List<TransactionModel> transactions = querySnapshot.docs
+          .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      double IncomeByBookingSlot = 0; // thu nhập từ việc đặt chỗ gửi xe
+      double IncomeByCommission = 0; // thu nhập từ ăn hoa hồng < nhà phát triển >
+      double IncomeByCombo = 0; // thu nhập  từ các combo <tháng>
+      double IncomeByRecharge = 0; // thu nhập từ việc quản lý tiền nạp
+      double IncomeByOther  = 0;
+      double Incomes =0;
+      for(int i =0;i<transactions.length;i++){
+        Incomes = Incomes + transactions[i].total;
+        if(transactions[i].transactionType == true){
+          IncomeByRecharge = IncomeByRecharge + transactions[i].total;
+        }
+        else {
+          IncomeByBookingSlot = IncomeByBookingSlot + transactions[i].total;
+        }
+      }
+      IncomeByCommission = IncomeByBookingSlot *0.2;
+      Income income = Income(Incomes, IncomeByBookingSlot, IncomeByCommission, IncomeByCombo, IncomeByOther, IncomeByRecharge);
+      return income;
+
+
+    } catch (e) {
+      print('Error fetching transactions: $e');
+    }
+    return null;
+  }
+
+
 
 }

@@ -5,12 +5,6 @@ import 'package:project_smart_parking_app/blocs/order/order_state.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
-
-
-
-import '../../repositories/parking_spot_repository.dart';
-
-
 class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
 
   final TransactionRepository transactionRepository;

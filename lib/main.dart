@@ -8,13 +8,9 @@ import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
-import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
-import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
-import 'package:project_smart_parking_app/screens/settingScreen/setting_screen.dart';
-import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
-import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
+import 'admin/main.dart';
 import 'blocs/home/home_bloc.dart';
 
 import 'firebase_options.dart';
@@ -36,19 +32,24 @@ void main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (context) => UserProvider(),
+              create: (context) => UserProvider(),
           ),
           BlocProvider(
-            create: (context) => HomeScreenBloc(ParkingSpotRepository()),
+              create: (context) => HomeScreenBloc(ParkingSpotRepository()),
           ),
           BlocProvider(
-              create: (context)=> ParkingSpotBloc()),
-          BlocProvider(create: (context)=> BookingScreenBloc()),
-          BlocProvider(create: (context)=> WalletBloc(WalletRepository(), TransactionRepository())
+              create: (context) => ParkingSpotBloc()),
+          BlocProvider(
+              create: (context) => BookingScreenBloc()),
+          BlocProvider(
+              create: (context) => WalletBloc(WalletRepository(), TransactionRepository())
           ),
-          BlocProvider(create: (context)=> OrderScreenBloc(TransactionRepository())
+          BlocProvider(
+              create: (context) => OrderScreenBloc(TransactionRepository())
           ),
-          BlocProvider(create: (context)=> OrderDetailScreenBloc(TransactionRepository()))
+          BlocProvider(
+              create: (context) => OrderDetailScreenBloc(TransactionRepository())
+          ),
         ],
         child: Home(),
   )
@@ -115,7 +116,7 @@ class _HomeState extends State<Home> {
       theme: lightTheme, // Chế độ sáng
       darkTheme: darkTheme, // Chế độ tối
       themeMode: _themeMode, // Điều khiển theme hiện tại
-      home: HomeScreen(),
+      home: MyAppAdmin(),
     );
   }
 }

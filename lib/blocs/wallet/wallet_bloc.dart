@@ -7,8 +7,6 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 
 
-import '../../repositories/parking_spot_repository.dart';
-
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
   final WalletRepository walletRepository;

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/parking_spot_model.dart';
+
 
 class ParkingBookingRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -40,10 +40,10 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
     if (snapshot.exists) {
       // Chuyển dữ liệu sang SpotSlotsModel
       SpotSlotsModel spotSlot = SpotSlotsModel.fromJson(snapshot.data()!);
-      print(spotSlot);
+      // print(spotSlot);
       String spotName = spotSlot.spotName;
-      print(spotSlot.spotName);
-      print(spotSlot.spotID);
+      // print(spotSlot.spotName);
+      // print(spotSlot.spotID);
       String spotID = spotSlot.spotID;
       // Chuẩn bị dữ liệu
       List<String> occupiedSlotsCar = [];
@@ -109,10 +109,10 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
         return numberA.compareTo(numberB);
       });
       // In thông tin kiểm tra
-      print("Occupied Car Slots: $occupiedSlotsCar");
-      print("Occupied Moto Slots: $occupiedSlotsMoto");
-      print("Parking Section Car: $parkingSectionCar");
-      print("Parking Section Moto: $parkingSectionMoto");
+      // print("Occupied Car Slots: $occupiedSlotsCar");
+      // print("Occupied Moto Slots: $occupiedSlotsMoto");
+      // print("Parking Section Car: $parkingSectionCar");
+      // print("Parking Section Moto: $parkingSectionMoto");
       // Trả về đối tượng ParkingSlotData
       return ParkingSlotData(
         occupiedSlotsCar: occupiedSlotsCar,

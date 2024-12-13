@@ -8,9 +8,6 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 
 
 
-import '../../repositories/parking_spot_repository.dart';
-
-
 class OrderDetailScreenBloc extends Bloc<OrderDetailScreenEvent, OrderDetailScreenState> {
 
   final TransactionRepository transactionRepository;
