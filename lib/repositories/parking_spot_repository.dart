@@ -21,12 +21,26 @@ class ParkingSpotRepository {
       return [];
     }
   }
-  Future<List<ParkingSpotModel>> getAllParkingSpotsBySearch(String query) async {
+  Future<List<ParkingSpotModel>> getAllParkingSpotsBySearchSpotName(String query) async {
     try {
       final allSpots = await getAllParkingSpots();
       // Lọc các ParkingSpotModel chứa chuỗi tìm kiếm
       final filteredSpots = allSpots
           .where((spot) => spot.spotName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      // print('Filtered spots: $filteredSpots');
+      return filteredSpots;
+    } catch (e) {
+      print('Error searching for parking spots: $e');
+      return [];
+    }
+  }
+  Future<List<ParkingSpotModel>> getAllParkingSpotsBySearchSpotId(String query) async {
+    try {
+      final allSpots = await getAllParkingSpots();
+      // Lọc các ParkingSpotModel chứa chuỗi tìm kiếm
+      final filteredSpots = allSpots
+          .where((spot) => spot.spotId.toLowerCase().contains(query.toLowerCase()))
           .toList();
       // print('Filtered spots: $filteredSpots');
       return filteredSpots;

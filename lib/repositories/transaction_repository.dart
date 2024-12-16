@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 
 import '../models/transaction_model.dart';
 
@@ -174,6 +176,49 @@ class TransactionRepository {
       // Truy vấn collection `Transactions` với `userID`
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
+          .get();
+      // print(querySnapshot.docs);
+
+      // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
+      List<TransactionModel> transactions = querySnapshot.docs
+          .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      double IncomeByBookingSlot = 0; // thu nhập từ việc đặt chỗ gửi xe
+      double IncomeByCommission = 0; // thu nhập từ ăn hoa hồng < nhà phát triển >
+      double IncomeByCombo = 0; // thu nhập  từ các combo <tháng>
+      double IncomeByRecharge = 0; // thu nhập từ việc quản lý tiền nạp
+      double IncomeByOther  = 0;
+      double Incomes =0;
+      for(int i =0;i<transactions.length;i++){
+        Incomes = Incomes + transactions[i].total;
+        if(transactions[i].transactionType == true){
+          IncomeByRecharge = IncomeByRecharge + transactions[i].total;
+        }
+        else {
+          IncomeByBookingSlot = IncomeByBookingSlot + transactions[i].total;
+        }
+      }
+      IncomeByCommission = IncomeByBookingSlot *0.2;
+      Income income = Income(Incomes, IncomeByBookingSlot, IncomeByCommission, IncomeByCombo, IncomeByOther, IncomeByRecharge);
+      return income;
+
+
+    } catch (e) {
+      print('Error fetching transactions: $e');
+    }
+    return null;
+  }
+  Future<Income?> getIncomefromTransactionsBySpotName(spotID) async {
+    try {
+      List<ParkingSpotModel> spots = await ParkingSpotRepository().getAllParkingSpotsBySearchSpotId(spotID);
+      String SpotName = spots[0].spotName;
+
+      // Truy vấn collection `Transactions` với `userID`
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('Transactions')
+          .where('spotName', isEqualTo: SpotName)
+          .where('transactionType', isEqualTo: false)
+      // Tên collection trong Firestore
           .get();
       // print(querySnapshot.docs);
 

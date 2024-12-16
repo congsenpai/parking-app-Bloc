@@ -35,6 +35,26 @@ class SpotOwnerRepository{
       return [];
     }
   }
+  Future<SpotOwnerModel?> loginByOwner(String phone, String passWord) async {
+    try {
+      final allOwners = await getAllSpotOwners();
+
+      // Tìm người dùng khớp với phone và password
+      final matchingOwner = allOwners.firstWhere(
+            (owner) =>
+        owner.phoneNumber.toLowerCase() == phone.toLowerCase() &&
+            owner.passWord == passWord, // Trả về null nếu không tìm thấy
+      );
+
+      print('Matched owner: $matchingOwner');
+      return matchingOwner;
+    } catch (e) {
+      print('Error fetching owners: $e');
+      return null; // Trả về null nếu xảy ra lỗi
+    }
+  }
+
+
   // Hàm thêm mới SpotOwner vào Firestore
   Future<void> addSpotOwner({
 
@@ -44,6 +64,7 @@ class SpotOwnerRepository{
     required Timestamp createdTime,
     required String spotID,
     required PhoneNumber phoneNumber,
+    required bool isAdmin,
   }) async {
 
     final firestore = FirebaseFirestore.instance;

@@ -3,13 +3,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/customer_management.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/spot_owner_management.dart';
 
+import '../../../../models/spot_owner_model.dart';
 import '../../dashboard/dashboard_screen.dart';
+import '../../dashboard/sidetab_element/spot_management.dart';
 import '../../dashboard/sidetab_element/transaction-management.dart';
 
 
 class SideMenu extends StatelessWidget {
+  final SpotOwnerModel spotOwnerModel;
   const SideMenu({
-    Key? key,
+
+
+    Key? key, required this.spotOwnerModel,
   }) : super(key: key);
 
   @override
@@ -21,22 +26,11 @@ class SideMenu extends StatelessWidget {
             child: Image.asset("assets/images/logo.png"),
           ),
           DrawerListTile(
-            title: "Dashboard",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              Navigator.pushReplacement(context, 
-                  MaterialPageRoute(
-                      builder: (context)=>DashboardScreen()
-                  )
-              );
-            },
-          ),
-          DrawerListTile(
             title: "Quản lý giao dịch",
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {
               Navigator.push(context,
-              MaterialPageRoute(builder: (context)=>TransactionManagement(SpotName: '',)));
+              MaterialPageRoute(builder: (context)=>TransactionManagement(SpotName: '', spotOwnerModel: spotOwnerModel,)));
             },
           ),
           DrawerListTile(
@@ -44,9 +38,10 @@ class SideMenu extends StatelessWidget {
             svgSrc: "assets/icons/menu_task.svg",
             press: () {
               Navigator.push(context, MaterialPageRoute(
-                  builder: (context)=> CustomerManagement(userName: '', isAdmin: true,)));
+                  builder: (context)=> CustomerManagement(userName: '', isAdmin: spotOwnerModel.isAdmin, spotID: spotOwnerModel.spotID,)));
             },
           ),
+          spotOwnerModel.isAdmin == true ?
           DrawerListTile(
             title: "Quản lý chủ bãi đỗ",
             svgSrc: "assets/icons/menu_doc.svg",
@@ -54,11 +49,14 @@ class SideMenu extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(
                   builder: (context)=>SpotOwnerManagement(SpotOwnerName: '', isAdmin: true)));
             },
-          ),
+          ):
           DrawerListTile(
-            title: "Notification",
+            title: "Quản lý bãi đỗ",
             svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
+            press: () {
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=>SpotManagement(spotName: spotOwnerModel.spotOwnerName, isAdmin: false,)));
+            },
           ),
           DrawerListTile(
             title: "Profile",

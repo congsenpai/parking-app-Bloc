@@ -8,14 +8,17 @@ import 'chart.dart';
 import 'data_of_income.dart';
 
 class IncomeDetail extends StatelessWidget {
+  final bool isAdmin;
+  final String SpotID;
   const IncomeDetail({
-    Key? key,
+    Key? key, required this.isAdmin, required this.SpotID,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Income?>(
-        future: TransactionRepository().getIncomefromTransactionsAll(),
+        future: isAdmin ? TransactionRepository().getIncomefromTransactionsAll():
+        TransactionRepository().getIncomefromTransactionsBySpotName(SpotID),
         builder: (context,snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -44,13 +47,13 @@ class IncomeDetail extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: defaultPadding),
-                Chart(),
-                StorageInfoCard(
+                Chart(isAdmin: isAdmin, SpotID: SpotID,),
+                isAdmin == false ? StorageInfoCard(
                   svgSrc: "assets/icons/Documents.svg",
                   title: "Thu nhập từ việc đặt chỗ",
                   income: income.IncomeByBookingSlot.toString(),
 
-                ),
+                ):
                 StorageInfoCard(
                   svgSrc: "assets/icons/media.svg",
                   title: "Thu nhập từ ăn hoa hồng",

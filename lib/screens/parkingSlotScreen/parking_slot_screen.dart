@@ -268,7 +268,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
               bool isReservated = reservationSlots.contains(slot);
               return GestureDetector(
                 onTap: () {
-                  if (!isOccupied) {
+                  if (!isOccupied && !isReservated) {
                     setState(() {
                       lostSlotMoto = slot; // Cập nhật vị trí chọn
                     });

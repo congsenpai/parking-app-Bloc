@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/components/search_widget.dart';
+import 'package:project_smart_parking_app/admin/screens/dashboard/login/login.dart';
+import 'package:project_smart_parking_app/models/spot_owner_model.dart';
 
 import 'package:provider/provider.dart';
 
@@ -11,8 +13,9 @@ import '../../../controllers/menu_app_controller.dart';
 import '../../../responsive.dart';
 
 class Header extends StatelessWidget {
+  final SpotOwnerModel spotOwnerModel;
   const Header({
-    Key? key,
+    Key? key, required this.spotOwnerModel,
   }) : super(key: key);
 
   @override
@@ -24,7 +27,7 @@ class Header extends StatelessWidget {
             onPressed: context.read<MenuAppController>().controlMenu,
           ),
 
-        Expanded(child: ProfileCard()),
+        Expanded(child: ProfileCard(spotOwnerModel: spotOwnerModel,)),
         // ProfileCard()
       ],
     );
@@ -32,8 +35,9 @@ class Header extends StatelessWidget {
 }
 
 class ProfileCard extends StatelessWidget {
+  final SpotOwnerModel spotOwnerModel;
   const ProfileCard({
-    Key? key,
+    Key? key, required this.spotOwnerModel,
   }) : super(key: key);
 
   @override
@@ -59,11 +63,14 @@ class ProfileCard extends StatelessWidget {
           Padding(
               padding:
                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
+              child: Text(spotOwnerModel.spotOwnerName),
             ),
           Container(
             width: Get.width / 15,
-              child: IconButton(onPressed: (){}, icon: Icon(Icons.logout))
+              child: IconButton(onPressed: (){
+                Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context)=>LoginScreenAdmin()));
+              }, icon: Icon(Icons.logout))
               )
 
 

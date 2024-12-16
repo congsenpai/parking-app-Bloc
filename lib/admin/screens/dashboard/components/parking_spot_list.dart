@@ -7,8 +7,10 @@ import '../../../responsive.dart';
 import 'data_of_parking_spot.dart';
 
 class ParkingSpotList extends StatelessWidget {
+  final bool isAdmin;
+  final String spotID;
   const ParkingSpotList({
-    super.key,
+    super.key, required this.isAdmin, required this.spotID,
   });
 
   @override
@@ -30,12 +32,13 @@ class ParkingSpotList extends StatelessWidget {
         SizedBox(height: defaultPadding),
         Responsive(
           mobile: FileInfoCardGridView(
-            crossAxisCount: 1,
+            crossAxisCount: 1, isAdmin: isAdmin, spotID: spotID,
 
           ),
-          tablet: FileInfoCardGridView(),
+          tablet: FileInfoCardGridView(isAdmin: isAdmin, spotID: spotID,),
           desktop: FileInfoCardGridView(
             childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            isAdmin: isAdmin, spotID: spotID,
           ),
         ),
       ],
@@ -44,10 +47,12 @@ class ParkingSpotList extends StatelessWidget {
 }
 
 class FileInfoCardGridView extends StatelessWidget {
+  final bool isAdmin;
+  final String spotID; 
   FileInfoCardGridView({
     super.key,
     this.crossAxisCount = 1,
-    this.childAspectRatio = 1,
+    this.childAspectRatio = 1, required this.isAdmin, required this.spotID,
   });
   ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
 
@@ -57,7 +62,7 @@ class FileInfoCardGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ParkingSpotModel>>(
-      future: parkingSpotRepository.getAllParkingSpots(),
+      future: isAdmin ?parkingSpotRepository.getAllParkingSpots():parkingSpotRepository.getAllParkingSpotsBySearchSpotId(spotID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());

@@ -5,15 +5,17 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 import '../../../constants.dart';
 
 class Chart extends StatelessWidget {
-
+  final bool isAdmin;
+  final String SpotID;
   const Chart({
-    Key? key,
+    Key? key, required this.isAdmin, required this.SpotID,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Income?>(
-        future: TransactionRepository().getIncomefromTransactionsAll(),
+        future: isAdmin ? TransactionRepository().getIncomefromTransactionsAll()
+        : TransactionRepository().getIncomefromTransactionsBySpotName(SpotID),
         builder: (context,snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

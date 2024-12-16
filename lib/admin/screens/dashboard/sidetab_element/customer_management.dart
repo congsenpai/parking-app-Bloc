@@ -8,11 +8,12 @@ import '../components/search_widget.dart';
 class CustomerManagement extends StatefulWidget {
   final String userName;
   final bool isAdmin;
+  final String spotID;
 
   const CustomerManagement({
     super.key,
     required this.userName,
-    required this.isAdmin,
+    required this.isAdmin, required this.spotID,
   });
 
   @override
@@ -39,6 +40,7 @@ class _CustomerManagementState extends State<CustomerManagement> {
             padding: EdgeInsets.all(Get.width / 30),
             child: Column(
               children: [
+                widget.isAdmin == true ?
                 SearchField(
                   controllerText: searchUserName,
                   onSearch: (value) {
@@ -47,6 +49,8 @@ class _CustomerManagementState extends State<CustomerManagement> {
                     });
                     print("Search value: $searchUserName");
                   },
+                ): Center(
+                  child: Text('Customer List'),
                 ),
                 SizedBox(height: defaultPadding),
                 Row(
@@ -56,7 +60,7 @@ class _CustomerManagementState extends State<CustomerManagement> {
                       flex: 5,
                       child: CustomerList(
                         userName: searchUserName,
-                        isAdmin: widget.isAdmin,
+                        isAdmin: widget.isAdmin, spotID: widget.spotID,
                       ),
                     ),
                   ],

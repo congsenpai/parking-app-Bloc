@@ -36,7 +36,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       final spots = await repository.getAllParkingSpots();
       final spotsRecentlyOrder = await repository
           .getAllParkingSpots(); // Bạn có thể thay đổi nếu cần
-      final spotsBySearch = await repository.getAllParkingSpotsBySearch(
+      final spotsBySearch = await repository.getAllParkingSpotsBySearchSpotName(
           event.query);
       emit(HomeScreenLoaded(spots, spotsBySearch,spotsRecentlyOrder));
     }

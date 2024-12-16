@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../models/spot_owner_model.dart';
 import '../../constants.dart';
 import '../../responsive.dart';
 import 'components/header.dart';
@@ -10,6 +11,9 @@ import 'components/transaction_list.dart';
 import 'components/income_details.dart';
 
 class DashboardScreen extends StatelessWidget {
+  final SpotOwnerModel spotOwnerModel;
+  const DashboardScreen({super.key, required this.spotOwnerModel});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,7 +22,7 @@ class DashboardScreen extends StatelessWidget {
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            Header(),
+            Header(spotOwnerModel: spotOwnerModel,),
             SizedBox(height: defaultPadding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,12 +31,12 @@ class DashboardScreen extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      ParkingSpotList(),
+                      ParkingSpotList(isAdmin: spotOwnerModel.isAdmin, spotID: spotOwnerModel.spotID,),
                       SizedBox(height: defaultPadding),
-                      TransactionList(SpotName: '',typeTab: true, inOrOut: true, isAdmin: true,),
+                      TransactionList(SpotName: '',typeTab: true, inOrOut: true, isAdmin: spotOwnerModel.isAdmin,),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context)) IncomeDetail(),
+                      if (Responsive.isMobile(context)) IncomeDetail(isAdmin: spotOwnerModel.isAdmin, SpotID: spotOwnerModel.spotID,),
                     ],
                   ),
                 ),
@@ -42,7 +46,7 @@ class DashboardScreen extends StatelessWidget {
                 if (!Responsive.isMobile(context))
                   Expanded(
                     flex: 2,
-                    child: IncomeDetail(),
+                    child: IncomeDetail(isAdmin: spotOwnerModel.isAdmin, SpotID: spotOwnerModel.spotID,),
                   ),
               ],
             )

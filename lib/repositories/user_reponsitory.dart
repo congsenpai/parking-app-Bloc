@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
+import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import '../models/user_model.dart';
 
@@ -43,11 +45,13 @@ class UserRepository {
       return [];
     }
   }
-  Future<List<UserModel>> getUserBySpotID(String spotName) async {
+  Future<List<UserModel>> getUserBySpotID(String spotID) async {
     try {
+      List<ParkingSpotModel> spots = await ParkingSpotRepository().getAllParkingSpotsBySearchSpotId(spotID);
+      String SpotName = spots[0].spotName;
       List<TransactionModel> transaction = await TransactionRepository().getAllTransactions();
       List<String> userUsedSpotName = transaction
-          .where((tran) => tran.spotName.toLowerCase().contains(spotName.toLowerCase()))
+          .where((tran) => tran.spotName.toLowerCase().contains(SpotName.toLowerCase()))
           .map((tran) =>tran.userID).toList();
 
       // Lọc các ParkingSpotModel chứa chuỗi tìm kiếm
@@ -57,7 +61,15 @@ class UserRepository {
         ListUser.add(userModel!);
       }
       print('Filtered spots: $ListUser');
-      return ListUser;
+      Set<String> seenIds = {}; // Set để lưu trữ ID đã thấy
+      List<UserModel> uniqueList = ListUser.where((user) {
+        final isNew = !seenIds.contains(user.userID);
+        if (isNew) {
+          seenIds.add(user.userID);
+        }
+        return isNew;
+      }).toList();
+      return uniqueList;
 
     } catch (e) {
       print('Users does not exist.');

@@ -8,11 +8,12 @@ import '../../../constants.dart';
 class CustomerList extends StatefulWidget {
   final String userName;
   final bool isAdmin;
+  final String spotID;
 
   const CustomerList({
     Key? key,
     required this.userName,
-    required this.isAdmin,
+    required this.isAdmin, required this.spotID,
   }) : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class _CustomerListState extends State<CustomerList> {
   // Hàm để load dữ liệu
   void _loadData() {
     setState(() {
-      if (widget.isAdmin ) {
+      if (widget.isAdmin) {
         if(widget.userName.isEmpty) {
           _futureUsers = UserRepository().getAllUser();
         }
@@ -46,8 +47,8 @@ class _CustomerListState extends State<CustomerList> {
 
       }
       else{
-        print('search data: ${widget.userName}');
-        _futureUsers = UserRepository().getUserByUserName(widget.userName);
+        print('search data: ${widget.spotID}');
+        _futureUsers = UserRepository().getUserBySpotID(widget.spotID);
       }
     });
   }
