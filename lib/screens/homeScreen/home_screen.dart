@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     textInSpan2: 'Parking Sport',
                   ),
                   SizedBox(height: Get.width / 15),
-                  NearbyParkingSpotsWidget(parkingSpots: parkingSpots, userID: widget.user.userID,),
+                  NearbyParkingSpotsWidget(parkingSpots: parkingSpots, userID: widget.user.userID, userName: widget.user.username,),
                   SizedBox(height: Get.width / 10),
                   const HeaderText(
                       textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
@@ -310,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         bottomNavigationBar: SafeArea(
-          child: footerWidget(userID: widget.user.userID,),
+          child: footerWidget(userID: widget.user.userID, userName: widget.user.username,),
         ),
       );
     }, listener: (context, state) {

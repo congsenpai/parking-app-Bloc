@@ -7,10 +7,11 @@ import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_b
 import '../../Language/language.dart';
 import '../../repositories/parking_slot_repository.dart';
 class ParkingSlotScreen extends StatefulWidget {
+  final String userName;
   final String documentId;
   final ParkingSpotModel parkingSpotModel;
   final String userID;
-  const ParkingSlotScreen({super.key, required this.documentId, required this.parkingSpotModel, required this.userID});
+  const ParkingSlotScreen({super.key, required this.documentId, required this.parkingSpotModel, required this.userID, required this.userName});
   @override
   State<ParkingSlotScreen> createState() => _ParkingBookingScreenState();
 }
@@ -327,7 +328,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                 //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
                 // Navigator.of(context).pop(); // Đóng dialog
                 Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot, userID: widget.userID,)),
+                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot, userID: widget.userID, userName: '',)),
                 );
               },
             ),

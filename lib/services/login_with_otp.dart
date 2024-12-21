@@ -54,7 +54,7 @@ class LoginWithOTP {
         isActive: userData['isActive'] ?? true,
         createdOn: userData['createdOn'] ?? DateTime.now(),
         city: userData['city'] ?? '',
-        vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
+        vehicle: userData['vehicle'] ?? '',
       );
     } else {
       //print('User document does not exist, creating a new one.');

@@ -18,10 +18,10 @@ class UserModel {
   final bool isActive;
   final dynamic createdOn;
   final String city;
-  final List<Map<String, String>> vehical;
+  final String vehicle;
 
   UserModel({
-    required this.vehical,
+    required this.vehicle,
     required this.userID,
     required this.username,
     required this.email,
@@ -51,18 +51,14 @@ class UserModel {
       'isActive': isActive,
       'createdOn': createdOn,
       'city': city,
-      'vehical': vehical,
+      'vehicle': vehicle,
     };
   }
 
   // Create UserModel from Map (JSON)
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      vehical: List<Map<String, String>>.from(
-        (json['vehical'] as List<dynamic>).map(
-          (e) => Map<String, String>.from(e as Map),
-        ),
-      ),
+      vehicle: json['vehicle'] ?? 'null',
       userID: json['uId'] ?? 'null',
       username: json['username'] ?? 'null',
       email: json['email'] ?? 'null',
@@ -92,7 +88,7 @@ const String isAdminKey = 'isAdmin';
 const String isActiveKey = 'isActive';
 const String createdOnKey = 'createdOn';
 const String cityKey = 'city';
-const String vehicalKey = 'vehical';
+const String vehicleKey = 'vehicle';
 const String tokenKey = 'token';
 const String refreshTokenKey = 'refreshToken';
 
@@ -118,7 +114,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
     await _storage.delete(key: isActiveKey);
     await _storage.delete(key: createdOnKey);
     await _storage.delete(key: cityKey);
-    await _storage.delete(key: vehicalKey);
+    await _storage.delete(key: vehicleKey);
   }
 
   @override
@@ -135,16 +131,17 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
     final isActive = await _storage.read(key: isActiveKey) == 'true';
     final createdOn = await _storage.read(key: createdOnKey);
     final city = await _storage.read(key: cityKey);
-    final vehicalJson = await _storage.read(key: vehicalKey);
+    final vehicleJson = await _storage.read(key: vehicleKey);
 
-    List<Map<String, String>> vehical = [];
-    if (vehicalJson != null) {
-      vehical = List<Map<String, String>>.from(json.decode(vehicalJson));
-    }
+    String vehicle = vehicleJson ?? '';
+
+
+
+
 
     if (uId != null && username != null) {
       return UserModel(
-        vehical: vehical,
+        vehicle: vehicle,
         userID: uId,
         username: username,
         email: email ?? '',
@@ -155,7 +152,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
         userAddress: userAddress ?? '',
         isAdmin: isAdmin,
         isActive: isActive,
-        createdOn: createdOn,
+        createdOn: createdOn ?? '',
         city: city ?? '',
       );
     }
@@ -177,8 +174,8 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
     await _storage.write(key: createdOnKey, value: user.createdOn.toString());
     await _storage.write(key: cityKey, value: user.city);
 
-    // Serialize vehical list into a JSON string before saving
-    await _storage.write(key: vehicalKey, value: json.encode(user.vehical));
+    // Serialize vehicle list into a JSON string before saving
+    await _storage.write(key: vehicleKey, value: json.encode(user.vehicle));
   }
 
   @override

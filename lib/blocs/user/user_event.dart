@@ -7,11 +7,11 @@ class ChangeProfileEvent extends UserEvent {
   final String userID;
   final String userName;
   final String email;
-  final    String phone;
+  final String phone;
   final String userImg;
-  final    String country;
+  final String country;
   final String userAddress;
-  final    List<Map<String, String>> vehicle;
+  final String vehicle;
 
   ChangeProfileEvent(this.userID,
       this.userName,

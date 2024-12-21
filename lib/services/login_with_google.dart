@@ -28,7 +28,7 @@ class LoginWithGoogle {
         'isActive': true,
         'createdOn': DateTime.now(),
         'city': '',
-        'vehical': [],
+        'vehicle': [],
       });
     }
   }
@@ -55,7 +55,7 @@ class LoginWithGoogle {
         isActive: userData['isActive'] ?? true,
         createdOn: userData['createdOn'] ?? DateTime.now(),
         city: userData['city'] ?? '',
-        vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
+        vehicle: userData['vehicle'] ?? '',
       );
     } else {
       return null;

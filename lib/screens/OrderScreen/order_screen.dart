@@ -16,8 +16,9 @@ import '../loginScreen/login_screen.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   final String userID;
+  final String userName;
 
-  const MyOrdersScreen({super.key, required this.userID});
+  const MyOrdersScreen({super.key, required this.userID, required this.userName});
 
   @override
   State<MyOrdersScreen> createState() => _MyOrdersScreenState();
@@ -141,7 +142,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 child: NoDataTransactionWidget(),
               ),
         bottomNavigationBar: footerWidget(
-          userID: widget.userID,
+          userID: widget.userID, userName: widget.userName,
         ),
         backgroundColor: Colors.white,
       );

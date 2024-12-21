@@ -14,10 +14,11 @@ import '../../widget/transaction_item_widget.dart';
 
 class WalletScreen extends StatefulWidget {
   final String userID;
+  final String userName2;
   final double money = 0;
   final String userName = 'bao';
   final creditID = '00000000000';
-  const WalletScreen({super.key,required this.userID});
+  const WalletScreen({super.key,required this.userID, required this.userName2});
   @override
   State<WalletScreen> createState() => _WalletScreenState();
 
@@ -37,9 +38,7 @@ class _WalletScreenState extends State<WalletScreen> {
           if (state is WalletLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is WalletLoaded) {
-            if (state.Transactiondata.isEmpty) {
-              return Center(child: Text('Chưa có giao dịch nào'));
-            }
+
             transactionModel = state.Transactiondata;
             walletModel = state.dataWallet;
           } else if (state is WalletError) {
@@ -89,7 +88,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
               ),
             ),
-            bottomNavigationBar:  footerWidget(userID: widget.userID,),
+            bottomNavigationBar:  footerWidget(userID: widget.userID, userName: widget.userName2,),
           );
         },
         listener: (context,state){
@@ -141,6 +140,7 @@ class _WalletSectionState extends State<WalletSection> {
               borderRadius: BorderRadius.circular(Get.width/20),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,15 +154,27 @@ class _WalletSectionState extends State<WalletSection> {
                       ),
                     ),
                     SizedBox(height: Get.width/20),
-                    Text(widget.userName, style: const TextStyle(color: Colors.white)),
-                    Text(widget.creditID, style: const TextStyle(color: Colors.white)),
+                    Text(widget.userName, style: TextStyle(color: Colors.white,fontSize: Get.width/25)),
+                    Text(widget.creditID, style: TextStyle(color: Colors.white,fontSize: Get.width/25)),
                   ],
                 ),
 
                 Center(
                   child: ElevatedButton(
                       onPressed: (){},
-                      child: const Text('Nạp tiền')
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent, // Màu nền
+                        foregroundColor: Colors.white, // Màu chữ
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide( // Viền
+                            color: Colors.white, // Màu viền
+                            width: 4,           // Độ dày viền
+                          ),// Bo tròn nút
+                          borderRadius: BorderRadius.circular(Get.width/20),
+                        ),
+                      ),
+                      child: Text('Recharge',style: TextStyle(fontSize: Get.width/20),)
                   )
                 )
               ],
@@ -182,7 +194,7 @@ class _WalletSectionState extends State<WalletSection> {
                 onPressed: () {
                   Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: widget.userID,))
+                      MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: widget.userID, userName: widget.userName,))
                   );
                 },
 

@@ -7,12 +7,14 @@ import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
+import '../screens/settingScreen/setting_screen.dart';
 
 
 class footerWidget extends StatelessWidget {
   final String userID; // Thêm biến này để lưu trữ thông tin user
+  final String userName;
   const footerWidget({
-    super.key, required this.userID,
+    super.key, required this.userID, required this.userName,
   });
 
   @override
@@ -58,7 +60,7 @@ class footerWidget extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: userID,)));
+                  MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: userID, userName: userName,)));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -87,7 +89,7 @@ class footerWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => WalletScreen(
-                          userID: userID)));
+                          userID: userID, userName2: userName,)));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -111,7 +113,13 @@ class footerWidget extends StatelessWidget {
             width: Get.width / 20,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(context,
+              MaterialPageRoute(
+                  builder: (context) => SettingsScreen(userID: userID, userName: userName,)
+              )
+              );
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               // Điều chỉnh kích thước theo nội dung

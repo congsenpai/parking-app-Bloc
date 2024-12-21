@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:project_smart_parking_app/models/wallet_model.dart';
+import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import '../models/user_model.dart';
 
 class LoginWithEmail {
@@ -28,7 +30,7 @@ class LoginWithEmail {
         'isActive': true,
         'createdOn': DateTime.now(),
         'city': '',
-        'vehical': [],
+        'vehicle': [],
       });
     }
   }
@@ -41,13 +43,23 @@ class LoginWithEmail {
         email: email,
         password: password,
       );
-
-      // Tạo tài liệu cho người dùng trong Firestore
       await createUserDocument(userCredential.user);
-
       // Lấy thông tin người dùng từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
       await _userProvider.login(model!);
+      // Tạo tài liệu cho người dùng trong Firestore
+
+      WalletModel walletModel = WalletModel(
+          walletCode: model.username == '' ? "${model.username}BCP" : model.email,
+          userID: model.userID,
+          userName: model.username == '' ? model.username : 'NoName',
+          balance: 0,
+          creditScore: 0,
+          isAction: true,
+          createdOn: Timestamp.now()
+      );
+      WalletRepository walletRepository = WalletRepository();
+      await walletRepository.addWallet(model.userID, walletModel);
       // Trả về thông tin người dùng nếu đăng ký thành công
       return model;
 
@@ -119,7 +131,7 @@ class LoginWithEmail {
         isActive: userData['isActive'] ?? true,
         createdOn: userData['createdOn'] ?? DateTime.now(),
         city: userData['city'] ?? '',
-        vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
+        vehicle: userData['vehicle'] ?? '',
       );
     } else {
       return null;

@@ -10,10 +10,11 @@ import '../../models/parking_spot_model.dart';
 
 
 class NearbyParkingSpotsWidget extends StatelessWidget {
+  final String userName;
   final String userID;
   const NearbyParkingSpotsWidget({
     super.key,
-    required this.parkingSpots, required this.userID,
+    required this.parkingSpots, required this.userID, required this.userName,
   });
 
   final List<ParkingSpotModel> parkingSpots;
@@ -43,7 +44,7 @@ class NearbyParkingSpotsWidget extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ParkingSpotScreen(data: spot, userID: userID,)),
+                        MaterialPageRoute(builder: (context) => ParkingSpotScreen(data: spot, userID: userID, userName: userName,)),
                       );
                     },
                     child: Column(

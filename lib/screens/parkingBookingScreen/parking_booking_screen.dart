@@ -16,13 +16,14 @@ import '../../widget/Starwidget.dart';
 
 class ParkingBookingDetailScreen extends StatefulWidget {
   final String userID;
+  final String userName;
 
   const ParkingBookingDetailScreen(
       {super.key,
       required this.parkingSpotModel,
       required this.TypeSelected,
       required this.NameSlot,
-      required this.userID});
+      required this.userID, required this.userName});
 
   final ParkingSpotModel parkingSpotModel;
   final String TypeSelected;
@@ -625,7 +626,7 @@ class _ParkingBookingDetailScreenState
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MyOrdersScreen(userID: widget.userID,),
+            builder: (context) => MyOrdersScreen(userID: widget.userID, userName: widget.userName,),
           ),
         );
       }

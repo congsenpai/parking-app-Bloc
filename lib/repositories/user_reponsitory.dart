@@ -72,6 +72,7 @@ class UserRepository {
       return uniqueList;
 
     } catch (e) {
+      print(e);
       print('Users does not exist.');
       return [];
     }
@@ -97,7 +98,7 @@ class UserRepository {
       return [];
     }
   }
-  Future<void> updateUserByID( String userID, String userName, String email, String phone, String userImg, String country, String userAddress, List<Map<String, String>> vehical,) async {
+  Future<void> updateUserByID( String userID, String userName, String email, String phone, String userImg, String country, String userAddress, String vehicle,) async {
     try {
       DocumentReference docRef =
       FirebaseFirestore.instance.collection('users').doc(userID);
@@ -108,8 +109,10 @@ class UserRepository {
         'userImg': userImg,
         'country': country,
         'userAddress': userAddress,
-        'vehical': vehical,
+        'vehicle': vehicle,
       };
+      // Cập nhật tài liệu Firestore
+      await docRef.update(updatedData);
     } catch (e) {
       print('Lỗi khi cập nhật thông tin người dùng: $e');
     }

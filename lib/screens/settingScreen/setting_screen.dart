@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:project_smart_parking_app/screens/settingScreen/update_user_profile.dart';
+import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 import 'package:project_smart_parking_app/widget/footer_widget.dart';
 
 
 class SettingsScreen extends StatefulWidget {
   @override
-  const SettingsScreen({super.key, required this.userID});
+  const SettingsScreen({super.key, required this.userID, required this.userName});
   final String userID;
+  final String userName;
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 
@@ -27,9 +30,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           // Avatar và số điện thoại
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
-              children: const [
+              children:  [
                 CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.blueAccent,
@@ -37,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "6281092102910",
+                  "${widget.userName}",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -63,7 +66,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                         borderRadius: BorderRadius.circular(15)
                       ),
-                      child: buildListTile(Icons.edit, "Edit Profile", onTap: () {}),
+                      child: buildListTile(Icons.edit, "Edit Profile", onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>UpdateUserProfile(UserID: widget.userID,)));
+                      }),
                     ),
                     SizedBox(
                       height: Get.width /20,
@@ -99,7 +105,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                           borderRadius: BorderRadius.circular(15)
                       ),
-                      child: buildListTile(Icons.wallet, "My wallet", onTap: () {}),
+                      child: buildListTile(Icons.wallet, "My wallet", onTap: () {
+                        Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context)=> WalletScreen(userID: widget.userID, userName2: widget.userName,)));
+                      }),
                     ),
                     SizedBox(
                       height: Get.width /20,
@@ -161,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
       // Bottom Navigation Bar
-      bottomNavigationBar: footerWidget(),
+      bottomNavigationBar: footerWidget(userID: widget.userID, userName: widget.userName,),
     );
   }
 

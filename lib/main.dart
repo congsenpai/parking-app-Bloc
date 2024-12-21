@@ -15,6 +15,7 @@ import 'admin/main.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/home/home_bloc.dart';
+import 'blocs/user/user_bloc.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,9 @@ void main() async {
           BlocProvider(
               create: (context) => OrderDetailScreenBloc(TransactionRepository())
           ),
+          BlocProvider(
+              create: (context) => UserBloc()
+          )
         ],
         child:MyApp(),
       )
@@ -134,14 +138,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeApp extends StatefulWidget {
+  const HomeApp({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeApp> createState() => _HomeAppState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeAppState extends State<HomeApp> {
   ThemeMode _themeMode = ThemeMode.light; // Mặc định là sáng
 
   void toggleTheme() {
