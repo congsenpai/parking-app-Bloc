@@ -8,6 +8,7 @@ import 'package:project_smart_parking_app/repositories/parking_spot_repository.d
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/transactionDiposited/example.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
 
@@ -57,7 +58,7 @@ void main() async {
               create: (context) => UserBloc()
           )
         ],
-        child:MyApp(),
+        child:HomeApp(),
       )
   );
 }
@@ -160,8 +161,11 @@ class _HomeAppState extends State<HomeApp> {
       theme: lightTheme, // Chế độ sáng
       darkTheme: darkTheme, // Chế độ tối
       themeMode: _themeMode, // Điều khiển theme hiện tại
-      home: MyAppAdmin(),
+      home: Example(),
     );
   }
 }
+
+
+
 

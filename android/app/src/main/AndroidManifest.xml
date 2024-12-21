@@ -5,6 +5,7 @@
 
     <!-- Quyền truy cập vị trí trong nền (tùy chọn nếu cần thiết) -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="smart_parking_app"
         android:name="${applicationName}"
