@@ -1,5 +1,6 @@
+// ignore_for_file: unused_local_variable, unused_field, avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:project_smart_parking_app/services/GoogleMap.dart';

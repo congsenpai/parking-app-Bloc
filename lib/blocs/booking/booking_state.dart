@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 
 
-
 abstract class BookingScreenState {}
 
 class BookingScreenInitial extends BookingScreenState {

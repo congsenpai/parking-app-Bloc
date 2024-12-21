@@ -1,55 +1,34 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
-import 'package:project_smart_parking_app/services/remember_me_service.dart';
+import '../../blocs/register/register_bloc.dart';
+import '../../blocs/register/register_event.dart';
+import '../../blocs/register/register_state.dart';
 import '../homeScreen/home_screen.dart';
-import '../../blocs/auth/auth_bloc.dart';
+
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:project_smart_parking_app/blocs/auth/auth_event.dart';
-import 'package:project_smart_parking_app/blocs/auth/auth_state.dart';
+
 import 'package:project_smart_parking_app/services/login_with_otp.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_with_phone_number.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import 'login_screen.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordConfirmationController = TextEditingController();
   bool isChecked = false; // Variable to hold checkbox state
   bool obscureText = true; // Variable to toggle password visibility
   String? _errorMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadRememberedCredentials(); // Tải thông tin đã lưu khi khởi tạo
-  }
-
-  Future<void> _loadRememberedCredentials() async {
-    final rememberMeService = RememberMeService();
-    final isRemembered = await rememberMeService.isRemembered();
-
-    if (isRemembered) {
-      final credentials = await rememberMeService.getCredentials();
-      setState(() {
-        _emailController.text = credentials['email'] ?? '';
-        _passwordController.text = credentials['password'] ?? '';
-        isChecked = true;
-        print(
-            "Email: ${credentials['email']}, Password: ${credentials['password']}");
-      });
-    } else {
-      print("No remembered credentials");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BlocProvider(
-          create: (context) => AuthBloc(LoginWithEmail(), LoginWithGoogle(),
-              LoginWithOTP(), RememberMeService()),
+          create: (context) =>
+              AuthBloc(LoginWithEmail(), LoginWithGoogle(), LoginWithOTP()),
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
               if (state is AuthLoading) {
@@ -106,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: Get.height / 20,
                       ),
                       const Text(
-                        'Sign in to Parkiin',
+                        'Sign up to connect with Parkiin',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -169,61 +148,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         height: Get.height / 30,
                       ),
-                      // Remember Me & Forgot Password
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value:
-                                    context.read<AuthBloc>().state.isRemember,
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    context.read<AuthBloc>().add(
-                                        ToggleRememberMeEvent(
-                                            isRemember: value,
-                                            email: _emailController.text.trim(),
-                                            password: _passwordController.text
-                                                .trim()));
-                                    print('Đã checked');
-                                  }
-                                },
-                                activeColor: Colors.blue,
-                              ),
-                              const Text(
-                                'Remember Me',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Get.snackbar(
-                                'Password Recovery',
-                                'Link to reset password sent to your email!',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.black54,
-                                colorText: Colors.white,
-                              );
-                            },
-                            child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(color: Colors.grey),
+                      TextField(
+                        controller: _passwordConfirmationController,
+                        obscureText: obscureText,
+                        // Use the obscureText variable
+                        decoration: InputDecoration(
+                          labelText: 'Retype Password',
+                          labelStyle: const TextStyle(color: Colors.white),
+                          filled: true,
+                          fillColor: const Color(0xFF2C2F3F),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
                             ),
+                            onPressed: () {
+                              setState(() {
+                                obscureText = !obscureText; // Toggle the state
+                              });
+                            },
                           ),
-                        ],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: Get.height / 30,
                       ),
 
-                      // Sign In Button with GetX Navigation
+                      // Sign Up Button with GetX Navigation
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
                             context.read<AuthBloc>().add(
-                                  LoginWithEmailEvent(
+                                  RegisterWithEmailEvent(
                                     _emailController.text.trim(),
                                     _passwordController.text.trim(),
+                                    _passwordConfirmationController.text.trim(),
                                   ),
                                 );
                             if (_errorMessage != null) {
@@ -251,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: const EdgeInsets.all(15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(2))),
-                          child: const Text('Sign in',
+                          child: const Text('Sign Up',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20)),
                         ),
@@ -279,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Social Sign-In Buttons
                       ElevatedButton(
                         onPressed: () {
-                          context.read<AuthBloc>().add(LoginWithGoogleEvent());
+                          context.read<AuthBloc>().add(RegisterWithGoogleEvent());
                           if (_errorMessage != null) {
                             showDialog(
                               context: context,
@@ -312,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Icon(Icons.g_mobiledata_rounded,
                                 color: Colors.white),
-                            Text('Sign in with google',
+                            Text('Sign up with google',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -343,7 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Icon(Icons.phone, color: Colors.white),
                             Text(
-                              'Sign in with phone number',
+                              'Sign up with phone number',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -364,15 +331,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'New to Parkiin?',
+                            'Have your account?',
                             style: TextStyle(color: Colors.white70),
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.to(const RegisterScreen());
+                              // Navigate to Sign Up Screen
+                              Get.to(const LoginScreen());
                             },
                             child: const Text(
-                              'Create new account here →',
+                              'Try to login here →',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

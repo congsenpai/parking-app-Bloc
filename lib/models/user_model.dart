@@ -1,10 +1,8 @@
-// ignore_for_file: avoid_print
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_provider/flutter_auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
-
+// ignore_for_file: avoid_print
 
 // UserModel class definition
 class UserModel {
@@ -62,7 +60,7 @@ class UserModel {
     return UserModel(
       vehical: List<Map<String, String>>.from(
         (json['vehical'] as List<dynamic>).map(
-              (e) => Map<String, String>.from(e as Map),
+          (e) => Map<String, String>.from(e as Map),
         ),
       ),
       userID: json['uId'] ?? 'null',
@@ -99,7 +97,7 @@ const String tokenKey = 'token';
 const String refreshTokenKey = 'refreshToken';
 
 class SecureStore implements AuthStore<UserModel>, TokenStore {
-  static final SecureStore _instance = const SecureStore._();
+  static const SecureStore _instance = SecureStore._();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   const SecureStore._();
@@ -210,6 +208,7 @@ class SecureStore implements AuthStore<UserModel>, TokenStore {
 
 class UserProvider with ChangeNotifier {
   final SecureStore _secureStore = SecureStore();
+
   UserModel? _user;
 
   UserModel? get user => _user;
@@ -219,20 +218,28 @@ class UserProvider with ChangeNotifier {
   // Phương thức đăng nhập
   Future<void> login(UserModel userModel) async {
     _user = userModel;
-    await _secureStore.save(userModel); // Lưu thông tin người dùng vào SecureStore
+    await _secureStore
+        .save(userModel); // Lưu thông tin người dùng vào SecureStore
     notifyListeners();
   }
 
   // Phương thức đăng xuất
   Future<void> logout() async {
     _user = null;
-    await _secureStore.delete(); // Xóa thông tin người dùng khỏi SecureStore
+    await _secureStore.delete();
+    await _secureStore.clear(); // Xóa thông tin người dùng khỏi SecureStore
     notifyListeners();
   }
 
   // Tải thông tin người dùng từ SecureStore
-  Future<void> loadUser() async {
-    _user = await _secureStore.retrieve(); // Lấy thông tin người dùng từ SecureStore
-    notifyListeners();
+  Future<UserModel?> loadUser() async {
+    try {
+      _user = await _secureStore.retrieve();
+      notifyListeners();
+      return _user;
+    } catch (e) {
+      print("Error loading user: $e");
+      return null;
+    }
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
@@ -11,8 +10,11 @@ import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
-import 'blocs/home/home_bloc.dart';
 
+
+import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'blocs/home/home_bloc.dart';
 import 'firebase_options.dart';
 import 'models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +53,21 @@ void main() async {
               create: (context) => OrderDetailScreenBloc(TransactionRepository())
           ),
         ],
-        child: Home(),
-  )
-      );
+        child:MyApp(),
+      )
+  );
+}
+
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
+      home: RegisterScreen(), // Assuming you want to show the RegisterScreen initially
+      // You can add routes or other setup if needed
+    );
+  }
 }
 
 void configLoading() {
@@ -68,6 +82,18 @@ void configLoading() {
 
 // ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
+  Future<bool> _isFirstLaunch() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
+    if (isFirstLaunch) {
+      await prefs.setBool(
+          'isFirstLaunch', false); // Set to false after first launch
+    }
+
+    return isFirstLaunch;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -75,18 +101,32 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      builder: EasyLoading.init(), // Initialize EasyLoading in the builder
-      home: FutureBuilder<UserModel?>(
-        future: SecureStore().retrieve(), // Check user information
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator()); // Show loading
-          } else if (snapshot.hasData && snapshot.data != null) {
-            // If user data is present, navigate to Home
-            return LoginScreen();
+      builder: EasyLoading.init(),
+      debugShowCheckedModeBanner: false,
+      home: FutureBuilder<bool>(
+        future: _isFirstLaunch(),
+        builder: (context, firstLaunchSnapshot) {
+          if (firstLaunchSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (firstLaunchSnapshot.data == true) {
+            // If first launch, show WelcomeScreen
+            return const WelcomeScreen();
           } else {
-            // If no user data, navigate to Welcome
-            return WelcomeScreen();
+            // Otherwise, check if the user is logged in
+            return FutureBuilder<UserModel?>(
+              future: SecureStore().retrieve(),
+              builder: (context, userSnapshot) {
+                if (userSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (userSnapshot.hasData && userSnapshot.data != null) {
+                  return HomeScreen(user: userSnapshot.data!);
+                } else {
+                  return const LoginScreen();
+                }
+              },
+            );
           }
         },
       ),

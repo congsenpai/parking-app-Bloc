@@ -11,7 +11,8 @@ import '../parkingSlotScreen/parking_slot_screen.dart';
 class ParkingSpotScreen extends StatefulWidget {
 
   final ParkingSpotModel data;
-  const ParkingSpotScreen({Key? key,  required this.data}) : super(key: key);
+  final String userID;
+  const ParkingSpotScreen({Key? key,  required this.data, required this.userID}) : super(key: key);
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
 }
@@ -224,7 +225,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!,)
+                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID,)
                 ),
               );
             },

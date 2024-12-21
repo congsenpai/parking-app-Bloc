@@ -36,7 +36,8 @@ class LoginWithOTP {
   Future<UserModel?> _getUserModel(User? user) async {
     if (user == null) return null;
 
-    DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+    DocumentSnapshot userDoc =
+        await _firestore.collection('users').doc(user.uid).get();
 
     if (userDoc.exists) {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
@@ -58,7 +59,8 @@ class LoginWithOTP {
     } else {
       //print('User document does not exist, creating a new one.');
       await _createUserDocument(user);
-      return await _getUserModel(user); // Re-fetch after creating the user document
+      return await _getUserModel(
+          user); // Re-fetch after creating the user document
     }
   }
 
@@ -94,14 +96,15 @@ class LoginWithOTP {
   }
 
   // Xác thực OTP và lưu UserModel vào UserProvider
-  Future<UserModel?> signInWithOTP(String phoneNumber,String otp) async {
+  Future<UserModel?> signInWithOTP(String phoneNumber, String otp) async {
     sendOtp(phoneNumber);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: _verificationId,
         smsCode: otp,
       );
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
       // Tạo hoặc lấy UserModel từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
@@ -115,7 +118,6 @@ class LoginWithOTP {
       return null;
     }
   }
-
 
   // Đăng xuất
   Future<void> signOut() async {

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_event.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_state.dart';

@@ -14,3 +14,12 @@ class LoginWithPhoneNumberEvent extends AuthEvent {
   final String otp;
   LoginWithPhoneNumberEvent(this.phoneNumber, this.otp);
 }
+class ToggleRememberMeEvent extends AuthEvent {
+  final bool isRemember;
+  final String email;
+  final String password;
+
+  ToggleRememberMeEvent({required this.isRemember, required this.email, required this.password});
+}
+
+

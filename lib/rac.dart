@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';

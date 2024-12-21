@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
@@ -36,7 +37,8 @@ class LoginWithGoogle {
   Future<UserModel?> _getUserModel(User? user) async {
     if (user == null) return null;
 
-    DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+    DocumentSnapshot userDoc =
+        await _firestore.collection('users').doc(user.uid).get();
 
     if (userDoc.exists) {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
@@ -56,18 +58,65 @@ class LoginWithGoogle {
         vehical: List<Map<String, String>>.from(userData['vehical'] ?? []),
       );
     } else {
-      //print('User document does not exist, creating a new one.');
-      await _createUserDocument(user);
-      return await _getUserModel(user); // Re-fetch after creating the user document
+      return null;
     }
   }
 
-  // Đăng nhập với Google và lưu UserModel vào UserProvider
+  // Đăng ký với Google và tạo tài khoản người dùng mới nếu chưa có
+  Future<UserModel?> signUpWithGoogle({bool isRemember = false}) async {
+    try {
+      // Bước 1: Xác thực với Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      if (googleUser == null || googleAuth == null) {
+        throw 'Google sign-in was canceled or failed.';
+      }
+
+      // Bước 2: Lấy thông tin xác thực từ Google
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Bước 3: Đăng nhập vào Firebase
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      User? firebaseUser = userCredential.user;
+
+      if (firebaseUser == null) {
+        throw 'Failed to retrieve Firebase user after Google sign-in.';
+      }
+
+      // Bước 4: Tạo tài liệu người dùng mới trong Firestore nếu chưa tồn tại
+      await _createUserDocument(firebaseUser);
+
+      // Bước 5: Lấy thông tin người dùng từ Firestore
+      UserModel? model = await _getUserModel(firebaseUser);
+
+      // Bước 6: Lưu vào UserProvider nếu cần ghi nhớ
+      if (model != null && isRemember) {
+        await _userProvider.login(model);
+      }
+
+      // Bước 7: Trả về UserModel
+      return model;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error signing up with Google: $e');
+      }
+      return null;
+    }
+  }
+
+  // Đăng nhập với Google
   Future<UserModel?> signInWithGoogle() async {
     try {
       // Google Authentication
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
 
       // Firebase credential
       final credential = GoogleAuthProvider.credential(
@@ -76,16 +125,19 @@ class LoginWithGoogle {
       );
 
       // Firebase login
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
 
-      // Tạo hoặc lấy UserModel từ Firestore
+      // Lấy UserModel từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
       if (model != null) {
-        await _userProvider.login(model); // Lưu model vào UserProvider
+        await _userProvider.login(model);
       }
       return model; // Trả về UserModel đã đăng nhập
     } catch (e) {
-      print('Error signing in with Google: $e');
+      if (kDebugMode) {
+        print('Error signing in with Google: $e');
+      }
       return null;
     }
   }

@@ -89,7 +89,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
               ),
             ),
-            bottomNavigationBar: const footerWidget(),
+            bottomNavigationBar:  footerWidget(userID: widget.userID,),
           );
         },
         listener: (context,state){
@@ -182,7 +182,7 @@ class _WalletSectionState extends State<WalletSection> {
                 onPressed: () {
                   Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => MyOrdersScreen())
+                      MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: widget.userID,))
                   );
                 },
 

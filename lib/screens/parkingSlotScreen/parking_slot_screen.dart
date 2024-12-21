@@ -9,7 +9,8 @@ import '../../repositories/parking_slot_repository.dart';
 class ParkingSlotScreen extends StatefulWidget {
   final String documentId;
   final ParkingSpotModel parkingSpotModel;
-  const ParkingSlotScreen({Key? key, required this.documentId, required this.parkingSpotModel}) : super(key: key);
+  final String userID;
+  const ParkingSlotScreen({super.key, required this.documentId, required this.parkingSpotModel, required this.userID});
   @override
   State<ParkingSlotScreen> createState() => _ParkingBookingScreenState();
 }
@@ -326,7 +327,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                 //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
                 // Navigator.of(context).pop(); // Đóng dialog
                 Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot,)),
+                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot, userID: widget.userID,)),
                 );
               },
             ),
