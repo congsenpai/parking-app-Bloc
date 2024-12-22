@@ -21,8 +21,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     // emit(HomeScreenLoading());
     try {
       final spots = await repository.getAllParkingSpots();
-      final spotsRecentlyOrder = await repository
-          .getAllParkingSpots(); // Bạn có thể thay đổi nếu cần
+      final spotsRecentlyOrder = await repository.getParkingSpotbyRecentlyTransaction(event.userId);
       emit(HomeScreenLoaded(spots,[],spotsRecentlyOrder));
     } catch (e) {
       emit(HomeScreenError("Failed to load parking spots"));
@@ -34,8 +33,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     // emit(HomeScreenLoading());
     try {
       final spots = await repository.getAllParkingSpots();
-      final spotsRecentlyOrder = await repository
-          .getAllParkingSpots(); // Bạn có thể thay đổi nếu cần
+      final spotsRecentlyOrder = await repository.getParkingSpotbyRecentlyTransaction(event.userId); // Bạn có thể thay đổi nếu cần
       final spotsBySearch = await repository.getAllParkingSpotsBySearchSpotName(
           event.query);
       emit(HomeScreenLoaded(spots, spotsBySearch,spotsRecentlyOrder));

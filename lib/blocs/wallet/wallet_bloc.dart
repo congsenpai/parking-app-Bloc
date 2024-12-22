@@ -28,7 +28,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       final WalletModel WalletData;
       WalletData = (await walletRepository.getWallet(event.userID))!;
       final List<TransactionModel> TransactionData;
-      TransactionData = await transactionRepository.getTransactionsByUser(event.userID);
+      TransactionData = await transactionRepository.getRecentlyTransactionsByUser(event.userID);
       emit(WalletLoaded(TransactionData, WalletData));
 
     } catch (e) {

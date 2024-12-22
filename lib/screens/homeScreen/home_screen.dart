@@ -37,19 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
   ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
   List<ParkingSpotModel> parkingSpots = [];
   List<ParkingSpotModel> parkingSpotsBySearch = [];
+  List<ParkingSpotModel> RecentlyparkingSpots = [];
   String currentText = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<HomeScreenBloc>().add(LoadParkingSpotsEvent());
+    context.read<HomeScreenBloc>().add(LoadParkingSpotsEvent(widget.user.userID));
     // Lắng nghe sự thay đổi của text trong _searchController
     _searchController.addListener(() {
       parkingSpotsBySearch = [];
       // Lấy giá trị hiện tại từ TextEditingController
       currentText = _searchController.text;
-      context.read<HomeScreenBloc>().add(SearchParkingSpotsEvent(currentText));
+      context.read<HomeScreenBloc>().add(SearchParkingSpotsEvent(currentText,widget.user.userID));
       // In ra giá trị để kiểm tra
       //print("Current search text: $currentText");
 
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } else if (state is HomeScreenLoaded) {
         parkingSpots = state.parkingSpots;
         parkingSpotsBySearch = state.parkingSpotsBySearch;
-        parkingSpots = state.parkingSpots;
+        RecentlyparkingSpots = state.parkingSpotsRecentlyOrder;
       }
       return Scaffold(
         appBar: PreferredSize(
@@ -303,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const HeaderText(
                       textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
                   SizedBox(height: Get.width / 20),
-                  const OrderRecentlyWidget(),
+                  NearbyParkingSpotsWidget(parkingSpots: RecentlyparkingSpots, userID: widget.user.userID, userName: widget.user.username,),
                 ],
               ),
             ),

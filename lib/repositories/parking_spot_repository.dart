@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/services/GoogleMap.dart';
 import '../models/parking_spot_model.dart';
 class ParkingSpotRepository {
@@ -36,6 +37,27 @@ class ParkingSpotRepository {
       return [];
     }
   }
+  Future<List<ParkingSpotModel>> getParkingSpotbyRecentlyTransaction(String userID) async{
+      try {
+        List<String> SpotName = await TransactionRepository().getParkingSpotRecentlyTransactionsByUser(userID);
+        print(SpotName);
+
+        final allSpots = await getAllParkingSpots();
+        // Lọc các ParkingSpotModel chứa chuỗi tìm kiếm
+        final filteredSpots = allSpots
+            .where((spot) => SpotName.contains(spot.spotName))
+            .toList();
+        print('Filtered spots: $filteredSpots');
+        return filteredSpots;
+      } catch (e) {
+        print('Error searching for parking spots: $e');
+        return [];
+      }
+
+
+  }
+
+
   Future<List<ParkingSpotModel>> getAllParkingSpotsBySearchSpotId(String query) async {
     try {
       final allSpots = await getAllParkingSpots();
