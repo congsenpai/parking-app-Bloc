@@ -1,15 +1,61 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/models/transaction_model.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
+import 'package:project_smart_parking_app/screens/transactionDiposited/vnpay_flutter.dart';
+import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
+
+import '../OrderScreen/order_screen.dart';
 class TransferFormScreen extends StatefulWidget {
+
+  final String userName;
+
+  final String userID;
+
+  const TransferFormScreen({super.key, required this.userName, required this.userID});
   @override
   State<TransferFormScreen> createState() => _TransferFormScreenState();
 }
 class _TransferFormScreenState extends State<TransferFormScreen> {
+  String responseCode = '';
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   String? _paymentMethod; // Lưu phương thức thanh toán được chọn (MoMo hoặc VNPay)
-  @override
+  Future<void> onPayment(String orderInfo,double amount) async {
+    final paymentUrl = VNPAYFlutter.instance.generatePaymentUrl(
+      url:
+      'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html', //vnpay url, default is https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+      version: '2.0.1',
+      tmnCode: 'CVXOW51B', //vnpay tmn code, get from vnpay
+      txnRef: DateTime.now().millisecondsSinceEpoch.toString(),
+      orderInfo: orderInfo, //order info, default is Pay Order
+      amount: amount,
+      returnUrl:
+      'xxxxxx', //https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
+      ipAdress: '192.168.10.10',
+      vnpayHashKey: 'WN9I2JRPC6ASCWQ1XS8C94WYEYJFCTR5', //vnpay hash key, get from vnpay
+      vnPayHashType: VNPayHashType
+          .HMACSHA512, //hash type. Default is HMACSHA512, you can chang it in: https://sandbox.vnpayment.vn/merchantv2,
+      vnpayExpireDate: DateTime.now().add(const Duration(hours: 1)),
+    );
+    await VNPAYFlutter.instance.show(
+      paymentUrl: paymentUrl,
+      onPaymentSuccess: (params) {
+          setState(() {
+            Navigator.pop(context); // Thoát màn hình hiện tại
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>WalletScreen(userID: widget.userID, userName2: widget.userName)));
+          });
+        },
+      onPaymentError: (params) {
+        setState(() {
+          responseCode = 'Error';
+        });
+      }, budget: amount, userID: widget.userID
+    );
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -149,8 +195,10 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
-              // Xử lý logic chuyển khoản tại đây
+              onPayment('${name} '
+                  'recharged ${amount} '
+                  'with note ${note}',
+                  double.parse(amount));
             },
             child: const Text('Xác nhận'),
           ),

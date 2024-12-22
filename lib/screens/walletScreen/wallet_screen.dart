@@ -11,6 +11,7 @@ import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart'
 import 'package:project_smart_parking_app/widget/footer_widget.dart';
 import '../../blocs/wallet/wallet_bloc.dart';
 import '../../widget/transaction_item_widget.dart';
+import '../transactionDiposited/transaction_diposited.dart';
 
 class WalletScreen extends StatefulWidget {
   final String userID;
@@ -161,7 +162,9 @@ class _WalletSectionState extends State<WalletSection> {
 
                 Center(
                   child: ElevatedButton(
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>TransferFormScreen(userName: widget.userName, userID: widget.userID,)));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent, // Màu nền
                         foregroundColor: Colors.white, // Màu chữ

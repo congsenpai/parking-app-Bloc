@@ -9,6 +9,7 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/transactionDiposited/example.dart';
+import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
 
@@ -58,7 +59,7 @@ void main() async {
               create: (context) => UserBloc()
           )
         ],
-        child:HomeApp(),
+        child:MyApp(),
       )
   );
 }
@@ -161,7 +162,7 @@ class _HomeAppState extends State<HomeApp> {
       theme: lightTheme, // Chế độ sáng
       darkTheme: darkTheme, // Chế độ tối
       themeMode: _themeMode, // Điều khiển theme hiện tại
-      home: Example(),
+      home: TransferFormScreen(userName: 'Hà Gia Bảo', userID: 'Iaq6HFxTD7cirInUDOLlNc0xB983',),
     );
   }
 }

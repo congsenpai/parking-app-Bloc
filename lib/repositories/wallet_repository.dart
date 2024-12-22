@@ -46,9 +46,11 @@ class WalletRepository {
   }
   Future<void> updateWalletBalance(String userID, double newBalance) async {
     try {
+      double? bal = await getBalanceByUserID(userID);
+
       // Truy cập tài liệu của Wallet dựa trên userID và cập nhật budget
       await _firestore.collection('Wallet').doc(userID).update({
-        'balance': newBalance,
+        'balance': newBalance+bal!,
       });
       print('Wallet budget updated for userID: $userID');
     } catch (e) {

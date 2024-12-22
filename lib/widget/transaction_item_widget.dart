@@ -37,13 +37,13 @@ class _TransactionItemState extends State<TransactionItem> {
     int hour = dateTime.hour;     // Giờ
     int minute = dateTime.minute; // Phút
     int second = dateTime.second;
-    String _date = '$day / $month / $year \t $hour:$minute:$second';
+    String _date = '$day / $month / $year \n$hour:$minute:$second';
     final String date = _date;
     return Container(
       margin: EdgeInsets.only(top: Get.width /25),
       width: Get.width/1.6,
       height: Get.width/4,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(Get.width/50),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -56,6 +56,8 @@ class _TransactionItemState extends State<TransactionItem> {
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             padding: const EdgeInsets.all(8),
@@ -65,9 +67,10 @@ class _TransactionItemState extends State<TransactionItem> {
             ),
             child: Icon(widget.icon, color: widget.iconColor),
           ),
-          const SizedBox(width: 16),
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 title,
