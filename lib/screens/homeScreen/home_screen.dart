@@ -20,7 +20,7 @@ import '../../widget/footer_widget.dart';
 import '../loginScreen/login_screen.dart';
 import 'header_text.dart';
 import 'nearby_parking_spots_widget.dart';
-import 'order_recently_widget.dart';
+import 'service_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserModel user; // Thêm biến này để lưu trữ thông tin user
@@ -305,6 +305,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
                   SizedBox(height: Get.width / 20),
                   NearbyParkingSpotsWidget(parkingSpots: RecentlyparkingSpots, userID: widget.user.userID, userName: widget.user.username,),
+                  SizedBox(height: Get.width / 10),
+                  const HeaderText(
+                      textInSpan1: 'My', textInSpan2: 'Services'),
+                  SizedBox(height: Get.width / 20),
+                  ServiceWidget(userID: widget.user.userID),
                 ],
               ),
             ),

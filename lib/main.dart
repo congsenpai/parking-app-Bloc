@@ -8,12 +8,8 @@ import 'package:project_smart_parking_app/repositories/parking_spot_repository.d
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
-import 'package:project_smart_parking_app/screens/transactionDiposited/example.dart';
-import 'package:project_smart_parking_app/screens/transactionDiposited/transaction_diposited.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
-
-
 import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/home/home_bloc.dart';
@@ -103,6 +99,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+
       title: 'Smart Parking App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -159,13 +156,15 @@ class _HomeAppState extends State<HomeApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: lightTheme, // Chế độ sáng
       darkTheme: darkTheme, // Chế độ tối
       themeMode: _themeMode, // Điều khiển theme hiện tại
-      home: TransferFormScreen(userName: 'Hà Gia Bảo', userID: 'Iaq6HFxTD7cirInUDOLlNc0xB983',),
+      home: MyAppAdmin(),
     );
   }
 }
+
 
 
 
