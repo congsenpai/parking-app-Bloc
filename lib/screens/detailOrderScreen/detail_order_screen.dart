@@ -35,6 +35,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       transactionID: 1,
       transactionType: true,
       userID: '');
+  String _nameUser = 'unknown';
+  
+  late DateTime _StartingTime = DateTime.now();
+  late DateTime _EndingTime = DateTime.now();
+  late DateTime _CreatingTime = DateTime.now();
+  bool _expired = true;
+  late Timestamp _RemainingTime = Timestamp.now();
+  String CreateFormatTime (DateTime time){
+    int year=time.year;
+    int month=time.month;
+    int day = time.day;
+    int hour = time.hour;
+    int minute = time.minute;
+    int second = time.second;
+    String result = '$hour :$minute :$second \n  $day/$month/$year';
+    
+    return result;
+  }
+  String CreateFormatRemainingTime (DateTime time){
+    int year=time.year;
+    int month=time.month;
+    int day = time.day;
+    int hour = time.hour;
+    int minute = time.minute;
+    int second = time.second;
+    String result = ' $day/$month/$year \n $hour :$minute :$second';
+
+    return result;
+  }
+
 
   @override
   void initState() {
@@ -43,6 +73,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     context.read<OrderDetailScreenBloc>().add(
         OrderDetailEvent(widget.transactionID)
     );
+
   }
   @override
   Widget build(BuildContext context) {
@@ -52,6 +83,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       }
       else if(state is OrderDetailScreenLoaded){
         _transactionModel = state.transactionModel;
+        _nameUser = state.userModel.username;
+        _CreatingTime = state.transactionModel.date.toDate();
+        _StartingTime = state.transactionModel.startTime.toDate();
+        _EndingTime = state.transactionModel.endTime.toDate();
+        _expired = state.expired;
+        _RemainingTime = state.remainingTime;
       }
       return Scaffold(
         appBar: AppBar(
@@ -63,216 +100,438 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           backgroundColor: Colors.transparent,
         ),
 
-        body: Container(
+        
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+              
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.blue.shade100,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.all(Get.width/20),
+                padding: EdgeInsets.all(Get.width/20),
+                child: SingleChildScrollView(
+                  child: Table(
+              
+                    // Định nghĩa các độ rộng cột
+                    columnWidths: const {
+                      0: FlexColumnWidth(1), // Cột 0 có chiều rộng cố định 100
+                      1: FlexColumnWidth(1),    // Cột 1 chiếm gấp đôi không gian so với các cột flex khác
+                        // Cột 2 chiếm không gian bằng 1 flex
+                    },
+                    // Tạo viền cho bảng
+                    children: [
+                      // user name
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('User Name', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_nameUser}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // note
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Note', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.note}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // creating time
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Created Time', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${CreateFormatTime(_CreatingTime)}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // tên bãi đỗ
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Spot Name ', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                fontSize: Get.width/30,
+                                color: Colors.black45,
+                                fontWeight: FontWeight.bold
+                              ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.spotName}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // loại phương tiện
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Loại phương tiện ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.typeVehical}', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // tên vị trí đỗ
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Slot Name  ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.slotName}', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Biển số xe
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Biển số xe ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.vehicalLicense}', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // starting time
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Starting Time', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(': ${CreateFormatTime(_StartingTime)}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // ending time
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Ending time', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                          ),
+              
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${CreateFormatTime(_EndingTime)}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // tổng thời gian
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Total Time ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.totalTime.toString()} h', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // giá gửi xe
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Price Per Hour ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.budget.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // tổng tiền
+                      TableRow(
+                        children: [
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Total ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                          TableCell(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(':  ${_transactionModel.total.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
+                                  fontSize: Get.width/30,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
+                          ),
+                        ],
+                      ),
+              
+                    ],
+                  ),
+              
+              
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.blue.shade100,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.all(Get.width/20),
+                padding: EdgeInsets.all(Get.width/20),
+                child: Column(
+                  children: [
+                    Center(child: Text('Order State', style: TextStyle(fontSize: Get.width/20, color: Colors.black26, fontWeight: FontWeight.bold),),),
+                    Table(
 
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.blue.shade100,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 4,
-                offset: Offset(2, 2),
+                      // Định nghĩa các độ rộng cột
+                      columnWidths: const {
+                        0: FlexColumnWidth(1), // Cột 0 có chiều rộng cố định 100
+                        1: FlexColumnWidth(1),    // Cột 1 chiếm gấp đôi không gian so với các cột flex khác
+                        // Cột 2 chiếm không gian bằng 1 flex
+                      },
+                      // Tạo viền cho bảng
+                      children: [
+
+                        // user name
+                        TableRow(
+                          children: [
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text('Remaining Time', textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: Get.width/30,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            TableCell(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: _expired ? Text(':   Expired !', textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: Get.width/30,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold
+                                  ),)
+                                    :Text(': ${CreateFormatRemainingTime(_RemainingTime.toDate())}', textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: Get.width/30,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.bold
+                                  ),),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
-          ),
-          margin: EdgeInsets.all(Get.width/20),
-          padding: EdgeInsets.all(Get.width/20),
-          child: SingleChildScrollView(
-            child: Table(
-
-              // Định nghĩa các độ rộng cột
-              columnWidths: const {
-                0: FlexColumnWidth(1), // Cột 0 có chiều rộng cố định 100
-                1: FlexColumnWidth(1),    // Cột 1 chiếm gấp đôi không gian so với các cột flex khác
-                  // Cột 2 chiếm không gian bằng 1 flex
-              },
-              // Tạo viền cho bảng
-              children: [
-                // tên bãi đỗ
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Tên bãi đỗ ', textAlign: TextAlign.left,
-                          style: TextStyle(
-                          fontSize: Get.width/30,
-                          color: Colors.black45,
-                          fontWeight: FontWeight.bold
-                        ),
-                        ),
-                      ),
-                    ),
-
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.spotName}', textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: Get.width/30,
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold
-                          ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // loại phương tiện
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Loại phương tiện ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.typeVehical}', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // tên vị trí đỗ
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Tên vị trí đỗ  ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.slotName}', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // Biển số xe
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Biển số xe ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.vehicalLicense}', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // tổng thời gian
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Tổng thời gian ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.totalTime.toString()} h', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // giá gửi xe
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Giá gửi xe ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.budget.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-                // tổng tiền
-                TableRow(
-                  children: [
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Tổng tiền ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                    TableCell(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(':  ${_transactionModel.total.toString()} VNĐ', textAlign: TextAlign.left,style: TextStyle(
-                            fontSize: Get.width/30,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold
-                        ),),
-                      ),
-                    ),
-                  ],
-                ),
-
-              ],
-            ),
-
-
           ),
         ),
       );

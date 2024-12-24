@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
@@ -21,6 +22,14 @@ class BookingScreenLoaded extends BookingScreenState {
 
 
   BookingScreenLoaded(this.TotalTime, this.Total, this.selectedDateStart, this.selectedDateEnd, this.startTime, this.endTime);
+}
+
+class BookingScreenLoadedMonth extends BookingScreenState{
+  late final double Total;
+  late final String Month;
+  late final Timestamp startTime;
+  late final Timestamp endTime;
+  BookingScreenLoadedMonth(this.Total,this.Month,this.startTime,this.endTime);
 }
 
 class BookingSuccess extends BookingScreenState{

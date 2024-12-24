@@ -41,26 +41,26 @@ class _ChoosendSpotsState extends State<ChoosendSpots> {
       ),
       body: _isLoading
           ? const Center(
-        child: CircularProgressIndicator(), // Hiển thị khi đang tải dữ liệu.
-      )
+            child: CircularProgressIndicator(), // Hiển thị khi đang tải dữ liệu.
+          )
           : _parkingSpots.isNotEmpty
           ? SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-          child: Column(
-            children: _parkingSpots.map((item) {
-              return SizedBox(
-                width: Get.width / 1,
-                child: SpotItem(
-                  data: item, userModel: widget.userModel,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
+              child: Column(
+                children: _parkingSpots.map((item) {
+                  return SizedBox(
+                    width: Get.width / 1,
+                    child: SpotItem(
+                      data: item, userModel: widget.userModel,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
       )
           : const Center(
-        child: Text('No Spots Available'), // Hiển thị khi không có dữ liệu.
+            child: Text('No Spots Available'), // Hiển thị khi không có dữ liệu.
       ),
     );
   }
