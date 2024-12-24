@@ -24,7 +24,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 ///
 /// To learn how to generate and specify this key,
 /// check out the README file of this sample.
-const String _apiKey = '';
+const String _apiKey = 'AIzaSyC4BcWF9-2Ji07EghWdmcKJ163XYAHu8wE';
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.title});
 

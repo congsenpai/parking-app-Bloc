@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import '../../models/user_model.dart';
 import '../../services/login_with_otp.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 // ignore_for_file: avoid_print
-
-
-
 
 class OtpScreen extends StatelessWidget {
   final String phoneNumber;
@@ -191,21 +190,25 @@ class OTPInputRowState extends State<OTPInputRow> {
     );
   }
 
-  // void _login() async {
-  //   String otp = getOtp();
-  //   print(otp);
-  //   UserModel? user = await _loginWithOTP.verifyOtp(otp);
-  //   if (user != null) {
-  //     print('Login successful: ${user.username}');
-  //     EasyLoading.show(status: 'Verifying...');
-  //     await Future.delayed(const Duration(seconds: 3));
-  //     EasyLoading.dismiss();
-  //     // Get.to(HomeScreen());
-  //   } else {
-  //     _showErrorDialog();
-  //     print('Login failed. Please check your credentials.');
-  //   }
-  // }
+  void _login() async {
+    String otp = getOtp();
+    print(otp);
+    UserModel? user =
+        await _loginWithOTP.signInWithOTP(widget.phoneNumber, otp);
+    if (user != null) {
+      print('Login successful: ${user.username}');
+      EasyLoading.show(status: 'Verifying...');
+      await Future.delayed(const Duration(seconds: 3));
+      EasyLoading.dismiss();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+      );
+    } else {
+      _showErrorDialog();
+      print('Login failed. Please check your credentials.');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,8 +277,8 @@ class OTPInputRowState extends State<OTPInputRow> {
         SizedBox(height: Get.height / 20),
         if (getOtp().length == 6)
           ElevatedButton(
-            onPressed:(){
-
+            onPressed: () {
+              _login();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4040FD),

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/user_model.dart';
+import '../models/wallet_model.dart';
+import '../repositories/wallet_repository.dart';
 
 class LoginWithOTP {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -110,9 +112,25 @@ class LoginWithOTP {
       UserModel? model = await _getUserModel(userCredential.user);
       if (model != null) {
         await _userProvider.login(model); // Lưu vào UserProvider
+        print('Người dùng đã đăng nhập thành công!');
+        return model;
+      } else {
+        _createUserDocument(userCredential.user);
+        UserModel? model0 = await _getUserModel(userCredential.user);
+        await _userProvider.login(model0!);
+        WalletModel walletModel = WalletModel(
+            walletCode:
+                model0.username == '' ? "${model0.username}BCP" : model0.email,
+            userID: model0.userID,
+            userName: model0.username == '' ? model0.username : 'NoName',
+            balance: 0,
+            creditScore: 0,
+            isAction: true,
+            createdOn: Timestamp.now());
+        WalletRepository walletRepository = WalletRepository();
+        await walletRepository.addWallet(model0.userID, walletModel);
+        return model0;
       }
-      print('Người dùng đã đăng nhập thành công!');
-      return model;
     } catch (e) {
       print('Lỗi khi xác thực OTP: $e');
       return null;

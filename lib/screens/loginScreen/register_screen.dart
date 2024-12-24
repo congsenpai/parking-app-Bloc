@@ -47,7 +47,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               } else if (state is AuthAuthenticated) {
                 final user = state.user;
                 EasyLoading.dismiss();
-                Get.to(HomeScreen(user: user));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+                );
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
@@ -296,7 +299,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       // Social Sign-In Buttons
                       ElevatedButton(
                         onPressed: () {
-                          Get.to(LoginWithPhoneNumberScreen);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginWithPhoneNumberScreen()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                             side:
@@ -337,7 +343,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextButton(
                             onPressed: () {
                               // Navigate to Sign Up Screen
-                              Get.to(const LoginScreen());
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginScreen()),
+                              );
                             },
                             child: const Text(
                               'Try to login here →',
