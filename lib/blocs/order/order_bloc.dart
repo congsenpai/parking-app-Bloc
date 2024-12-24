@@ -23,29 +23,15 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
 
     try {
       final List<TransactionModel> TransactionData;
-      TransactionData = await transactionRepository.getTransactionsByUser(event.userID);
+      TransactionData = await transactionRepository.getAllRecentlyTransactionsByUser(event.userID);
       if(event.searchText!='' ){
-
-        List<TransactionModel>DepositTransactions =
+        List<TransactionModel>Transactions =
         TransactionData.where((tran)
-        => tran.transactionType == true
-            && tran.spotName.toLowerCase().contains(event.searchText)).toList();
-        print(DepositTransactions.length);
-
-        // giao dịch rút tiền
-        List<TransactionModel>WithdrawTransactions =
-        TransactionData.where((tran)
-        => tran.transactionType == false
-            && tran.spotName.toLowerCase().contains(event.searchText)).toList();
-        emit(OrderScreenLoaded(DepositTransactions,WithdrawTransactions));}
+        => tran.spotName.toLowerCase().contains(event.searchText)).toList();
+        print(Transactions.length);
+        emit(OrderScreenLoaded(Transactions));}
       else{
-        // giao dịch nạp tiền
-        List<TransactionModel>DepositTransactions = TransactionData.where((tran) => tran.transactionType == true).toList();
-        print(DepositTransactions);
-        // giao dịch rút tiền
-        List<TransactionModel>WithdrawTransactions = TransactionData.where((tran) => tran.transactionType == false).toList();
-        print(WithdrawTransactions);
-        emit(OrderScreenLoaded(DepositTransactions,WithdrawTransactions));}
+        emit(OrderScreenLoaded(TransactionData));}
     } catch (e) {
       emit(OrderScreenError("Failed to load parking spots"));
     }

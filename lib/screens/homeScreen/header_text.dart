@@ -56,26 +56,7 @@ class _HeaderTextState extends State<HeaderText> {
             ),
           ),
         ),
-        Spacer(),
-        Container(
-          margin: EdgeInsets.only(right: Get.width / 15),
-          child: OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: Colors.white, width: 1),
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.all(4),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              foregroundColor: Colors.blue,
-            ),
-            child: const Text(
-              'View All',
-              style: TextStyle(fontSize: 13, color: Colors.grey),
-            ),
-          ),
-        ),
+
       ],
     );
   }

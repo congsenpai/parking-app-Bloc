@@ -8,6 +8,7 @@ import 'package:project_smart_parking_app/repositories/parking_spot_repository.d
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
@@ -165,6 +166,18 @@ class _HomeAppState extends State<HomeApp> {
   }
 }
 
+
+// class Trash extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
+//       home: ChoosendSpots(), // Assuming you want to show the RegisterScreen initially
+//       // You can add routes or other setup if needed
+//     );
+//   }
+// }
 
 
 

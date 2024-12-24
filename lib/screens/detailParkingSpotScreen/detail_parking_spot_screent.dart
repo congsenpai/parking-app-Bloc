@@ -9,11 +9,12 @@ import '../../models/parking_spot_model.dart';
 import '../../widget/Starwidget.dart';
 import '../parkingSlotScreen/parking_slot_screen.dart';
 class ParkingSpotScreen extends StatefulWidget {
+  final bool isMonthly;
 
   final ParkingSpotModel data;
   final String userName;
   final String userID;
-  const ParkingSpotScreen({Key? key,  required this.data, required this.userID, required this.userName}) : super(key: key);
+  const ParkingSpotScreen({Key? key,  required this.data, required this.userID, required this.userName, required this.isMonthly}) : super(key: key);
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
 }
@@ -225,10 +226,18 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
+              !widget.isMonthly ?
               Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName,)
                 ),
-              );
+              ):
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName,)
+                ),
+              )
+
+
+              ;
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.blue,

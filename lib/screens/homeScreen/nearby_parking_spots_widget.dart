@@ -44,7 +44,7 @@ class NearbyParkingSpotsWidget extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ParkingSpotScreen(data: spot, userID: userID, userName: userName,)),
+                        MaterialPageRoute(builder: (context) => ParkingSpotScreen(data: spot, userID: userID, userName: userName, isMonthly: false,)),
                       );
                     },
                     child: Column(

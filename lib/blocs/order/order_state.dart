@@ -12,9 +12,9 @@ class OrderScreenInitial extends OrderScreenState {}
 class OrderScreenLoading extends OrderScreenState {}
 
 class OrderScreenLoaded extends OrderScreenState {
-  final List<TransactionModel>  depositdata;
-  final List<TransactionModel>  withdrawdata;
-  OrderScreenLoaded(this.depositdata, this.withdrawdata);
+  final List<TransactionModel>  transactions;
+
+  OrderScreenLoaded(this.transactions);
 }
 
 class OrderScreenError extends OrderScreenState {

@@ -309,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const HeaderText(
                       textInSpan1: 'My', textInSpan2: 'Services'),
                   SizedBox(height: Get.width / 20),
-                  ServiceWidget(userID: widget.user.userID),
+                  ServiceWidget(userID: widget.user.userID, userModel: widget.user,),
                 ],
               ),
             ),

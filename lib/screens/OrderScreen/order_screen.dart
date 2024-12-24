@@ -29,8 +29,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchText = "";
   String userIDTest = 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1';
-  late List<TransactionModel> depositTransactions = [];
-  late List<TransactionModel> withdrawTransactions = [];
+  late List<TransactionModel> Transactions = [];
+
 
   @override
   void initState() {
@@ -54,8 +54,11 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
       if (state is OrderScreenLoading) {
         return const Center(child: CircularProgressIndicator());
       } else if (state is OrderScreenLoaded) {
-        depositTransactions = state.depositdata;
-        withdrawTransactions = state.withdrawdata;
+        Transactions = state.transactions;
+
+
+        print('WithdrawTransactions bao gom: ${Transactions}');
+
       }
       return Scaffold(
         appBar: AppBar(
@@ -91,53 +94,27 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
             ),
           ],
         ),
-        body: depositTransactions != [] || withdrawTransactions != []
+        body: Transactions != []
             ? SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
                 child: Column(
                   children: [
-                    ListView.builder(
-                      shrinkWrap:
-                          true, // Để ListView không chiếm hết không gian
-                      padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-                      itemCount: depositTransactions.length,
-                      itemBuilder: (context, index) {
-                        final transaction = depositTransactions[index];
-                        return SizedBox(
-                          width: Get.width / 2,
-                          child: TransactionItem(
-                            icon: Icons.location_on,
-                            // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                            // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                            // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                            iconColor: Colors.green,
-                            data: transaction, // Màu của icon tùy chỉnh
-                          ),
-                        );
-                      },
-                    ),
-                    ListView.builder(
-                      shrinkWrap:
-                          true, // Để ListView không chiếm hết không gian
-                      padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-                      itemCount: withdrawTransactions.length,
-                      itemBuilder: (context, index) {
-                        final transaction = withdrawTransactions[index];
-                        return SizedBox(
-                          width: Get.width / 2,
-                          child: TransactionItem(
-                            icon: Icons.location_on,
-                            data: transaction,
-                            // title: transaction.spotName, // Cần thay bằng thông tin từ transaction
-                            // subtitle: '${transaction.total} VND', // Hiển thị thông tin giao dịch
-                            // date: transaction.date.toDate().toString(), // Bạn có thể thay bằng ngày trong transaction
-                            iconColor: Colors.red, // Màu của icon tùy chỉnh
-                          ),
-                        );
-                      },
-                    ),
+                    ...Transactions.map((transaction) {
+                      return SizedBox(
+                        width: Get.width / 1,
+                        child: TransactionItem(
+                          icon: Icons.location_on,
+                          data: transaction,
+                          iconColor: transaction.transactionType == true ?Colors.green:Colors.red,
+                        ),
+                      );
+                    }).toList(),
                   ],
                 ),
-              )
+              ),
+        )
+
             : const Center(
                 child: NoDataTransactionWidget(),
               ),

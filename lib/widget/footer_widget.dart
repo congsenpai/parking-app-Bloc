@@ -31,7 +31,8 @@ class footerWidget extends StatelessWidget {
               final userModel =
                   await Provider.of<UserProvider>(context, listen: false)
                       .loadUser();
-              Get.to(HomeScreen(user: userModel!));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen(user: userModel!)));
+
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,

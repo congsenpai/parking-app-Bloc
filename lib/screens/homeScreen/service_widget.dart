@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:project_smart_parking_app/models/user_model.dart';
 
 import '../chatBotService/GeminiScreen.dart';
+import '../monthlyParkage/ChoosendSpots.dart';
 
 
 class ServiceWidget extends StatelessWidget {
   final String userID;
+  final UserModel userModel;
   const ServiceWidget({
-    super.key, required this.userID,
+    super.key, required this.userID, required this.userModel,
   });
 
   @override
@@ -35,6 +38,7 @@ class ServiceWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                   ),
                   onPressed: () {
+                    Get.to(ChoosendSpots(userModel: userModel,));
 
 
                   },
@@ -77,6 +81,7 @@ class ServiceWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                   ),
                   onPressed: () {
+
 
 
 

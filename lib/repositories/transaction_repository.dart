@@ -95,6 +95,26 @@ class TransactionRepository {
       List<TransactionModel> transactions = querySnapshot.docs
           .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
+      return transactions;
+    } catch (e) {
+      print('Error fetching transactions: $e');
+      return [];
+    }
+  }
+  Future<List<TransactionModel>> getAllRecentlyTransactionsByUser(String userID) async {
+    try {
+      print(userID);
+      // Truy vấn collection `Transactions` với `userID` và sắp xếp theo thời gian giảm dần
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('Transactions') // Tên collection trong Firestore
+          .where('userID', isEqualTo: userID)// Lọc theo loại giao dịch
+          .orderBy('date', descending: true) // Sắp xếp giảm dần theo thời gian
+          .get();
+      print(querySnapshot.docs);
+      // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
+      List<TransactionModel> transactions = querySnapshot.docs
+          .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
 
       return transactions;
     } catch (e) {
