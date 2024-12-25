@@ -19,11 +19,8 @@ class BookingScreenLoaded extends BookingScreenState {
   late final DateTime? selectedDateEnd;
   late final TimeOfDay? startTime;
   late final TimeOfDay? endTime;
-
-
   BookingScreenLoaded(this.TotalTime, this.Total, this.selectedDateStart, this.selectedDateEnd, this.startTime, this.endTime);
 }
-
 class BookingScreenLoadedMonth extends BookingScreenState{
   late final double Total;
   late final String Month;

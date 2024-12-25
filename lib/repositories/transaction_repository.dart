@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 
@@ -20,7 +21,35 @@ class Income{
       this.IncomeByOther,
       this.IncomeByRecharge);
 }
+class ConsumptionByDay{
+  int year;
+  int month;
+  List<FlSpot> Up_flspots;
+  List<FlSpot> Down_flspots;
 
+  ConsumptionByDay(
+      this.month,this.year,this.Down_flspots,this.Up_flspots
+      );
+}
+class ConsumptionByMonth{
+  int year;
+  List<FlSpot> Up_flspots;
+  List<FlSpot> Down_flspots;
+  ConsumptionByMonth(
+      this.year,
+      this.Up_flspots,
+      this.Down_flspots);
+}
+class TransactionTime{
+  int year;
+  int month;
+  int day;
+  double budget;
+  bool TransactionType;
+  TransactionTime(
+      this.year,this.month,this.day,this.budget,this.TransactionType
+      );
+}
 
 class TransactionRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -45,6 +74,135 @@ class TransactionRepository {
       return transactions;
     } catch (e) {
       print('Error fetching transactions: $e');
+      return [];
+    }
+  }
+  Future<List<TransactionTime>> getTimeAndTypeOfTransactionByUserID(String userID) async{
+    try{
+      final trans = await getTransactionsByUser(userID);
+      List<TransactionTime> transactionTimes = [];
+      for(var tran in trans){
+        int year = tran.date.toDate().year;
+        int month = tran.date.toDate().month;
+        int day = tran.date.toDate().day;
+        double budget = tran.total;
+        bool TransactionType = tran.transactionType;
+        TransactionTime transactionTime = TransactionTime(year, month, day, budget, TransactionType);
+        transactionTimes.add(transactionTime);
+      }
+      return transactionTimes;
+    }
+    catch(e){
+      print('getTimeAndTypeOfTransactionByUserID_tran_repos ${e}');
+      return [];
+    }
+  }
+  Future<List<ConsumptionByMonth>> getlistTransactionOfCustomerbyUserID(String userID) async {
+    try {
+      // Lấy danh sách giao dịch đã được xử lý từ getTimeAndTypeOfTransactionByUserID
+      final transactionTimes = await getTimeAndTypeOfTransactionByUserID(userID);
+
+      // Map để lưu tổng doanh thu theo năm và tháng, chia theo TransactionType (Up/Down)
+      Map<int, Map<int, double>> upYearToMonthlyTotal = {}; // Lưu tổng theo năm và tháng (Up)
+      Map<int, Map<int, double>> downYearToMonthlyTotal = {}; // Lưu tổng theo năm và tháng (Down)
+
+      // Nhóm các giao dịch theo năm, tháng và TransactionType (Up hoặc Down)
+      for (var transaction in transactionTimes) {
+        int year = transaction.year;
+        int month = transaction.month;
+
+        // Xử lý theo TransactionType
+        if (transaction.TransactionType) { // Up transaction type (true)
+          if (!upYearToMonthlyTotal.containsKey(year)) {
+            upYearToMonthlyTotal[year] = {};
+          }
+          upYearToMonthlyTotal[year]![month] =
+              (upYearToMonthlyTotal[year]![month] ?? 0) + transaction.budget;
+        } else { // Down transaction type (false)
+          if (!downYearToMonthlyTotal.containsKey(year)) {
+            downYearToMonthlyTotal[year] = {};
+          }
+          downYearToMonthlyTotal[year]![month] =
+              (downYearToMonthlyTotal[year]![month] ?? 0) + transaction.budget;
+        }
+      }
+
+      // Tạo danh sách các đối tượng ConsumptionByMonth
+      List<ConsumptionByMonth> cons = [];
+
+      // Duyệt qua upYearToMonthlyTotal và ghép dữ liệu down tương ứng
+      upYearToMonthlyTotal.forEach((year, monthlyTotals) {
+        List<FlSpot> upFlSpots = monthlyTotals.entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value)) // Chuyển map thành danh sách FlSpot
+            .toList();
+
+        List<FlSpot> downFlSpots = downYearToMonthlyTotal[year]?.entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value)) // Chuyển map thành danh sách FlSpot
+            .toList() ??
+            [];
+
+        // Thêm ConsumptionByMonth vào danh sách
+        cons.add(ConsumptionByMonth(year, upFlSpots, downFlSpots));
+      });
+
+      return cons; // Trả về danh sách ConsumptionByMonth
+    } catch (e) {
+      print("getlistTransactionOfCustomerbyUserID_transactionRepo: $e");
+      return [];
+    }
+  }
+  Future<List<ConsumptionByDay>> getlistTransactionOfCustomerByDay(String userID) async {
+    try {
+      // Lấy dữ liệu giao dịch và chuyển thành danh sách TransactionTime
+      final transactionTimes = await getTimeAndTypeOfTransactionByUserID(userID);
+      List<ConsumptionByDay> consByDay = [];
+
+      // Map lưu tổng ngân sách theo năm, tháng, ngày và TransactionType (Up/Down)
+      Map<int, Map<int, Map<int, double>>> upYearToDailyTotal = {}; // Lưu doanh thu (Up)
+      Map<int, Map<int, Map<int, double>>> downYearToDailyTotal = {}; // Lưu doanh thu (Down)
+
+      // Nhóm dữ liệu theo năm, tháng, ngày và TransactionType
+      for (var transaction in transactionTimes) {
+        int year = transaction.year;
+        int month = transaction.month;
+        int day = transaction.day;
+
+        // TransactionType = true (Up)
+        if (transaction.TransactionType) {
+          upYearToDailyTotal[year] ??= {};
+          upYearToDailyTotal[year]![month] ??= {};
+          upYearToDailyTotal[year]![month]![day] =
+              (upYearToDailyTotal[year]![month]![day] ?? 0) + transaction.budget;
+        } else {
+          // TransactionType = false (Down)
+          downYearToDailyTotal[year] ??= {};
+          downYearToDailyTotal[year]![month] ??= {};
+          downYearToDailyTotal[year]![month]![day] =
+              (downYearToDailyTotal[year]![month]![day] ?? 0) + transaction.budget;
+        }
+      }
+
+      // Tạo đối tượng ConsumptionByDay từ dữ liệu đã nhóm
+      upYearToDailyTotal.forEach((year, monthlyTotals) {
+        monthlyTotals.forEach((month, dailyTotals) {
+          // Tạo danh sách FlSpot cho từng ngày
+          List<FlSpot> upFlSpots = dailyTotals.entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value))
+              .toList();
+
+          List<FlSpot> downFlSpots = downYearToDailyTotal[year]?[month]?.entries
+              .map((e) => FlSpot(e.key.toDouble(), e.value))
+              .toList() ??
+              [];
+
+          // Thêm vào danh sách ConsumptionByDay
+          consByDay.add(ConsumptionByDay(month, year, downFlSpots, upFlSpots));
+        });
+      });
+
+      return consByDay; // Trả về danh sách ConsumptionByDay
+    } catch (e) {
+      print("getlistTransactionOfCustomerByDay Error: $e");
       return [];
     }
   }
@@ -122,7 +280,6 @@ class TransactionRepository {
       return [];
     }
   }
-
   Future<List<TransactionModel>> getAllTransactions() async {
     try {
 
@@ -182,15 +339,11 @@ class TransactionRepository {
   Future<TransactionModel?> getTransactionsByID(String transactionID) async {
     try {
       print('Transaction ID: $transactionID');
-
-
       // Chuyển đổi transactionID từ String sang int nếu cần thiết
       // Chuyển đổi từ String sang double trước
       double parsedDouble = double.tryParse(transactionID) ?? 0.0;
-
-// Chuyển đổi từ double sang int
+      // Chuyển đổi từ double sang int
       int parsedTransactionID = parsedDouble.toInt();
-
       // Truy vấn collection `Transactions` với `transactionID`
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions')
@@ -247,7 +400,6 @@ class TransactionRepository {
   // Lấy ra doanh thu từ toàn bộ các giao dịch
   Future<Income?> getIncomefromTransactionsAll() async {
     try {
-
       // Truy vấn collection `Transactions` với `userID`
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
@@ -326,7 +478,4 @@ class TransactionRepository {
     }
     return null;
   }
-
-
-
 }

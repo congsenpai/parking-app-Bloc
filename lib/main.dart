@@ -1,30 +1,33 @@
+import 'admin/main.dart';
+import 'firebase_options.dart';
+import 'models/user_model.dart';
+import 'blocs/home/home_bloc.dart';
+import 'blocs/user/user_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
-import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:project_smart_parking_app/rac.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:project_smart_parking_app/services/theme_app.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
-import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
-import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
+import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/forgot_pass.dart';
-import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
-import 'package:project_smart_parking_app/services/theme_app.dart';
-import 'admin/main.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'blocs/home/home_bloc.dart';
-import 'blocs/user/user_bloc.dart';
-import 'firebase_options.dart';
-import 'models/user_model.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
+import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
+import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
+import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
+import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -168,17 +171,17 @@ class _HomeAppState extends State<HomeApp> {
 }
 
 
-// class Trash extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
-//       home: ChoosendSpots(), // Assuming you want to show the RegisterScreen initially
-//       // You can add routes or other setup if needed
-//     );
-//   }
-// }
+class Trash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
+      home: ManagementConsumptionByCustomer(userID: 'Iaq6HFxTD7cirInUDOLlNc0xB983',) // Assuming you want to show the RegisterScreen initially
+      // You can add routes or other setup if needed
+    );
+  }
+}
 
 
 
