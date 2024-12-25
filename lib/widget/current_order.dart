@@ -1,19 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:project_smart_parking_app/models/parking_spot_model.dart';
+import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
+import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
+import 'package:project_smart_parking_app/services/map_and_routing.dart';
 
 class InProgressParking extends StatefulWidget {
-
-  final String url;
-  final String placeName;
-  final String location;
+  final String userId;
 
   const InProgressParking({
     super.key,
-    required this.url,
-    required this.placeName,
-    required this.location,
+    required this.userId,
   });
 
   @override
@@ -21,6 +19,28 @@ class InProgressParking extends StatefulWidget {
 }
 
 class _InProgressParkingState extends State<InProgressParking> {
+  ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
+  TransactionRepository _transactionRepository = TransactionRepository();
+
+  void initState() {
+    super.initState();
+  }
+
+  Future<String> _getPlaceNameFromOrder() async {
+    List<String> placeName = await _transactionRepository
+        .getParkingSpotRecentlyTransactionsByUser(widget.userId);
+    return placeName.first;
+  }
+
+  Future<LatLng> _getLocationOrder() async {
+    List<ParkingSpotModel> a = await _parkingSpotRepository
+        .getAllParkingSpotsBySearchSpotName(await _getPlaceNameFromOrder());
+    ParkingSpotModel geoPoint = a.first;
+    LatLng latLng =
+        LatLng(geoPoint.location.latitude, geoPoint.location.longitude);
+    return latLng;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,20 +67,13 @@ class _InProgressParkingState extends State<InProgressParking> {
           height: Get.width / 15,
         ),
         Container(
-          height: Get.width / 3,
+          height: Get.width / 2,
           width: Get.width / 1.1,
           decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(2, 4),
-              ),
-            ],
-          ),
+              image: DecorationImage(
+            image: AssetImage('assets/images/backgroundMap.png'),
+            fit: BoxFit.cover,
+          )),
           child: Row(
             children: [
               Container(
@@ -69,32 +82,9 @@ class _InProgressParkingState extends State<InProgressParking> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.location_on, color: Colors.white, size: Get.width / 10),
+                    Icon(Icons.location_on,
+                        color: Colors.red, size: Get.width / 10),
                     SizedBox(width: Get.width / 40),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${widget.placeName}\n",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "${widget.location}",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                      overflow: TextOverflow.visible,
-                      softWrap: true,
-                    ),
                   ],
                 ),
               ),
@@ -102,9 +92,17 @@ class _InProgressParkingState extends State<InProgressParking> {
                 width: Get.width / 3,
                 alignment: Alignment.center,
                 child: OutlinedButton(
-                  onPressed: () {
-                    // Mở URL (bản đồ) khi nhấn vào nút
-                    Get.toNamed(widget.url);
+                  onPressed: () async {
+                    LatLng endPoint = await _getLocationOrder();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapWidget(
+                          endPoint: endPoint,
+                        ),
+                      ),
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.white, width: 1),
