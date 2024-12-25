@@ -1,13 +1,16 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_bloc.dart';
+import 'package:project_smart_parking_app/rac.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
+import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
 import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
@@ -167,17 +170,17 @@ class _HomeAppState extends State<HomeApp> {
 }
 
 
-// class Trash extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
-//       home: ChoosendSpots(), // Assuming you want to show the RegisterScreen initially
-//       // You can add routes or other setup if needed
-//     );
-//   }
-// }
+class Trash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
+      home: ManagementConsumptionByCustomer(userID: 'Iaq6HFxTD7cirInUDOLlNc0xB983',) // Assuming you want to show the RegisterScreen initially
+      // You can add routes or other setup if needed
+    );
+  }
+}
 
 
 

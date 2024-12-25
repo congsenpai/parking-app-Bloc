@@ -1,7 +1,6 @@
 // ignore_for_file: unused_import
 
 import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,7 +140,6 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
       emit(BookingScreenError("Failed to load parking spots"));
     }
   }
-
 // Giả lập hàm lấy số ngày trong tháng
   int getNumberOfDaysInMonth(int year, int month) {
     final lastDay = DateTime(year, month + 1, 0); // Ngày cuối của tháng

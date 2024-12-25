@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:project_smart_parking_app/models/user_model.dart';
 
 import '../chatBotService/GeminiScreen.dart';
+import '../managementConsumptionByCustomer/management_consumption_by_customer.dart';
 import '../monthlyParkage/ChoosendSpots.dart';
 
 
@@ -81,10 +82,7 @@ class ServiceWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(5.0),
                   ),
                   onPressed: () {
-
-
-
-
+                    Get.to(ManagementConsumptionByCustomer(userID: userID,));
                   },
                   child: Column(
                     children: [
@@ -96,7 +94,7 @@ class ServiceWidget extends StatelessWidget {
                       ),
                       SizedBox(height: Get.width / 30),
                       Text(
-                        "Parking\nChat",
+                        "Expenses\nChat",
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
