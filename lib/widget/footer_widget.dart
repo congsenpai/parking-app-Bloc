@@ -87,7 +87,7 @@ class footerWidget extends StatelessWidget {
             ),
             IconButton(
               icon: Image.asset(
-                'assets/icons/icon_vip/56.png', // Đường dẫn đến ảnh của bạn
+                'assets/icons/icon_vip/31.png', // Đường dẫn đến ảnh của bạn
                 width: 45, // Kích thước icon
                 height: 45,
               ),
