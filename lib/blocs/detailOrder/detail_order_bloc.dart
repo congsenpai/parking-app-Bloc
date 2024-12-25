@@ -45,17 +45,20 @@ class OrderDetailScreenBloc extends Bloc<OrderDetailScreenEvent, OrderDetailScre
     // emit(OrderDetailLoading());
 
     try {
-      Timestamp RemainingTime= Timestamp.now();
+      Timestamp RemainingTime= Timestamp(0, 0);
       bool expired = false;
       TransactionRepository transactionRepository = TransactionRepository();
       TransactionModel? transactionModel = await transactionRepository.getTransactionsByID(event.transactionID);
+
       UserRepository userRepository = UserRepository();
       UserModel? userModel = await userRepository.getUserByID(transactionModel!.userID);
-      ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
-      List<ParkingSpotModel> spots = await parkingSpotRepository.getAllParkingSpotsBySearchSpotName(transactionModel.spotName);
-      ParkingSpotModel spot = spots[0];
-      print(userModel);
-      if(transactionModel.endTime.toDate().isBefore(Timestamp.now().toDate())){
+
+
+      if(transactionModel.endTime.toDate().isBefore(Timestamp.now().toDate()) && transactionModel.transactionType == false){
+        ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
+        List<ParkingSpotModel> spots = await parkingSpotRepository.getAllParkingSpotsBySearchSpotName(transactionModel.spotName);
+        ParkingSpotModel spot = spots[0];
+        print(userModel);
         expired = true;
         await updateStateSlot(spot.spotId, transactionModel.typeVehical, transactionModel.slotName, 0);
         RemainingTime = getRemainingTimestamp(transactionModel.endTime);
@@ -66,6 +69,7 @@ class OrderDetailScreenBloc extends Bloc<OrderDetailScreenEvent, OrderDetailScre
       
 
     } catch (e) {
+      print(e);
       emit(OrderDetailScreenError("Failed to load parking spots"));
     }
   }

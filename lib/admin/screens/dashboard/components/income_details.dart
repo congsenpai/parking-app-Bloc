@@ -50,32 +50,32 @@ class IncomeDetail extends StatelessWidget {
                 Chart(isAdmin: isAdmin, SpotID: SpotID,),
                 isAdmin == false ? StorageInfoCard(
                   svgSrc: "assets/icons/Documents.svg",
-                  title: "Thu nhập từ việc đặt chỗ",
-                  income: income.IncomeByBookingSlot.toString(),
+                  title: "Booking",
+                  income: income.IncomeByBookingSlot.toInt().toString(),
 
                 ):
                 StorageInfoCard(
                   svgSrc: "assets/icons/media.svg",
-                  title: "Thu nhập từ ăn hoa hồng",
-                  income: income.IncomeByCommission.toString(),
+                  title: "Chiết khấu",
+                  income: income.IncomeByCommission.toInt().toString(),
 
                 ),
                 StorageInfoCard(
                   svgSrc: "assets/icons/media.svg",
-                  title: "Thu nhập từ các gói đăng ký",
-                  income: income.IncomeByCombo.toString(),
+                  title: "Gói đăng ký",
+                  income: income.IncomeByCombo.toInt().toString(),
 
                 ),
                 StorageInfoCard(
                   svgSrc: "assets/icons/media.svg",
                   title: "Thu nhập khác",
-                  income: income.IncomeByOther.toString(),
+                  income: income.IncomeByOther.toInt().toString(),
 
                 ),
                 StorageInfoCard(
                   svgSrc: "assets/icons/unknown.svg",
                   title: "Tiền nạp của khách",
-                  income: income.IncomeByRecharge.toString(),
+                  income: income.IncomeByRecharge.toInt().toString(),
 
                 ),
 

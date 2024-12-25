@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/customer_management.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/spot_owner_management.dart';
 
@@ -22,8 +24,16 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
+          Container(
+            margin: EdgeInsets.all(Get.width/10),
+            child: IconButton(
+              icon: Image.asset(
+                'assets/images/logo.png', // Đường dẫn đến ảnh của bạn
+                width: Get.width/3, // Kích thước icon
+              ),
+              onPressed: (){
+              },
+            ),
           ),
           DrawerListTile(
             title: "Quản lý giao dịch",

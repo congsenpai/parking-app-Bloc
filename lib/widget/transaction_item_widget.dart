@@ -27,6 +27,7 @@ class _TransactionItemState extends State<TransactionItem> {
     final String subtitle = '${widget.data.total} VND';
     final Timestamp a = widget.data.date;
 
+
 // Chuyển đổi Timestamp thành DateTime
     DateTime dateTime = a.toDate();
 // Lấy ngày, tháng, năm
@@ -89,7 +90,6 @@ class _TransactionItemState extends State<TransactionItem> {
           SizedBox(width: Get.width/20,),
           ElevatedButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsScreen(transactionID: widget.data.transactionID.toString())));
-
           },
               child: Text('Chi tiết')
           )

@@ -1,14 +1,19 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin_ios_android/flutter_webview_plugin_ios_android.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../repositories/transaction_repository.dart';
 import '../../repositories/wallet_repository.dart';
+import '../walletScreen/wallet_screen.dart';
 
 //[VNPayHashType] List of Hash Type in VNPAY, default is HMACSHA512
 enum VNPayHashType {
@@ -149,6 +154,8 @@ class VNPAYFlutter {
           if (params['vnp_ResponseCode'] == '00') {
             if (onPaymentSuccess != null) {
               onPaymentSuccess(params);
+              flutterWebviewPlugin.close();
+              Get.to(WalletScreen(userID: userID, userName2: '',));
 
               double count = 0;
               TransactionRepository transactionRepository = TransactionRepository();

@@ -6,19 +6,18 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_state.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
-
 import '../../blocs/detailOrder/detail_order_event.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   @override
   const OrderDetailsScreen({super.key, required this.transactionID});
   final String transactionID;
+
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
-
-
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+
 
   late TransactionModel _transactionModel =TransactionModel
     (vehicalLicense: '',
@@ -36,7 +35,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       transactionType: true,
       userID: '');
   String _nameUser = 'unknown';
-  
+  late bool _check = false;
   late DateTime _StartingTime = DateTime.now();
   late DateTime _EndingTime = DateTime.now();
   late DateTime _CreatingTime = DateTime.now();
@@ -50,7 +49,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     int minute = time.minute;
     int second = time.second;
     String result = '$hour :$minute :$second \n  $day/$month/$year';
-    
     return result;
   }
   String CreateFormatRemainingTime (DateTime time){
@@ -64,16 +62,28 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
     return result;
   }
+  String CreateFormatRemainingTime2 (DateTime time){
+    int year=time.year;
+    int month=time.month;
+    int day = time.day;
+    int hour = time.hour;
+    int minute = time.minute;
+    int second = time.second;
+    String result = '$hour h : $minute m : $second s';
+
+    return result;
+  }
 
 
   @override
+
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(widget.transactionID);
     context.read<OrderDetailScreenBloc>().add(
         OrderDetailEvent(widget.transactionID)
     );
-
   }
   @override
   Widget build(BuildContext context) {
@@ -89,6 +99,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         _EndingTime = state.transactionModel.endTime.toDate();
         _expired = state.expired;
         _RemainingTime = state.remainingTime;
+        _check = state.transactionModel.transactionType;
       }
       return Scaffold(
         appBar: AppBar(
@@ -338,9 +349,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           ),
               
                           TableCell(
-                            child: Padding(
+                            child: !_check?Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(': ${CreateFormatTime(_StartingTime)}', textAlign: TextAlign.left,
+                              child: Text(':  ${CreateFormatTime(_StartingTime)}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ):Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(': Recharged Money', textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontSize: Get.width/30,
                                     color: Colors.black45,
@@ -365,11 +384,19 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               ),
                             ),
                           ),
-              
+
                           TableCell(
-                            child: Padding(
+                            child: !_check?Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(':  ${CreateFormatTime(_EndingTime)}', textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Get.width/30,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ):Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(': Recharged Money', textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontSize: Get.width/30,
                                     color: Colors.black45,
@@ -475,7 +502,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
                 margin: EdgeInsets.all(Get.width/20),
                 padding: EdgeInsets.all(Get.width/20),
-                child: Column(
+                child: !_check ?Column(
                   children: [
                     Center(child: Text('Order State', style: TextStyle(fontSize: Get.width/20, color: Colors.black26, fontWeight: FontWeight.bold),),),
                     Table(
@@ -514,7 +541,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold
                                   ),)
-                                    :Text(': ${CreateFormatRemainingTime(_RemainingTime.toDate())}', textAlign: TextAlign.left,
+                                    :Text(': ${CreateFormatRemainingTime2(_RemainingTime.toDate())}', textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: Get.width/30,
                                       color: Colors.black45,
@@ -529,7 +556,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ],
                     ),
                   ],
-                ),
+                ):Center(),
               ),
             ],
           ),

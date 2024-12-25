@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/admin/main.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/forgot_pass.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:project_smart_parking_app/services/remember_me_service.dart';
@@ -377,6 +378,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: const Text(
                               'Create new account here →',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Are you an Admin or Owner?',
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.to(MyAppAdmin());
+                            },
+                            child: const Text(
+                              'Login here →',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,

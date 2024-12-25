@@ -30,7 +30,6 @@ class MyAppAdmin extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => MenuAppController(),
           ),
-
         ],
         child: LoginScreenAdmin(),
       ),
