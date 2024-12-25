@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/forgot_pass.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:project_smart_parking_app/services/remember_me_service.dart';
 import '../homeScreen/home_screen.dart';
@@ -68,7 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
               } else if (state is AuthAuthenticated) {
                 final user = state.user;
                 EasyLoading.dismiss();
-                Get.to(HomeScreen(user: user));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen(user: user)),
+                );
+
               } else if (state is AuthError) {
                 EasyLoading.dismiss();
                 showDialog(
@@ -199,13 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.snackbar(
-                                'Password Recovery',
-                                'Link to reset password sent to your email!',
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.black54,
-                                colorText: Colors.white,
-                              );
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const PasswordResetScreen()));
                             },
                             child: const Text(
                               'Forgot Password?',
@@ -329,7 +328,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Social Sign-In Buttons
                       ElevatedButton(
                         onPressed: () {
-                          Get.to(LoginWithPhoneNumberScreen);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginWithPhoneNumberScreen()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                             side:

@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event is RegisterWithEmailEvent) {
         user = await _registerWithEmail.signUpWithEmailPassword(event.email, event.password);
       } else if (event is RegisterWithGoogleEvent) {
-        user = await _registerWithGoogle.signUpWithGoogle();
+        user = await _registerWithGoogle.signInWithGoogle();
       } else if (event is RegisterWithPhoneNumberEvent) {
         user = await _registerWithOTP.signInWithOTP(event.phoneNumber, event.otp);
       }

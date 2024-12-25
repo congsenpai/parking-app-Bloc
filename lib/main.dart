@@ -11,6 +11,7 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
+import 'package:project_smart_parking_app/screens/loginScreen/forgot_pass.dart';
 import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
 import 'admin/main.dart';
@@ -70,7 +71,7 @@ class Home extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
-      home: RegisterScreen(), // Assuming you want to show the RegisterScreen initially
+      home: PasswordResetScreen(), // Assuming you want to show the RegisterScreen initially
       // You can add routes or other setup if needed
     );
   }

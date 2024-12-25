@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
-import 'package:project_smart_parking_app/services/GoogleMap.dart';
+
 import '../models/parking_spot_model.dart';
 class ParkingSpotRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

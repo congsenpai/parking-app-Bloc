@@ -16,6 +16,7 @@ import '../../repositories/parking_spot_repository.dart';
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';
 import '../../services/login_with_otp.dart';
+import '../../widget/current_order.dart';
 import '../../widget/footer_widget.dart';
 import '../loginScreen/login_screen.dart';
 import 'header_text.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen(
       {super.key,
       required this.user}); // Sử dụng this.user để truy cập trong lớp State
+  @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -38,19 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ParkingSpotModel> parkingSpots = [];
   List<ParkingSpotModel> parkingSpotsBySearch = [];
   List<ParkingSpotModel> RecentlyparkingSpots = [];
+
   String currentText = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<HomeScreenBloc>().add(LoadParkingSpotsEvent(widget.user.userID));
+    context
+        .read<HomeScreenBloc>()
+        .add(LoadParkingSpotsEvent(widget.user.userID));
     // Lắng nghe sự thay đổi của text trong _searchController
     _searchController.addListener(() {
       parkingSpotsBySearch = [];
       // Lấy giá trị hiện tại từ TextEditingController
       currentText = _searchController.text;
-      context.read<HomeScreenBloc>().add(SearchParkingSpotsEvent(currentText,widget.user.userID));
+      context
+          .read<HomeScreenBloc>()
+          .add(SearchParkingSpotsEvent(currentText, widget.user.userID));
       // In ra giá trị để kiểm tra
       //print("Current search text: $currentText");
 
@@ -274,9 +281,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: Get.width / 15),
-                  // InProgressParking(location: 'null', placeName: 'null', url: 'null'),
+                  InProgressParking(
+                    userId: widget.user.userID,
+                  ),
                   Padding(
-                      padding: EdgeInsets.only(left: Get.width * 0),
+                      padding: EdgeInsets.only(top: Get.width * 0.05),
                       //
                       // widget hiển thị kết quả tìm kiếm
                       child: parkingSpotsBySearch.length == 0 ||
@@ -284,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? Center(
                               child: Center(
                                   child: Text(
-                              "Wellcome to my app",
+                              "Welcome to my app",
                               style: TextStyle(
                                   fontSize: Get.width / 15,
                                   fontWeight: FontWeight.bold),
@@ -299,24 +308,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     textInSpan2: 'Parking Sport',
                   ),
                   SizedBox(height: Get.width / 15),
-                  NearbyParkingSpotsWidget(parkingSpots: parkingSpots, userID: widget.user.userID, userName: widget.user.username,),
+                  NearbyParkingSpotsWidget(
+                    parkingSpots: parkingSpots,
+                    userID: widget.user.userID,
+                    userName: widget.user.username,
+                  ),
                   SizedBox(height: Get.width / 10),
                   const HeaderText(
                       textInSpan1: 'Recently', textInSpan2: 'Parking Sport'),
                   SizedBox(height: Get.width / 20),
-                  NearbyParkingSpotsWidget(parkingSpots: RecentlyparkingSpots, userID: widget.user.userID, userName: widget.user.username,),
+                  NearbyParkingSpotsWidget(
+                    parkingSpots: RecentlyparkingSpots,
+                    userID: widget.user.userID,
+                    userName: widget.user.username,
+                  ),
                   SizedBox(height: Get.width / 10),
-                  const HeaderText(
-                      textInSpan1: 'My', textInSpan2: 'Services'),
-                  SizedBox(height: Get.width / 20),
-                  ServiceWidget(userID: widget.user.userID, userModel: widget.user,),
+                  Column(
+                    children: [
+                      const HeaderText(
+                          textInSpan1: 'My', textInSpan2: 'Services'),
+                      const SizedBox(height: 20),
+                      GridMenuScreen(
+                        userID: widget.user.userID,
+                        userModel: widget.user,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
         ),
         bottomNavigationBar: SafeArea(
-          child: footerWidget(userID: widget.user.userID, userName: widget.user.username,),
+          child: footerWidget(
+            userID: widget.user.userID,
+            userName: widget.user.username,
+          ),
         ),
       );
     }, listener: (context, state) {

@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
+import '../models/wallet_model.dart';
+import '../repositories/wallet_repository.dart';
 
 class LoginWithGoogle {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -62,83 +64,76 @@ class LoginWithGoogle {
     }
   }
 
-  // Đăng ký với Google và tạo tài khoản người dùng mới nếu chưa có
-  Future<UserModel?> signUpWithGoogle({bool isRemember = false}) async {
+  Future<UserModel?> signInWithGoogle() async {
     try {
-      // Bước 1: Xác thực với Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      // Khởi tạo GoogleSignIn
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      if (googleUser == null || googleAuth == null) {
-        throw 'Google sign-in was canceled or failed.';
+      // Nếu người dùng hủy quá trình đăng nhập
+      if (googleUser == null) {
+        throw 'Google Sign-In was canceled.';
       }
 
-      // Bước 2: Lấy thông tin xác thực từ Google
-      final credential = GoogleAuthProvider.credential(
+      // Lấy thông tin chứng thực Google
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Tạo thông tin đăng nhập Firebase
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Bước 3: Đăng nhập vào Firebase
+      // Đăng nhập vào Firebase
       UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      User? firebaseUser = userCredential.user;
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
-      if (firebaseUser == null) {
-        throw 'Failed to retrieve Firebase user after Google sign-in.';
+      // Kiểm tra nếu tài khoản mới cần tạo tài liệu trong Firestore
+      bool isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+      if (isNewUser) {
+        await _createUserDocument(userCredential.user);
+
       }
 
-      // Bước 4: Tạo tài liệu người dùng mới trong Firestore nếu chưa tồn tại
-      await _createUserDocument(firebaseUser);
-
-      // Bước 5: Lấy thông tin người dùng từ Firestore
-      UserModel? model = await _getUserModel(firebaseUser);
-
-      // Bước 6: Lưu vào UserProvider nếu cần ghi nhớ
-      if (model != null && isRemember) {
-        await _userProvider.login(model);
-      }
-
-      // Bước 7: Trả về UserModel
-      return model;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error signing up with Google: $e');
-      }
-      return null;
-    }
-  }
-
-  // Đăng nhập với Google
-  Future<UserModel?> signInWithGoogle() async {
-    try {
-      // Google Authentication
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Firebase credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Firebase login
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-
-      // Lấy UserModel từ Firestore
+      // Lấy thông tin người dùng từ Firestore
       UserModel? model = await _getUserModel(userCredential.user);
-      if (model != null) {
-        await _userProvider.login(model);
+      await _userProvider.login(model!);
+
+      // Nếu là người dùng mới, tạo ví cho họ
+      if (isNewUser) {
+        WalletModel walletModel = WalletModel(
+          walletCode:
+              model.username == '' ? "${model.username}BCP" : model.email,
+          userID: model.userID,
+          userName: model.username == '' ? model.username : 'NoName',
+          balance: 0,
+          creditScore: 0,
+          isAction: true,
+          createdOn: Timestamp.now(),
+        );
+
+        WalletRepository walletRepository = WalletRepository();
+        await walletRepository.addWallet(model.userID, walletModel);
       }
-      return model; // Trả về UserModel đã đăng nhập
+
+      // Trả về thông tin người dùng
+      return model;
+    } on FirebaseAuthException catch (e) {
+      // Xử lý lỗi đăng nhập Firebase Authentication
+      if (e.code == 'account-exists-with-different-credential') {
+        throw 'The account already exists with a different credential.';
+      } else if (e.code == 'invalid-credential') {
+        throw 'The provided credential is invalid.';
+      } else {
+        throw 'Error signing in with Google: ${e.message}';
+      }
     } catch (e) {
+      // Bắt lỗi chung
       if (kDebugMode) {
-        print('Error signing in with Google: $e');
+        print('An unexpected error occurred: $e');
       }
-      return null;
+      throw 'An unexpected error occurred: $e';
     }
   }
 
