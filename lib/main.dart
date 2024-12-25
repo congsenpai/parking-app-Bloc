@@ -4,11 +4,9 @@ import 'models/user_model.dart';
 import 'blocs/home/home_bloc.dart';
 import 'blocs/user/user_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:project_smart_parking_app/rac.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:project_smart_parking_app/services/theme_app.dart';
@@ -23,10 +21,8 @@ import 'package:project_smart_parking_app/screens/loginScreen/forgot_pass.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/login_screen.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
-import 'package:project_smart_parking_app/screens/loginScreen/register_screen.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
 import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
 
 void main() async {
@@ -44,9 +40,11 @@ void main() async {
               create: (context) => HomeScreenBloc(ParkingSpotRepository()),
           ),
           BlocProvider(
-              create: (context) => ParkingSpotBloc()),
+              create: (context) => ParkingSpotBloc()
+          ),
           BlocProvider(
-              create: (context) => BookingScreenBloc()),
+              create: (context) => BookingScreenBloc()
+          ),
           BlocProvider(
               create: (context) => WalletBloc(WalletRepository(), TransactionRepository())
           ),
@@ -60,7 +58,7 @@ void main() async {
               create: (context) => UserBloc()
           )
         ],
-        child:MyApp(),
+        child:MyAdminApp(),
       )
   );
 }
@@ -76,7 +74,6 @@ class Home extends StatelessWidget {
     );
   }
 }
-
 void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
@@ -86,21 +83,17 @@ void configLoading() {
     ..textColor = Colors.white
     ..maskType = EasyLoadingMaskType.clear;
 }
-
 // ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   Future<bool> _isFirstLaunch() async {
     final prefs = await SharedPreferences.getInstance();
     final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-
     if (isFirstLaunch) {
       await prefs.setBool(
           'isFirstLaunch', false); // Set to false after first launch
     }
-
     return isFirstLaunch;
   }
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -117,7 +110,6 @@ class MyApp extends StatelessWidget {
           if (firstLaunchSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (firstLaunchSnapshot.data == true) {
             // If first launch, show WelcomeScreen
             return const WelcomeScreen();
@@ -141,17 +133,14 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-class HomeApp extends StatefulWidget {
-  const HomeApp({super.key});
+class MyAdminApp extends StatefulWidget {
+  const MyAdminApp({super.key});
 
   @override
-  State<HomeApp> createState() => _HomeAppState();
+  State<MyAdminApp> createState() => _MyAdminAppState();
 }
-
-class _HomeAppState extends State<HomeApp> {
+class _MyAdminAppState extends State<MyAdminApp> {
   ThemeMode _themeMode = ThemeMode.light; // Mặc định là sáng
-
   void toggleTheme() {
     setState(() {
       _themeMode =
@@ -170,18 +159,6 @@ class _HomeAppState extends State<HomeApp> {
   }
 }
 
-
-class Trash extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
-      home: ManagementConsumptionByCustomer(userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1',) // Assuming you want to show the RegisterScreen initially
-      // You can add routes or other setup if needed
-    );
-  }
-}
 
 
 
