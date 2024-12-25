@@ -177,7 +177,7 @@ class Trash extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       builder: EasyLoading.init(), // Initialize EasyLoading for loading indicators
-      home: ManagementConsumptionByCustomer(userID: 'Iaq6HFxTD7cirInUDOLlNc0xB983',) // Assuming you want to show the RegisterScreen initially
+      home: ManagementConsumptionByCustomer(userID: 'AmBtXnoNWVfM3gxmNzFVQSu6y8p1',) // Assuming you want to show the RegisterScreen initially
       // You can add routes or other setup if needed
     );
   }

@@ -64,7 +64,6 @@ class TransactionRepository {
           .collection('Transactions') // Tên collection trong Firestore
           .where('userID', isEqualTo: userID) // Lọc với userID
           .get();
-      print(querySnapshot.docs);
 
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
@@ -101,6 +100,7 @@ class TransactionRepository {
     try {
       // Lấy danh sách giao dịch đã được xử lý từ getTimeAndTypeOfTransactionByUserID
       final transactionTimes = await getTimeAndTypeOfTransactionByUserID(userID);
+      print('transactionTimes: $transactionTimes');
 
       // Map để lưu tổng doanh thu theo năm và tháng, chia theo TransactionType (Up/Down)
       Map<int, Map<int, double>> upYearToMonthlyTotal = {}; // Lưu tổng theo năm và tháng (Up)
@@ -111,39 +111,43 @@ class TransactionRepository {
         int year = transaction.year;
         int month = transaction.month;
 
-        // Xử lý theo TransactionType
         if (transaction.TransactionType) { // Up transaction type (true)
-          if (!upYearToMonthlyTotal.containsKey(year)) {
-            upYearToMonthlyTotal[year] = {};
-          }
+          upYearToMonthlyTotal.putIfAbsent(year, () => {});
           upYearToMonthlyTotal[year]![month] =
               (upYearToMonthlyTotal[year]![month] ?? 0) + transaction.budget;
         } else { // Down transaction type (false)
-          if (!downYearToMonthlyTotal.containsKey(year)) {
-            downYearToMonthlyTotal[year] = {};
-          }
+          downYearToMonthlyTotal.putIfAbsent(year, () => {});
           downYearToMonthlyTotal[year]![month] =
               (downYearToMonthlyTotal[year]![month] ?? 0) + transaction.budget;
         }
       }
-
       // Tạo danh sách các đối tượng ConsumptionByMonth
       List<ConsumptionByMonth> cons = [];
 
-      // Duyệt qua upYearToMonthlyTotal và ghép dữ liệu down tương ứng
-      upYearToMonthlyTotal.forEach((year, monthlyTotals) {
-        List<FlSpot> upFlSpots = monthlyTotals.entries
-            .map((e) => FlSpot(e.key.toDouble(), e.value)) // Chuyển map thành danh sách FlSpot
-            .toList();
+      // Duyệt qua cả upYearToMonthlyTotal và downYearToMonthlyTotal
+      Set<int> allYears = {
+        ...upYearToMonthlyTotal.keys,
+        ...downYearToMonthlyTotal.keys
+      };
 
+      for (var year in allYears) {
+        // Lấy dữ liệu Up cho năm hiện tại (nếu có)
+        List<FlSpot> upFlSpots = upYearToMonthlyTotal[year]?.entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value))
+            .toList() ??
+            [];
+
+        // Lấy dữ liệu Down cho năm hiện tại (nếu có)
         List<FlSpot> downFlSpots = downYearToMonthlyTotal[year]?.entries
-            .map((e) => FlSpot(e.key.toDouble(), e.value)) // Chuyển map thành danh sách FlSpot
+            .map((e) => FlSpot(e.key.toDouble(), e.value))
             .toList() ??
             [];
 
         // Thêm ConsumptionByMonth vào danh sách
         cons.add(ConsumptionByMonth(year, upFlSpots, downFlSpots));
-      });
+      }
+
+      print('cons: ${cons.length}');
 
       return cons; // Trả về danh sách ConsumptionByMonth
     } catch (e) {
@@ -151,6 +155,7 @@ class TransactionRepository {
       return [];
     }
   }
+
   Future<List<ConsumptionByDay>> getlistTransactionOfCustomerByDay(String userID) async {
     try {
       // Lấy dữ liệu giao dịch và chuyển thành danh sách TransactionTime
@@ -167,29 +172,38 @@ class TransactionRepository {
         int month = transaction.month;
         int day = transaction.day;
 
-        // TransactionType = true (Up)
-        if (transaction.TransactionType) {
-          upYearToDailyTotal[year] ??= {};
-          upYearToDailyTotal[year]![month] ??= {};
+        if (transaction.TransactionType) { // TransactionType = true (Up)
+          upYearToDailyTotal.putIfAbsent(year, () => {});
+          upYearToDailyTotal[year]!.putIfAbsent(month, () => {});
           upYearToDailyTotal[year]![month]![day] =
               (upYearToDailyTotal[year]![month]![day] ?? 0) + transaction.budget;
-        } else {
-          // TransactionType = false (Down)
-          downYearToDailyTotal[year] ??= {};
-          downYearToDailyTotal[year]![month] ??= {};
+        } else { // TransactionType = false (Down)
+          downYearToDailyTotal.putIfAbsent(year, () => {});
+          downYearToDailyTotal[year]!.putIfAbsent(month, () => {});
           downYearToDailyTotal[year]![month]![day] =
               (downYearToDailyTotal[year]![month]![day] ?? 0) + transaction.budget;
         }
       }
+      // Tạo tập hợp tất cả các năm và tháng để xử lý
+      Set<int> allYears = {
+        ...upYearToDailyTotal.keys,
+        ...downYearToDailyTotal.keys
+      };
 
-      // Tạo đối tượng ConsumptionByDay từ dữ liệu đã nhóm
-      upYearToDailyTotal.forEach((year, monthlyTotals) {
-        monthlyTotals.forEach((month, dailyTotals) {
-          // Tạo danh sách FlSpot cho từng ngày
-          List<FlSpot> upFlSpots = dailyTotals.entries
+      for (var year in allYears) {
+        Set<int> allMonths = {
+          ...upYearToDailyTotal[year]?.keys ?? {},
+          ...downYearToDailyTotal[year]?.keys ?? {}
+        };
+
+        for (var month in allMonths) {
+          // Lấy danh sách FlSpot cho Up
+          List<FlSpot> upFlSpots = upYearToDailyTotal[year]?[month]?.entries
               .map((e) => FlSpot(e.key.toDouble(), e.value))
-              .toList();
+              .toList() ??
+              [];
 
+          // Lấy danh sách FlSpot cho Down
           List<FlSpot> downFlSpots = downYearToDailyTotal[year]?[month]?.entries
               .map((e) => FlSpot(e.key.toDouble(), e.value))
               .toList() ??
@@ -197,8 +211,9 @@ class TransactionRepository {
 
           // Thêm vào danh sách ConsumptionByDay
           consByDay.add(ConsumptionByDay(month, year, downFlSpots, upFlSpots));
-        });
-      });
+        }
+      }
+      print(consByDay.length);
 
       return consByDay; // Trả về danh sách ConsumptionByDay
     } catch (e) {
@@ -206,6 +221,7 @@ class TransactionRepository {
       return [];
     }
   }
+
   Future<List<String>> getParkingSpotRecentlyTransactionsByUser(String userID) async {
     try {
       print(userID);

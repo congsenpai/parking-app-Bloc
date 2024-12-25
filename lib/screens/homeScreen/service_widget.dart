@@ -21,7 +21,7 @@ class GridMenuScreen extends StatelessWidget {
       "icon": 'assets/icons/icon_vip/03.png',
       "label": "E-Wallet",
       "onPress": (BuildContext context) {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
@@ -34,7 +34,7 @@ class GridMenuScreen extends StatelessWidget {
       "icon": 'assets/icons/icon_vip/51.png',
       "label": "Dashboard",
       "onPress": (BuildContext context) {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
@@ -47,7 +47,7 @@ class GridMenuScreen extends StatelessWidget {
       "icon": 'assets/icons/icon_vip/06.png',
       "label": "Monthly Package",
       "onPress": (BuildContext context) {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChoosendSpots(userModel: userModel),
@@ -59,7 +59,7 @@ class GridMenuScreen extends StatelessWidget {
       "icon": 'assets/icons/icon_vip/56.png',
       "label": "ChatBot",
       "onPress": (BuildContext context) {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ChatScreen(title: 'Chat Bot'),

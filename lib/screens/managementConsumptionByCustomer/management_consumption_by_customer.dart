@@ -6,11 +6,6 @@ import 'package:project_smart_parking_app/repositories/transaction_repository.da
 
 import 'ExpensesByUp_Down.dart';
 import 'LineChartSample.dart';
-
-
-
-
-
 class ManagementConsumptionByCustomer extends StatefulWidget {
   final String userID;
   const ManagementConsumptionByCustomer({super.key, required this.userID});
@@ -18,6 +13,7 @@ class ManagementConsumptionByCustomer extends StatefulWidget {
   State<ManagementConsumptionByCustomer> createState() => _ManagementConsumptionByCustomerState();
 }
 class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionByCustomer> {
+
   late int _SelectedYear = 2024;
   late int _selectedMonth = 0;
   late int Balance = 0;
@@ -54,8 +50,7 @@ class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionB
       Expencse = 0; // Đặt lại giá trị
       List<ConsumptionByMonth> consumpsByMonth = await transactionRepository.getlistTransactionOfCustomerbyUserID(widget.userID);
       List<ConsumptionByDay> consumpsByDay = await transactionRepository.getlistTransactionOfCustomerByDay(widget.userID);
-
-      // Lọc dữ liệu theo năm đã chọn
+           // Lọc dữ liệu theo năm đã chọn
       List<FlSpot> upFlSpots = [];
       List<FlSpot> downFlSpots = [];
       if(_selectedMonth == 0){
@@ -63,7 +58,6 @@ class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionB
           if (consum.year == _SelectedYear) {
             upFlSpots.addAll(consum.Up_flspots); // Thêm FlSpots Up
             downFlSpots.addAll(consum.Down_flspots); // Thêm FlSpots Down
-
             for (var spot in consum.Up_flspots) {
               Balance += spot.y.toInt(); // Cộng giá trị `y` cho Balance
             }
@@ -90,7 +84,13 @@ class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionB
       }
       setState(() {
         _up = upFlSpots;
-        _down = downFlSpots;   // Cập nhật dữ liệu FlSpots Down
+        _down = downFlSpots;
+        _up.sort((a, b) => a.x.compareTo(b.x));
+        // Sắp xếp _down theo thứ tự tăng dần của x
+        _down.sort((a, b) => a.x.compareTo(b.x));
+
+        print(_up);
+        print(_down); // Cập nhật danh sách _down đã được sắp xếp// Cập nhật dữ liệu FlSpots Down
 
       });
     } catch (e) {
@@ -214,7 +214,7 @@ class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionB
                 ),
 
                 // Biểu đồ line chart hiển thị dữ liệu
-                _up.isEmpty || _down.isEmpty
+                _up.isEmpty && _down.isEmpty
                     ?
                 const Center(child: Center(child: Text('Do not any transactions at this time'),))
                     : _selectedMonth == 0 ?
