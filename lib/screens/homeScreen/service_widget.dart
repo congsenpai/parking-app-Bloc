@@ -5,16 +5,6 @@ class GridMenuScreen extends StatelessWidget {
   late final String userID;
   late final UserModel userModel;
 
-import '../chatBotService/GeminiScreen.dart';
-import '../managementConsumptionByCustomer/management_consumption_by_customer.dart';
-import '../monthlyParkage/ChoosendSpots.dart';
-
-
-class ServiceWidget extends StatelessWidget {
-  final String userID;
-  final UserModel userModel;
-  const ServiceWidget({
-    super.key, required this.userID, required this.userModel,
   GridMenuScreen({
     super.key,
     required this.userID,
@@ -26,7 +16,7 @@ class ServiceWidget extends StatelessWidget {
       "icon": 'assets/icons/icon_vip/03.png', // Đường dẫn đến ảnh của bạn
       "label": "E-Wallet",
       "onPress": () {
-        print("E-Wallet được chọn");
+
       }
     },
     {
