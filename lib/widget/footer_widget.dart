@@ -9,12 +9,14 @@ import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../screens/settingScreen/setting_screen.dart';
 
-
 class footerWidget extends StatelessWidget {
   final String userID; // Thêm biến này để lưu trữ thông tin user
   final String userName;
+
   const footerWidget({
-    super.key, required this.userID, required this.userName,
+    super.key,
+    required this.userID,
+    required this.userName,
   });
 
   @override
@@ -22,123 +24,83 @@ class footerWidget extends StatelessWidget {
     return Container(
       height: Get.width / 6, // Điều chỉnh chiều cao của bottom navigation
       color: Colors.grey[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextButton(
-            onPressed: () async {
-              final userModel =
-                  await Provider.of<UserProvider>(context, listen: false)
-                      .loadUser();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen(user: userModel!)));
-
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              // Điều chỉnh kích thước theo nội dung
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.wordpress,
-                  size: Get.width / 15,
-                  color: Colors.blue,
-                ),
-                // Giới hạn kích thước icon
-                Text(
-                  "Discovery",
-                  style: TextStyle(
-                    fontSize: Get.width / 25,
-                    color: Colors.blue, // Giới hạn kích thước chữ
-                  ),
-                )
-              ],
+      child: Padding(
+        padding: EdgeInsets.only(left: Get.width / 12,right: Get.width / 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Image.asset(
+                'assets/icons/icon_vip/12.png', // Đường dẫn đến ảnh của bạn
+                width: 45, // Kích thước icon
+                height: 45,
+              ),
+              onPressed: () async {
+                final userModel =
+                    await Provider.of<UserProvider>(context, listen: false)
+                        .loadUser();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(user: userModel!)));
+              },
             ),
-          ),
-          SizedBox(
-            width: Get.width / 20,
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => MyOrdersScreen(userID: userID, userName: userName,)));
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              // Điều chỉnh kích thước theo nội dung
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.car_repair_outlined,
-                    size: Get.width / 15,
-                    color: Colors.blue), // Giới hạn kích thước icon
-                Text(
-                  "Orders",
-                  style: TextStyle(
-                    fontSize: Get.width / 25,
-                    color: Colors.blue, // Giới hạn kích thước chữ
-                  ),
-                )
-              ],
+            SizedBox(
+              width: Get.width / 20,
             ),
-          ),
-          SizedBox(
-            width: Get.width / 20,
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WalletScreen(
-                          userID: userID, userName2: userName,)));
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              // Điều chỉnh kích thước theo nội dung
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.wallet, size: Get.width / 15, color: Colors.blue),
-                // Giới hạn kích thước icon
-                Text(
-                  "Wallet",
-                  style: TextStyle(
-                    fontSize: Get.width / 25,
-                    color: Colors.blue,
-                    // Giới hạn kích thước chữ
-                  ),
-                )
-              ],
+            IconButton(
+              icon: Image.asset(
+                'assets/icons/icon_vip/23.png', // Đường dẫn đến ảnh của bạn
+                width: 45, // Kích thước icon
+                height: 45,
+              ),
+              onPressed: () async {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyOrdersScreen(userID: userID, userName: userName)));
+              },
             ),
-          ),
-          SizedBox(
-            width: Get.width / 20,
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(context,
-              MaterialPageRoute(
-                  builder: (context) => SettingsScreen(userID: userID, userName: userName,)
-              )
-              );
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              // Điều chỉnh kích thước theo nội dung
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.settings, size: Get.width / 15, color: Colors.blue),
-                // Giới hạn kích thước icon
-                Text(
-                  "Setting",
-                  style: TextStyle(
-                    fontSize: Get.width / 25,
-                    color: Colors.blue, // Giới hạn kích thước chữ
-                  ),
-                )
-              ],
+            SizedBox(
+              width: Get.width / 20,
             ),
-          )
-        ],
+            IconButton(
+              icon: Image.asset(
+                'assets/icons/icon_vip/24.png', // Đường dẫn đến ảnh của bạn
+                width: 45, // Kích thước icon
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WalletScreen(
+                              userID: userID,
+                              userName2: userName,
+                            )));
+              },
+            ),
+            SizedBox(
+              width: Get.width / 20,
+            ),
+            IconButton(
+              icon: Image.asset(
+                'assets/icons/icon_vip/56.png', // Đường dẫn đến ảnh của bạn
+                width: 45, // Kích thước icon
+                height: 45,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SettingsScreen(userID: userID, userName: userName)));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

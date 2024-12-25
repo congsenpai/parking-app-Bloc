@@ -104,6 +104,7 @@ flutter:
     - assets/images/OrderImage/
     - assets/images/Location2_DHTL/
     - assets/icons/
+    - assets/icons/icon_vip/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

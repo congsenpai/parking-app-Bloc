@@ -9,7 +9,6 @@ import 'package:project_smart_parking_app/blocs/home/home_bloc.dart';
 import 'package:project_smart_parking_app/blocs/home/home_event.dart';
 import 'package:project_smart_parking_app/blocs/home/home_state.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/parking_sport_by_search.dart';
-import 'package:project_smart_parking_app/services/map_and_routing.dart';
 import 'package:provider/provider.dart';
 import '../../models/parking_spot_model.dart';
 import '../../models/user_model.dart';
@@ -30,6 +29,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen(
       {super.key,
       required this.user}); // Sử dụng this.user để truy cập trong lớp State
+  @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -323,11 +323,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     userName: widget.user.username,
                   ),
                   SizedBox(height: Get.width / 10),
-                  const HeaderText(textInSpan1: 'My', textInSpan2: 'Services'),
-                  SizedBox(height: Get.width / 20),
-                  ServiceWidget(
-                    userID: widget.user.userID,
-                    userModel: widget.user,
+                  Column(
+                    children: [
+                      const HeaderText(
+                          textInSpan1: 'My', textInSpan2: 'Services'),
+                      const SizedBox(height: 20),
+                      GridMenuScreen(
+                        userID: widget.user.userID,
+                        userModel: widget.user,
+                      ),
+                    ],
                   ),
                 ],
               ),
