@@ -2,6 +2,7 @@
 
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
@@ -14,6 +15,16 @@ class Data {
   final TimeOfDay? totalTime; // Thời gian tổng cộng
   final double total;         // Tổng chi phí
   Data({required this.totalTime, required this.total});
+}
+int getNumberOfDaysInMonth(int year, int month) {
+  // Sử dụng DateTime để tính ngày đầu tiên của tháng kế tiếp
+  DateTime nextMonth = (month == 12)
+      ? DateTime(year + 1, 1, 1)
+      : DateTime(year, month + 1, 1);
+
+  // Trừ một ngày để quay về ngày cuối cùng của tháng
+  DateTime lastDayOfCurrentMonth = nextMonth.subtract(Duration(days: 1));
+  return lastDayOfCurrentMonth.day;
 }
 Data? calculateTotalCar({
   required DateTime? selectedDateStart,
@@ -63,6 +74,7 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
       : super(BookingScreenInitial()) {
     on<SelectAndCheckTimeEvent>(_selectAndCheckTimeEvent);
     on<CheckOut>(_checkOutBooking);
+    on<MonthlyPackageEvent>(_MonthlyPackageEvent);
   }
   // Định nghĩa lại hàm _homeScreenLoading với đúng cú pháp và kiểu trả về
   Future<void> _selectAndCheckTimeEvent(SelectAndCheckTimeEvent event,
@@ -93,6 +105,49 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
       emit(BookingScreenError("Failed to load parking spots"));
     }
   }
+
+
+  Future<void> _MonthlyPackageEvent(MonthlyPackageEvent event,
+      Emitter<BookingScreenState> emit) async {
+    try {
+      String time = event.time;
+      List<String> parts = time.split('/');
+
+      // Convert parts to integers
+      int month = int.parse(parts[0]);
+      int year = int.parse(parts[1]);
+
+      // Lấy số ngày trong tháng
+      int dayOfMonth = getNumberOfDaysInMonth(year, month);
+
+      // Thời gian bắt đầu (start time) là thời gian hiện tại
+      Timestamp startTime = Timestamp.now();
+
+      // Tính ngày cuối cùng của tháng (end time)
+      DateTime lastDayOfMonth = DateTime(year, month + 1, 0); // Ngày cuối của tháng
+      Timestamp endTime = Timestamp.fromDate(lastDayOfMonth);
+
+      // Tính tổng chi phí (price calculation) - Đây là ví dụ với công thức của bạn
+      double total = dayOfMonth * 30 * event.pricePerHourCar / 2;
+
+      // Emit trạng thái với tổng chi phí và thời gian bắt đầu và kết thúc
+      emit(BookingScreenLoadedMonth(
+          total,
+          '${month.toString()}/${year.toString()}',
+          startTime, // Gửi thời gian bắt đầu
+          endTime // Gửi thời gian kết thúc
+      ));
+    } catch (e) {
+      emit(BookingScreenError("Failed to load parking spots"));
+    }
+  }
+
+// Giả lập hàm lấy số ngày trong tháng
+  int getNumberOfDaysInMonth(int year, int month) {
+    final lastDay = DateTime(year, month + 1, 0); // Ngày cuối của tháng
+    return lastDay.day;
+  }
+
   Future<void> _checkOutBooking(CheckOut event,
       Emitter<BookingScreenState> emit) async {
 
@@ -100,9 +155,6 @@ class BookingScreenBloc extends Bloc<BookingScreenEvent, BookingScreenState> {
     try {
       print(event.transactionModel.userID);
       WalletRepository walletRepository  = WalletRepository();
-      print(walletRepository);
-      print('dđ');
-      print("00000111");
       double balance = await walletRepository.getBalanceByUserID(event.transactionModel.userID) as double;
       print(balance);
       double Total = event.transactionModel.total.toDouble();

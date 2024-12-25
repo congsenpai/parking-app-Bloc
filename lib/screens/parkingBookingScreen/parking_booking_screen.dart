@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_event.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_state.dart';
@@ -17,13 +18,14 @@ import '../../widget/Starwidget.dart';
 class ParkingBookingDetailScreen extends StatefulWidget {
   final String userID;
   final String userName;
+  final bool isMonthly;
 
   const ParkingBookingDetailScreen(
       {super.key,
       required this.parkingSpotModel,
       required this.TypeSelected,
       required this.NameSlot,
-      required this.userID, required this.userName});
+      required this.userID, required this.userName, required this.isMonthly});
 
   final ParkingSpotModel parkingSpotModel;
   final String TypeSelected;
@@ -47,20 +49,32 @@ class _ParkingBookingDetailScreenState
 
   final List<String> VehicalLisence = ['30A-12345', '29B-67890', '51C-54321'];
   late String SelecteVehicalLisence = VehicalLisence[0];
+
+  late List<String> selectedMonth = ['Null'];
+  late String SelecteMonth = selectedMonth[0];
   late ParkingSpotModel _parkingSpotModel;
   int star = 0;
   int reviewnumber = 0;
   late TransactionModel tranSactionModel;
 
   final StringURl = "assets/images/Location1_HVNH/HvnhMain.png";
+  DateTime CurrentDate = DateTime.now();
+
   DateTime selectedDateStart = DateTime.now();
   DateTime selectedDateEnd = DateTime.now();
   TimeOfDay startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay endTime = const TimeOfDay(hour: 1, minute: 1);
+  late Timestamp startingTime = Timestamp.now();
+  late Timestamp endtingTime = Timestamp.now();
+  String Month = '';
+  double Budget = 0;
 
   @override
   void initState() {
     super.initState();
+    if(widget.isMonthly){
+      selectedMonth = loadMonths();
+    }
     _parkingSpotModel = widget.parkingSpotModel;
     PriceOf1hourCar = _parkingSpotModel.costPerHourCar
         .toDouble(); // ✅ Truy cập widget trong initState.
@@ -72,6 +86,15 @@ class _ParkingBookingDetailScreenState
     } else {
       PriceBySelect_car_or_moto = PriceOf1hourCar;
     }
+  }
+
+  List<String> loadMonths() {
+    final DateTime now = DateTime.now();
+    return List.generate(3, (index) {
+      final DateTime nextMonth = DateTime(now.year, now.month + index + 1, 1);
+      // Trả về định dạng "month/year" với cả month và year là số nguyên
+      return '${nextMonth.month}/${nextMonth.year}';
+    });
   }
 
   @override
@@ -89,6 +112,13 @@ class _ParkingBookingDetailScreenState
         endTime = state.endTime!;
         TotalTime = state.TotalTime;
         Total = state.Total!;
+      }
+      else if(state is BookingScreenLoadedMonth){
+        Month = state.Month;
+        Budget = state.Total;
+        startingTime = state.startTime;
+        endtingTime = state.endTime;
+
       }
       return Scaffold(
           appBar: AppBar(
@@ -148,8 +178,10 @@ class _ParkingBookingDetailScreenState
                         ),
                       ],
                     ),
-                    // tổng thời gian
-                    Padding(
+
+                    !widget.isMonthly
+                    // tổng thời gian ( bình thường )
+                    ?Padding(
                       padding: EdgeInsets.only(top: Get.width / 20),
                       child: Column(
                         children: [
@@ -337,7 +369,7 @@ class _ParkingBookingDetailScreenState
                                                   true)
                                           ? '${selectedDateEnd.toLocal()}'
                                               .split(' ')[0]
-                                          : 'Chưa chọn',
+                                          : 'Empty !',
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                   ),
@@ -403,13 +435,13 @@ class _ParkingBookingDetailScreenState
                           ),
                         ],
                       ),
-                    ),
-                    // chọn biển số xe
-                    Padding(
+                    )
+                    // gói tháng
+                    :Padding(
                         padding: EdgeInsets.only(top: Get.width / 15),
                         child: Column(
                           children: [
-                            Text("CHỌN XE",
+                            Text("SELECTING MONTH",
                                 style: TextStyle(
                                   fontSize: Get.width / 25,
                                   fontWeight: FontWeight.bold,
@@ -430,12 +462,91 @@ class _ParkingBookingDetailScreenState
                                 TableRow(children: [
                                   Container(
                                       alignment: Alignment.center,
-                                      child: Text('Chọn biển số xe',
+                                      child: Text('Select month',
                                           style: TextStyle(
                                               fontSize: Get.width / 23))),
                                   Container(
                                       alignment: Alignment.center,
-                                      child: Text('Biển số',
+                                      child: Text('Month',
+                                          style: TextStyle(
+                                              fontSize: Get.width / 23)))
+                                ]),
+                                TableRow(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: DropdownButton<String>(
+                                        value: selectedMonth.isEmpty
+                                            ? null
+                                            : SelecteMonth,
+                                        items:
+                                        selectedMonth.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value,
+                                                style: TextStyle(
+                                                    fontSize: Get.width / 23)),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            SelecteMonth = newValue!;
+
+                                            context.read<BookingScreenBloc>().add(
+                                                MonthlyPackageEvent( SelecteMonth,PriceBySelect_car_or_moto));
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        SelecteMonth.isEmpty
+                                            ? 'Empty !'
+                                            : '$SelecteMonth',
+                                        style:
+                                        TextStyle(fontSize: Get.width / 23),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
+                    // chọn biển số xe
+                    Padding(
+                        padding: EdgeInsets.only(top: Get.width / 15),
+                        child: Column(
+                          children: [
+                            Text("SELECTING VEHICLE",
+                                style: TextStyle(
+                                  fontSize: Get.width / 25,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            SizedBox(
+                              height: Get.width / 15,
+                            ),
+                            Table(
+                              // border: TableBorder.all(
+                              //   color: Colors.black, // Màu viền
+                              //   width: 2.0, // Độ dày của viền
+                              // ),
+                              columnWidths: const {
+                                0: FlexColumnWidth(1.5),
+                                1: FlexColumnWidth(1),
+                              },
+                              children: [
+                                TableRow(children: [
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: Text('Select license vehicle',
+                                          style: TextStyle(
+                                              fontSize: Get.width / 23))),
+                                  Container(
+                                      alignment: Alignment.center,
+                                      child: Text('License vehicle',
                                           style: TextStyle(
                                               fontSize: Get.width / 23)))
                                 ]),
@@ -468,7 +579,7 @@ class _ParkingBookingDetailScreenState
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         SelecteVehicalLisence.isEmpty
-                                            ? 'Chưa chọn'
+                                            ? 'Empty !'
                                             : '$SelecteVehicalLisence',
                                         style:
                                             TextStyle(fontSize: Get.width / 23),
@@ -526,7 +637,7 @@ class _ParkingBookingDetailScreenState
                                   Container(
                                     alignment: Alignment.centerRight,
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
+                                    child: !widget.isMonthly? Text(
                                       TotalTime != null && Total != 0
                                           ? '${TotalTime!.hour} giờ' // Hiển thị chỉ giờ
                                           : 'Hãy chọn lại giá trị \n nhập vào hợp lý',
@@ -535,7 +646,18 @@ class _ParkingBookingDetailScreenState
                                           color: Total == 0
                                               ? Colors.red
                                               : Colors.black),
-                                    ),
+                                    ):
+                                        Text(
+                                          Month != '' && Budget != 0
+                                              ? '${Month}' // Hiển thị chỉ giờ
+                                              : 'EMPTY !',
+                                          style: TextStyle(
+                                              fontSize: Budget == 0 ? 14 : 16,
+                                              color: Budget == 0
+                                                  ? Colors.red
+                                                  : Colors.black),
+                                        )
+                                    ,
                                   ),
                                 ],
                               ),
@@ -563,7 +685,7 @@ class _ParkingBookingDetailScreenState
                                   Container(
                                     alignment: Alignment.centerRight,
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text('$Total VND'),
+                                    child: Text('$Budget VND'),
                                   ),
                                 ],
                               ),
@@ -572,6 +694,7 @@ class _ParkingBookingDetailScreenState
                         ],
                       ),
                     ),
+                    widget.isMonthly ? SizedBox(height: Get.width/4,) : SizedBox(height: Get.width/8,),
                     // thanh toán
                     Container(
                         alignment: Alignment.center,
@@ -580,7 +703,7 @@ class _ParkingBookingDetailScreenState
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.blue,
                         ),
-                        child: TextButton(
+                        child: !widget.isMonthly ? TextButton(
                             onPressed: () {
                               Timestamp timestampEnd = Timestamp.fromDate(
                                   combineDateAndTime(selectedDateEnd, endTime));
@@ -588,6 +711,7 @@ class _ParkingBookingDetailScreenState
                                   combineDateAndTime(
                                       selectedDateStart, startTime));
                               String slotname = widget.NameSlot;
+
                               TransactionModel transaction = TransactionModel(
                                   vehicalLicense: SelecteVehicalLisence,
                                   note: 'Thanh toán bãi đỗ : $slotname',
@@ -613,7 +737,37 @@ class _ParkingBookingDetailScreenState
                               style: TextStyle(
                                   fontSize: Get.width / 20,
                                   color: Colors.white),
-                            ))),
+                            )) :
+                        TextButton(
+                            onPressed: () {
+                              String slotname = widget.NameSlot;
+                              TransactionModel transaction = TransactionModel(
+                                  vehicalLicense: SelecteVehicalLisence,
+                                  note: 'Booking by Monthly Package : $slotname on $Month',
+                                  typeVehical: widget.TypeSelected,
+                                  budget: PriceBySelect_car_or_moto,
+                                  date: Timestamp.fromDate(DateTime.now()),
+                                  endTime: endtingTime,
+                                  slotName: widget.NameSlot,
+                                  spotName: _parkingSpotModel.spotName,
+                                  startTime: startingTime,
+                                  total: Budget,
+                                  totalTime: 1,
+                                  transactionID: 2,
+                                  transactionType: false,
+                                  userID: widget.userID);
+                              context.read<BookingScreenBloc>().add(
+                                CheckOut(transaction,
+                                    widget.parkingSpotModel.spotId),
+                              );
+                            },
+                            child: Text(
+                              'Thanh toán',
+                              style: TextStyle(
+                                  fontSize: Get.width / 20,
+                                  color: Colors.white),
+                            )) ),
+
                   ],
                 ),
               ),

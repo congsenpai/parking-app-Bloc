@@ -228,11 +228,11 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
             onPressed: () {
               !widget.isMonthly ?
               Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName,)
+                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName, IsMonthly: false,)
                 ),
               ):
               Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName,)
+                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName, IsMonthly: true,)
                 ),
               )
 

@@ -7,11 +7,12 @@ import 'package:project_smart_parking_app/screens/parkingBookingScreen/parking_b
 import '../../Language/language.dart';
 import '../../repositories/parking_slot_repository.dart';
 class ParkingSlotScreen extends StatefulWidget {
+  final bool IsMonthly;
   final String userName;
   final String documentId;
   final ParkingSpotModel parkingSpotModel;
   final String userID;
-  const ParkingSlotScreen({super.key, required this.documentId, required this.parkingSpotModel, required this.userID, required this.userName});
+  const ParkingSlotScreen({super.key, required this.documentId, required this.parkingSpotModel, required this.userID, required this.userName, required this.IsMonthly});
   @override
   State<ParkingSlotScreen> createState() => _ParkingBookingScreenState();
 }
@@ -201,7 +202,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                     setState(() {
                       lostSlotCar = slot; // Cập nhật vị trí chọn
                     });
-                    _showBookingDialog(slot,CarOfMoto);
+                    _showBookingDialog(slot,CarOfMoto,widget.IsMonthly);
                   }
                 },
                 child: Container(
@@ -275,7 +276,7 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
                       lostSlotMoto = slot; // Cập nhật vị trí chọn
                     });
                     CarOfMoto =0;
-                    _showBookingDialog(slot,CarOfMoto);
+                    _showBookingDialog(slot,CarOfMoto,widget.IsMonthly);
                   }
                 },
                 child: Container(
@@ -308,42 +309,89 @@ class _ParkingBookingScreenState extends State<ParkingSlotScreen> {
   }
 
   // Phương thức để hiển thị thông báo nổi
-  void _showBookingDialog(String slot, int CarOfMoto) {
+  void _showBookingDialog(String slot, int CarOfMoto,bool isMonthly) {
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(languageSelector.translate('Booking Slot', language)),
+        return !isMonthly
+            ?AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text(languageSelector.translate('Booking Slot', language)),
 
-          content: Text(
-            '${languageSelector.translate('Selected parking slot:', language)} $slot of $selectedFloor',
-          ),
+              content: Text(
+                '${languageSelector.translate('Selected parking slot:', language)} $slot of $selectedFloor',
+              ),
 
-          actions: <Widget>[
-            TextButton(
-              child: Text(languageSelector.translate('Booking Now', language), style: TextStyle(color: Colors.blue)),
-              onPressed: () {
-                //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
-                // Navigator.of(context).pop(); // Đóng dialog
-                Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(parkingSpotModel: widget.parkingSpotModel, TypeSelected: selectedFloor, NameSlot: slot, userID: widget.userID, userName: '',)),
-                );
-              },
-            ),
-            TextButton(
-              child: Text(languageSelector.translate('Cancel', language), style: TextStyle(color: Colors.grey)),
-              onPressed: () {
-                setState(() {
-                  lostSlotCar = '';
-                  lostSlotMoto = '';// Reset vị trí chọn khi huỷ
-                });
-                Navigator.of(context).pop(); // Đóng dialog
-              },
-            ),
-          ],
-        );
+              actions: <Widget>[
+                TextButton(
+                  child: Text(languageSelector.translate('Booking Now', language), style: TextStyle(color: Colors.blue)),
+                  onPressed: () {
+                    //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
+                    // Navigator.of(context).pop(); // Đóng dialog
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(
+                        parkingSpotModel: widget.parkingSpotModel,
+                        TypeSelected: selectedFloor,
+                        NameSlot: slot,
+                        userID: widget.userID,
+                        userName: widget.userName,
+                        isMonthly: widget.IsMonthly,
+                      )),
+                    );
+                  },
+                ),
+                TextButton(
+                  child: Text(languageSelector.translate('Cancel', language), style: TextStyle(color: Colors.grey)),
+                  onPressed: () {
+                    setState(() {
+                      lostSlotCar = '';
+                      lostSlotMoto = '';// Reset vị trí chọn khi huỷ
+                    });
+                    Navigator.of(context).pop(); // Đóng dialog
+                  },
+                ),
+              ],
+            )
+            :AlertDialog(
+                backgroundColor: Colors.white,
+
+                title: Text(languageSelector.translate('Booking Monthly', language)),
+
+                content: Text(
+                  '${languageSelector.translate('Selected parking slot:', language)} $slot of $selectedFloor',
+                ),
+
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(languageSelector.translate('Booking Now', language), style: TextStyle(color: Colors.blue)),
+                    onPressed: () {
+                      //print('Vị trí đã chọn :$slot !'); // In ra vị trí đã chọn
+                      // Navigator.of(context).pop(); // Đóng dialog
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ParkingBookingDetailScreen(
+                          parkingSpotModel: widget.parkingSpotModel,
+                          TypeSelected: selectedFloor,
+                          NameSlot: slot,
+                          userID: widget.userID,
+                          userName: widget.userName,
+                          isMonthly: widget.IsMonthly,)),
+                      );
+                    },
+                  ),
+                  TextButton(
+                    child: Text(languageSelector.translate('Cancel', language), style: TextStyle(color: Colors.grey)),
+                    onPressed: () {
+                      setState(() {
+                        lostSlotCar = '';
+                        lostSlotMoto = '';// Reset vị trí chọn khi huỷ
+                      });
+                      Navigator.of(context).pop(); // Đóng dialog
+                    },
+                  ),
+                ],
+              )
+        ;
       },
     );
   }
