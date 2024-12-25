@@ -1,5 +1,10 @@
-import '../../models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:project_smart_parking_app/screens/chatBotService/GeminiScreen.dart';
+import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
+import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';
+import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
+import '../../models/user_model.dart';
 
 class GridMenuScreen extends StatelessWidget {
   late final String userID;
@@ -11,110 +16,130 @@ class GridMenuScreen extends StatelessWidget {
     required this.userModel,
   });
 
-  final List<Map<String, dynamic>> menuItems = [
+  late final List<Map<String, dynamic>> menuItems = [
     {
-      "icon": 'assets/icons/icon_vip/03.png', // Đường dẫn đến ảnh của bạn
+      "icon": 'assets/icons/icon_vip/03.png',
       "label": "E-Wallet",
-      "onPress": () {
-
+      "onPress": (BuildContext context) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                WalletScreen(userID: userID, userName2: userModel.username),
+          ),
+        );
       }
     },
     {
       "icon": 'assets/icons/icon_vip/51.png',
       "label": "Dashboard",
-      "onPress": () {
-        print("Dashboard được chọn");
+      "onPress": (BuildContext context) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ManagementConsumptionByCustomer(userID: userID),
+          ),
+        );
       }
     },
     {
       "icon": 'assets/icons/icon_vip/06.png',
       "label": "Monthly Package",
-      "onPress": () {
-        print("Monthly Package được chọn");
+      "onPress": (BuildContext context) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChoosendSpots(userModel: userModel),
+          ),
+        );
       }
     },
     {
       "icon": 'assets/icons/icon_vip/56.png',
       "label": "ChatBot",
-      "onPress": () {
-        print("ChatBot được chọn");
+      "onPress": (BuildContext context) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(title: 'Chat Bot'),
+          ),
+        );
       }
     },
     {
       "icon": 'assets/icons/icon_vip/58.png',
       "label": "Support",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Support được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/41.png',
       "label": "Cinema",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Cinema được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/38.png',
       "label": "Bus Monthly Ticket",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Bus Monthly Ticket được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/48.png',
       "label": "4G",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("4G được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/28.png',
       "label": "Phone top up",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Phone top up được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/13.png',
       "label": "Fingerprint",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Fingerprint được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/25.png',
       "label": "Savings",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Savings được chọn");
       }
     },
     {
       "icon": 'assets/icons/icon_vip/30.png',
       "label": "Gift",
-      "onPress": () {
+      "onPress": (BuildContext context) {
         print("Gift được chọn");
       }
     },
+    // Other menu items remain unchanged...
   ];
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 10, // Khoảng cách giữa các mục theo chiều ngang
-      runSpacing: 10, // Khoảng cách giữa các mục theo chiều dọc
+      spacing: 10,
+      runSpacing: 10,
       alignment: WrapAlignment.start,
       children: menuItems.map((item) {
         return SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width / 3 - 15, // Đặt chiều rộng mỗi mục
+          width: MediaQuery.of(context).size.width / 3 - 15,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: item["onPress"],
+                onPressed: () => item["onPress"](context), // Pass context
                 iconSize: 50,
                 icon: CircleAvatar(
                   radius: 30,
