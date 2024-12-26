@@ -133,6 +133,31 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+class MyAdminApp extends StatefulWidget {
+  const MyAdminApp({super.key});
+
+  @override
+  State<MyAdminApp> createState() => _MyAdminAppState();
+}
+class _MyAdminAppState extends State<MyAdminApp> {
+  ThemeMode _themeMode = ThemeMode.light; // Mặc định là sáng
+  void toggleTheme() {
+    setState(() {
+      _themeMode =
+      _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme, // Chế độ sáng
+      darkTheme: darkTheme, // Chế độ tối
+      themeMode: _themeMode, // Điều khiển theme hiện tại
+      home: MyAppAdmin(),
+    );
+  }
+}
 
 
 
