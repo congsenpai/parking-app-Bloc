@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -32,7 +31,6 @@ class ChatWidget extends StatefulWidget {
   });
 
   final String apiKey;
-
   @override
   State<ChatWidget> createState() => _ChatWidgetState();
 }
@@ -99,21 +97,21 @@ class _ChatWidgetState extends State<ChatWidget> {
         children: [
           Expanded(
             child: _apiKey.isNotEmpty
-                ? ListView.builder(
-              controller: _scrollController,
-              itemBuilder: (context, idx) {
-                final content = _generatedContent[idx];
-                return MessageWidget(
-                  text: content.text,
-                  image: content.image,
-                  isFromUser: content.fromUser,
-                );
-              },
-              itemCount: _generatedContent.length,
-            )
+              ? ListView.builder(
+                controller: _scrollController,
+                itemBuilder: (context, idx) {
+                  final content = _generatedContent[idx];
+                  return MessageWidget(
+                    text: content.text,
+                    image: content.image,
+                    isFromUser: content.fromUser,
+                  );
+                },
+                itemCount: _generatedContent.length,
+              )
                 : ListView(
-              children: const [
-                Text(
+                  children: const [
+                  Text(
                   'No API key found. Please provide an API Key using '
                       "'--dart-define' to set the 'API_KEY' declaration.",
                 ),
@@ -195,7 +193,6 @@ class _ChatWidgetState extends State<ChatWidget> {
       text: null,
       fromUser: true
       ));
-
       var response = await _model.generateContent(content);
       var text = response.text;
       _generatedContent.add((image: null, text: text, fromUser: false));
@@ -227,14 +224,11 @@ class _ChatWidgetState extends State<ChatWidget> {
     setState(() {
       _loading = true;
     });
-
     try {
       _generatedContent.add((image: null, text: message, fromUser: true));
       final response = await _chat.sendMessage(
         Content.text(message),
       );
-
-
       final text = response.text;
       _generatedContent.add((image: null, text: text, fromUser: false));
 

@@ -16,7 +16,8 @@ class SelectAndCheckTimeEvent extends BookingScreenEvent {
   late final TimeOfDay endingTime;
   late final double pricePerHourCar;
   late final double insuranceDiscount;
-  SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime, this.endingTime, this.pricePerHourCar, this.insuranceDiscount);
+  SelectAndCheckTimeEvent(this.startingDate, this.endingDate, this.startingTime,
+      this.endingTime, this.pricePerHourCar, this.insuranceDiscount);
 }
 class MonthlyPackageEvent extends BookingScreenEvent{
   late String time ;

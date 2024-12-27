@@ -23,7 +23,6 @@ import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.da
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 import 'package:project_smart_parking_app/screens/loginScreen/welcome_screens.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
-import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

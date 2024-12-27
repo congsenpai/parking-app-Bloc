@@ -156,7 +156,6 @@ class VNPAYFlutter {
               onPaymentSuccess(params);
               flutterWebviewPlugin.close();
               Get.to(WalletScreen(userID: userID, userName2: '',));
-
               double count = 0;
               TransactionRepository transactionRepository = TransactionRepository();
               WalletRepository walletRepository = WalletRepository();

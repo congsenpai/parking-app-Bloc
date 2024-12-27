@@ -63,9 +63,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return result;
   }
   String CreateFormatRemainingTime2 (DateTime time){
-    int year=time.year;
-    int month=time.month;
-    int day = time.day;
     int hour = time.hour;
     int minute = time.minute;
     int second = time.second;
@@ -541,7 +538,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold
                                   ),)
-                                    :Text(': ${CreateFormatRemainingTime2(_RemainingTime.toDate())}', textAlign: TextAlign.left,
+                                    :Text(' ${CreateFormatRemainingTime2(_RemainingTime.toDate())}', textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: Get.width/30,
                                       color: Colors.black45,

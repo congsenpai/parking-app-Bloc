@@ -685,7 +685,8 @@ class _ParkingBookingDetailScreenState
                                   Container(
                                     alignment: Alignment.centerRight,
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text('$Budget VND'),
+                                    child: widget.isMonthly?Text('$Budget VND'):Text('$Total VND')
+                                    ,
                                   ),
                                 ],
                               ),

@@ -85,7 +85,6 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
-
                 // Input Số tiền
                 TextFormField(
                   controller: _amountController,

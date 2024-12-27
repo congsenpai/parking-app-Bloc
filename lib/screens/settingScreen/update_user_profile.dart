@@ -55,8 +55,6 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
     _country = TextEditingController();
     _userAddress = TextEditingController();
     _userVehicleLicense = TextEditingController();
-
-
     context.read<UserBloc>().add(InitstateEvent(widget.UserID));
     print(widget.UserID);
   }
@@ -152,8 +150,6 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                     SizedBox(height: Get.width / 50),
                     ElevatedButton(
                       onPressed: () {
-
-
                         context.read<UserBloc>().add(ChangeProfileEvent(
                           widget.UserID,
                           _userName.text,
