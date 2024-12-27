@@ -37,7 +37,6 @@ dependencies:
   get: ^4.6.6
   flutter_keyboard_visibility: ^6.0.0
   intl_phone_field: ^3.0.0
-
   firebase_core: ^3.6.0
   google_sign_in: ^6.2.1
   firebase_auth: ^5.3.1
@@ -68,6 +67,9 @@ dependencies:
   firebase_database: ^11.2.0
   latlong2: ^0.9.1
   flutter_map: ^7.0.2
+  bloc_test: ^9.1.7
+  flutter_launcher_icons: ^0.14.2
+
 
 
 
@@ -83,7 +85,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/AnhAppbar.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
