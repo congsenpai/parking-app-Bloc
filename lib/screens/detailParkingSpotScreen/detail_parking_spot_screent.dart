@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_event.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';
+import 'package:project_smart_parking_app/services/map_and_routing.dart';
 import '../../Language/language.dart';
 import '../../models/parking_spot_model.dart';
 import '../../widget/Starwidget.dart';
 import '../parkingSlotScreen/parking_slot_screen.dart';
+
 class ParkingSpotScreen extends StatefulWidget {
   final bool isMonthly;
 
   final ParkingSpotModel data;
   final String userName;
   final String userID;
-  const ParkingSpotScreen({Key? key,  required this.data, required this.userID, required this.userName, required this.isMonthly}) : super(key: key);
+
+  const ParkingSpotScreen({Key? key,
+    required this.data,
+    required this.userID,
+    required this.userName,
+    required this.isMonthly})
+      : super(key: key);
+
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
 }
+
 class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   final String Language = 'vi';
   int _star = 4;
@@ -26,6 +37,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   ParkingSpotModel? parkingSpot;
   String _currentImagePath = '';
   List<String> _imagePaths = [];
+  MapWidget _mapWidget = MapWidget(endPoint: LatLng(21.0285, 105.8542));
 
   @override
   void initState() {
@@ -35,18 +47,27 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
     _imagePaths = parkingSpot!.listImage;
     _star = parkingSpot!.star!;
     _reviewNumber = parkingSpot!.reviewsNumber!;
-
   }
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<ParkingSpotBloc,ParkingSpotState>(
-        builder: (context,state){
-        if (state is ParkingSpotLoading){
+
+Future<LatLng?> _getSpotPosition() async {
+  if (parkingSpot!=null) {
+    LatLng latLng =
+    LatLng(parkingSpot!.location.latitude, parkingSpot!.location.longitude);
+    return latLng;
+  }
+  return null;
+}
+
+
+@override
+Widget build(BuildContext context) {
+  return BlocConsumer<ParkingSpotBloc, ParkingSpotState>(
+      builder: (context, state) {
+        if (state is ParkingSpotLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
-        }
-        else if(state is ParkingSpotLoaded){
+        } else if (state is ParkingSpotLoaded) {
           _currentImagePath = state.CurrentImage;
         }
         return Scaffold(
@@ -93,7 +114,9 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
                       children: _imagePaths.map((imagePath) {
                         return GestureDetector(
                           onTap: () {
-                            context.read<ParkingSpotBloc>().add(ChangeImageEvent(imagePath));
+                            context
+                                .read<ParkingSpotBloc>()
+                                .add(ChangeImageEvent(imagePath));
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 8),
@@ -127,128 +150,154 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
             ),
           ),
         );
-        },
-        listener: (context,state){
-
-        }
-        );
-  }
-
-  // Hàm Widget chứa các chi tiết thông tin
-  Widget buildParkingDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          parkingSpot!.spotName,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        StarWidget(startNumber: _star, evaluateNumber: _reviewNumber),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Icon(Icons.location_on, size: 16, color: Colors.grey),
-            SizedBox(width: 4),
-            Text("1.3km"),
-            SizedBox(width: 16),
-            Icon(Icons.attach_money, size: 16, color: Colors.grey),
-            SizedBox(width: 4),
-            Text(
-                '${parkingSpot!.costPerHourMoto} ${languageSelector.translate('VND/hr', Language)}'
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Text(
-          languageSelector.translate('Description', Language),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          '${parkingSpot!.describe}',
-
-          style: TextStyle(color: Colors.grey),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              children: [
-                Icon(Icons.security, color: Colors.blue),
-                Text(languageSelector.translate('AI Secure', Language)),
-              ],
-            ),
-            Column(
-              children: [
-                Icon(Icons.electrical_services, color: Colors.blue),
-                Text(languageSelector.translate('Electrics', Language)),
-              ],
-            ),
-            Column(
-              children: [
-                Icon(Icons.wc, color: Colors.blue),
-                Text(languageSelector.translate('Toilets', Language)),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          "Location",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey[300],
-          ),
-          child: const Center(
-            child: Text(
-              "Open Maps",
-              style: TextStyle(color: Colors.blue),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              !widget.isMonthly ?
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName, IsMonthly: false,)
-                ),
-              ):
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ParkingSlotScreen(documentId: parkingSpot!.spotId, parkingSpotModel: parkingSpot!, userID: widget.userID, userName: widget.userName, IsMonthly: true,)
-                ),
-              )
-
-
-              ;
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text("Explore Parking Spots", style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal)),
-          ),
-        ),
-      ],
-    );
-  }
+      },
+      listener: (context, state) {});
 }
+
+// Hàm Widget chứa các chi tiết thông tin
+Widget buildParkingDetails() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        parkingSpot!.spotName,
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      StarWidget(startNumber: _star, evaluateNumber: _reviewNumber),
+      const SizedBox(height: 8),
+      Row(
+        children: [
+          Icon(Icons.location_on, size: 16, color: Colors.grey),
+          SizedBox(width: 4),
+          Text("1.3km"),
+          SizedBox(width: 16),
+          Icon(Icons.attach_money, size: 16, color: Colors.grey),
+          SizedBox(width: 4),
+          Text(
+              '${parkingSpot!.costPerHourMoto} ${languageSelector.translate(
+                  'VND/hr', Language)}'),
+        ],
+      ),
+      const SizedBox(height: 16),
+      Text(
+        languageSelector.translate('Description', Language),
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 4),
+      Text(
+        '${parkingSpot!.describe}',
+        style: TextStyle(color: Colors.grey),
+      ),
+      const SizedBox(height: 16),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Column(
+            children: [
+              Icon(Icons.security, color: Colors.blue),
+              Text(languageSelector.translate('AI Secure', Language)),
+            ],
+          ),
+          Column(
+            children: [
+              Icon(Icons.electrical_services, color: Colors.blue),
+              Text(languageSelector.translate('Electrics', Language)),
+            ],
+          ),
+          Column(
+            children: [
+              Icon(Icons.wc, color: Colors.blue),
+              Text(languageSelector.translate('Toilets', Language)),
+            ],
+          ),
+        ],
+      ),
+      const SizedBox(height: 16),
+      const Text(
+        "Location",
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 8),
+      FutureBuilder<LatLng?>(
+        future: _getSpotPosition(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data != null) {
+            return Container(
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey[300],
+              ),
+              child: _mapWidget.buildBasicMap(snapshot.data!),
+            );
+          } else {
+            return const Text(
+              "Unable to fetch location.",
+              style: TextStyle(color: Colors.red),
+            );
+          }
+        },
+      ),
+      Text(
+        "Open Map",
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+      const SizedBox(height: 16),
+      SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            !widget.isMonthly
+                ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ParkingSlotScreen(
+                        documentId: parkingSpot!.spotId,
+                        parkingSpotModel: parkingSpot!,
+                        userID: widget.userID,
+                        userName: widget.userName,
+                        IsMonthly: false,
+                      )),
+            )
+                : Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ParkingSlotScreen(
+                        documentId: parkingSpot!.spotId,
+                        parkingSpotModel: parkingSpot!,
+                        userID: widget.userID,
+                        userName: widget.userName,
+                        IsMonthly: true,
+                      )),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: const Text("Explore Parking Spots",
+              style: TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.normal)),
+        ),
+      ),
+    ],
+  );
+}}

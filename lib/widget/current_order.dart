@@ -98,9 +98,7 @@ class _InProgressParkingState extends State<InProgressParking> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MapWidget(
-                          endPoint: endPoint,
-                        ),
+                        builder: (context) => MapWidgetScreen(endPoint: endPoint)
                       ),
                     );
                   },

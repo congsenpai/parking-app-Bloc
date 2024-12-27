@@ -7,53 +7,27 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 
-class MapWidget extends StatefulWidget {
-  final LatLng endPoint;
+class MapWidget {
   final String apiKey = "9Gug0whGGq8v1H7AtidZcOGLbOV32mtm";
+  final LatLng endPoint;
 
   MapWidget({required this.endPoint});
 
-  @override
-  _MapWidgetState createState() => _MapWidgetState();
-}
-
-class _MapWidgetState extends State<MapWidget> {
-  LatLng? currentLocation;
-  List<LatLng> routePoints = [];
-  StreamSubscription<Position>? positionStream;
-
-  @override
-  void initState() {
-    super.initState();
-    _startLocationUpdates();
+  Future<LatLng?> getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      );
+      return LatLng(position.latitude, position.longitude);
+    } catch (e) {
+      print("Error getting current location: $e");
+      return null;
+    }
   }
 
-  @override
-  void dispose() {
-    positionStream?.cancel();
-    super.dispose();
-  }
-
-  void _startLocationUpdates() {
-    const locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.best,
-      distanceFilter: 1, // Cập nhật khi di chuyển ít nhất 10m
-    );
-
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position position) {
-      LatLng newLocation = LatLng(position.latitude, position.longitude);
-      setState(() {
-        currentLocation = newLocation;
-      });
-      _fetchRoute(newLocation, widget.endPoint);
-    });
-  }
-
-  Future<void> _fetchRoute(LatLng startPoint, LatLng endPoint) async {
+  Future<List<LatLng>> fetchRoute(LatLng startPoint) async {
     final url =
-        "https://api.tomtom.com/routing/1/calculateRoute/${startPoint.latitude},${startPoint.longitude}:${endPoint.latitude},${endPoint.longitude}/json?key=${widget.apiKey}";
+        "https://api.tomtom.com/routing/1/calculateRoute/${startPoint.latitude},${startPoint.longitude}:${endPoint.latitude},${endPoint.longitude}/json?key=$apiKey";
 
     final response = await http.get(Uri.parse(url));
 
@@ -62,22 +36,137 @@ class _MapWidgetState extends State<MapWidget> {
       final routes = data['routes'] as List;
       if (routes.isNotEmpty) {
         final points = routes[0]['legs'][0]['points'] as List;
-        setState(() {
-          routePoints = points
-              .map((point) => LatLng(point['latitude'], point['longitude']))
-              .toList();
-        });
+        return points
+            .map((point) => LatLng(point['latitude'], point['longitude']))
+            .toList();
       }
     } else {
       print("Error fetching route: ${response.statusCode}");
     }
+    return [];
+  }
+
+  Widget buildBasicMap(LatLng initialLocation) {
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: initialLocation,
+        initialZoom: 17.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate:
+              "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=$apiKey",
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: initialLocation,
+              child: Icon(
+                Icons.my_location,
+                color: Colors.green,
+                size: 40,
+              ),
+            ),
+            Marker(
+              point: endPoint,
+              child: Icon(
+                Icons.flag,
+                color: Colors.red,
+                size: 40,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildRouteMap(LatLng initialLocation, List<LatLng> routePoints) {
+    return FlutterMap(
+      options: MapOptions(
+        initialCenter: initialLocation,
+        initialZoom: 17.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate:
+              "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=$apiKey",
+        ),
+        if (routePoints.isNotEmpty)
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: routePoints,
+                color: Colors.blue,
+                strokeWidth: 4.0,
+              ),
+            ],
+          ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: initialLocation,
+              child: Icon(
+                Icons.my_location,
+                color: Colors.green,
+                size: 40,
+              ),
+            ),
+            Marker(
+              point: endPoint,
+              child: Icon(
+                Icons.flag,
+                color: Colors.red,
+                size: 40,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class MapWidgetScreen extends StatefulWidget {
+  final LatLng endPoint;
+
+  MapWidgetScreen({required this.endPoint});
+
+  @override
+  _MapWidgetScreenState createState() => _MapWidgetScreenState();
+}
+
+class _MapWidgetScreenState extends State<MapWidgetScreen> {
+  LatLng? currentLocation;
+  List<LatLng> routePoints = [];
+  late MapWidget mapWidget;
+
+  @override
+  void initState() {
+    super.initState();
+    mapWidget = MapWidget(endPoint: widget.endPoint);
+    _initializeMap();
+  }
+
+  Future<void> _initializeMap() async {
+    currentLocation = await mapWidget.getCurrentLocation();
+    if (currentLocation != null) {
+      routePoints = await mapWidget.fetchRoute(currentLocation!);
+    }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Real-Time Navigation'),
+        title: Text('Multiple Views Map'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -86,51 +175,8 @@ class _MapWidgetState extends State<MapWidget> {
         ),
       ),
       body: currentLocation == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : FlutterMap(
-              options: MapOptions(
-                initialCenter: currentLocation!,
-                initialZoom: 17.0,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate:
-                      "https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=${widget.apiKey}",
-                ),
-                if (routePoints.isNotEmpty)
-                  PolylineLayer(
-                    polylines: [
-                      Polyline(
-                        points: routePoints,
-                        color: Colors.blue,
-                        strokeWidth: 4.0,
-                      ),
-                    ],
-                  ),
-                MarkerLayer(
-                  markers: [
-                    Marker(
-                      point: currentLocation!,
-                      child: Icon(
-                        Icons.my_location,
-                        color: Colors.green,
-                        size: 40,
-                      ),
-                    ),
-                    Marker(
-                      point: widget.endPoint,
-                      child: Icon(
-                        Icons.flag,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          ? mapWidget.buildLoadingIndicator()
+          : mapWidget.buildRouteMap(currentLocation!, routePoints),
     );
   }
 }
