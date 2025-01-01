@@ -30,7 +30,7 @@ class LoginWithEmail {
         'isActive': true,
         'createdOn': DateTime.now(),
         'city': '',
-        'vehicle': [],
+        'vehicle': '',
       });
     }
   }
