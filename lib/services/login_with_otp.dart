@@ -31,7 +31,7 @@ class LoginWithOTP {
         'isActive': true,
         'createdOn': DateTime.now(),
         'city': '',
-        'vehical': [],
+        'vehical': '',
       });
     }
   }
