@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "com.smartparking.smart_parking_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
