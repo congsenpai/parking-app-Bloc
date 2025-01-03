@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/customer_management.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/sidetab_element/spot_owner_management.dart';
 
 import '../../../../models/spot_owner_model.dart';
-import '../../dashboard/dashboard_screen.dart';
+
 import '../../dashboard/sidetab_element/spot_management.dart';
-import '../../dashboard/sidetab_element/transaction-management.dart';
+import '../../dashboard/sidetab_element/transaction_management.dart';
 
 
 class SideMenu extends StatelessWidget {
@@ -16,8 +16,8 @@ class SideMenu extends StatelessWidget {
   const SideMenu({
 
 
-    Key? key, required this.spotOwnerModel,
-  }) : super(key: key);
+    super.key, required this.spotOwnerModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +82,12 @@ class SideMenu extends StatelessWidget {
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
-    Key? key,
+    super.key,
     // For selecting those three line once press "Command+D"
     required this.title,
     required this.svgSrc,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String title, svgSrc;
   final VoidCallback press;

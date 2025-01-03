@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,10 +13,10 @@ class SpotCarsList extends StatefulWidget {
   final String spotId;
 
   const SpotCarsList({
-    Key? key,
+    super.key,
     required this.SpotCarsName,
     required this.isAdmin, required this.spotId,
-  }) : super(key: key);
+  });
 
   @override
   State<SpotCarsList> createState() => _SpotCarsListState();
@@ -28,8 +30,6 @@ class _SpotCarsListState extends State<SpotCarsList> {
 
   void initState() {
     super.initState();
-    print('00000');
-    print(widget.SpotCarsName);
     _loadData(); // Gọi hàm load dữ liệu ban đầu
   }
 
@@ -41,13 +41,11 @@ class _SpotCarsListState extends State<SpotCarsList> {
           _futureSpotCars = (fetchSpotSlot(widget.spotId));
         }
         else{
-          print('search data: ${widget.SpotCarsName}');
           _futureSpotCars = (fetchSpotSlot(widget.spotId));
         }
 
       }
       else{
-        print('Do not permission' );
       }
     });
   }

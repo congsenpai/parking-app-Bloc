@@ -1,8 +1,8 @@
-// ignore_for_file: unused_local_variable, unused_field, avoid_print
+// ignore_for_file: unused_local_variable, unused_field, avoid_print, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore: unused_import
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
 
 import '../models/parking_spot_model.dart';
@@ -123,7 +123,7 @@ class ParkingSpotRepository {
   }) async {
     List<ParkingSpotModel> parkings = await ParkingSpotRepository().getAllParkingSpots();
     int count = parkings.length + 1 ;
-    String SpotID = 'spotID${count}';
+    String SpotID = 'spotID$count';
     final firestore = FirebaseFirestore.instance;
     try {
       await firestore.collection('ParkingSpots').doc(SpotID).set({

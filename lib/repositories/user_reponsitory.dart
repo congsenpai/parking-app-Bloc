@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';

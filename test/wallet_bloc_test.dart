@@ -73,7 +73,7 @@ void main() {
     });
 
     test('initial state is WalletInitial', () {
-      expect: () => [
+      () => [
         isA<WalletInitial>(),
 
       ];

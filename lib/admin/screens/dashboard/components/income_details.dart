@@ -1,6 +1,7 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../repositories/transaction_repository.dart';
 import '../../../constants.dart';
@@ -11,8 +12,8 @@ class IncomeDetail extends StatelessWidget {
   final bool isAdmin;
   final String SpotID;
   const IncomeDetail({
-    Key? key, required this.isAdmin, required this.SpotID,
-  }) : super(key: key);
+    super.key, required this.isAdmin, required this.SpotID,
+  });
 
   @override
   Widget build(BuildContext context) {

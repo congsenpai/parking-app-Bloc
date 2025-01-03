@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:project_smart_parking_app/admin/main.dart';

@@ -49,7 +49,7 @@ void main() {
 
     // Test case 1: Initial state
     test('initial state is HomeScreenInitial', () {
-      expect: () => [
+      () => [
         isA<HomeScreenInitial>()
       ];
     });

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, file_names, camel_case_types, non_constant_identifier_names, deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +35,7 @@ class ExpensesByUp_Down extends StatelessWidget {
       child: Column(
         children: [
 
-          Center(child: Text('$Title', style: TextStyle(fontSize: Get.width/20, fontWeight: FontWeight.bold, color: Colors.black),)),
+          Center(child: Text(Title, style: TextStyle(fontSize: Get.width/20, fontWeight: FontWeight.bold, color: Colors.black),)),
           SizedBox(height: Get.width/30,),
           Container(
             decoration: BoxDecoration(

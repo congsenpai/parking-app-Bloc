@@ -1,8 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 
@@ -11,7 +11,7 @@ class TransactionItem extends StatefulWidget {
   final Color iconColor;
   final TransactionModel data;
 
-  TransactionItem({
+  const TransactionItem({super.key, 
     required this.icon,
     required this.iconColor,
     required this.data,
@@ -38,8 +38,8 @@ class _TransactionItemState extends State<TransactionItem> {
     int hour = dateTime.hour;     // Giờ
     int minute = dateTime.minute; // Phút
     int second = dateTime.second;
-    String _date = '$day / $month / $year \n$hour:$minute:$second';
-    final String date = _date;
+    String date0 = '$day / $month / $year \n$hour:$minute:$second';
+    final String date = date0;
     return Container(
       margin: EdgeInsets.only(top: Get.width /25),
       width: Get.width/1.6,

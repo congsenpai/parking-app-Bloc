@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, deprecated_member_use
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
@@ -8,8 +10,8 @@ class Chart extends StatelessWidget {
   final bool isAdmin;
   final String SpotID;
   const Chart({
-    Key? key, required this.isAdmin, required this.SpotID,
-  }) : super(key: key);
+    super.key, required this.isAdmin, required this.SpotID,
+  });
 
   @override
   Widget build(BuildContext context) {

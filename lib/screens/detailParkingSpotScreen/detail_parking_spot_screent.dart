@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -18,12 +20,11 @@ class ParkingSpotScreen extends StatefulWidget {
   final String userName;
   final String userID;
 
-  const ParkingSpotScreen({Key? key,
+  const ParkingSpotScreen({super.key,
     required this.data,
     required this.userID,
     required this.userName,
-    required this.isMonthly})
-      : super(key: key);
+    required this.isMonthly});
 
   @override
   State<ParkingSpotScreen> createState() => _ParkingSpotScreenState();
@@ -37,7 +38,7 @@ class _ParkingSpotScreenState extends State<ParkingSpotScreen> {
   ParkingSpotModel? parkingSpot;
   String _currentImagePath = '';
   List<String> _imagePaths = [];
-  MapWidget _mapWidget = MapWidget(endPoint: LatLng(21.0285, 105.8542));
+  final MapWidget _mapWidget = MapWidget(endPoint: LatLng(21.0285, 105.8542));
 
   @override
   void initState() {

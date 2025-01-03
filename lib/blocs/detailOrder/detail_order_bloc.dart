@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +58,6 @@ class OrderDetailScreenBloc extends Bloc<OrderDetailScreenEvent, OrderDetailScre
         ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
         List<ParkingSpotModel> spots = await parkingSpotRepository.getAllParkingSpotsBySearchSpotName(transactionModel.spotName);
         ParkingSpotModel spot = spots[0];
-        print(userModel);
         expired = true;
         await updateStateSlot(spot.spotId, transactionModel.typeVehical, transactionModel.slotName, 0);
         RemainingTime = getRemainingTimestamp(transactionModel.endTime);
@@ -69,7 +68,6 @@ class OrderDetailScreenBloc extends Bloc<OrderDetailScreenEvent, OrderDetailScre
       
 
     } catch (e) {
-      print(e);
       emit(OrderDetailScreenError("Failed to load parking spots"));
     }
   }

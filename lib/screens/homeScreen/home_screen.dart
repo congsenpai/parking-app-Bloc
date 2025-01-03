@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously, deprecated_member_use
+
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,7 +14,6 @@ import 'package:project_smart_parking_app/screens/homeScreen/parking_sport_by_se
 import 'package:provider/provider.dart';
 import '../../models/parking_spot_model.dart';
 import '../../models/user_model.dart';
-import '../../repositories/parking_spot_repository.dart';
 import '../../services/login_with_email.dart';
 import '../../services/login_with_google.dart';
 import '../../services/login_with_otp.dart';
@@ -35,8 +36,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // Tạo một TextEditingController để kiểm soát TextField
-  TextEditingController _searchController = TextEditingController();
-  ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
+  final TextEditingController _searchController = TextEditingController();
   List<ParkingSpotModel> parkingSpots = [];
   List<ParkingSpotModel> parkingSpotsBySearch = [];
   List<ParkingSpotModel> RecentlyparkingSpots = [];
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     context
         .read<HomeScreenBloc>()
@@ -171,12 +171,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    child: const CircleAvatar(
-                                      minRadius: 20,
-                                      backgroundColor: Colors.white,
-                                      child: Icon(Icons.person),
-                                    ),
+                                  const CircleAvatar(
+                                    minRadius: 20,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(Icons.person),
                                   ),
                                   SizedBox(
                                     width: Get.width / 40,
@@ -242,11 +240,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        child: Image.asset(
-                          "assets/images/AnhAppbar.png",
-                          width: Get.width / 2.5,
-                        ),
+                      Image.asset(
+                        "assets/images/AnhAppbar.png",
+                        width: Get.width / 2.5,
                       ),
                     ],
                   ),
@@ -288,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(top: Get.width * 0.05),
                       //
                       // widget hiển thị kết quả tìm kiếm
-                      child: parkingSpotsBySearch.length == 0 ||
+                      child: parkingSpotsBySearch.isEmpty ||
                               currentText == ''
                           ? Center(
                               child: Center(

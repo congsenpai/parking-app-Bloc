@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -159,7 +161,7 @@ class _ManagementConsumptionByCustomerState extends State<ManagementConsumptionB
                             items: availableMonths.map<DropdownMenuItem<int>>((int month) {
                               return DropdownMenuItem<int>(
                                 value: month,
-                                child: Center(child: Text('${month.toString()}')),
+                                child: Center(child: Text(month.toString())),
                               );
                             }).toList(),
                           ),

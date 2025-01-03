@@ -44,7 +44,7 @@ void main() {
     );
 
     test('initial state is OrderDetailScreenInitial', () {
-      expect: () => [
+      () => [
         isA<OrderDetailScreenError>()
       ];
     });

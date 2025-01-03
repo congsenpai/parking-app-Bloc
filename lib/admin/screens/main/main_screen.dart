@@ -14,6 +14,7 @@ class MainScreen extends StatefulWidget {
     super.key,
     required this.spotOwnerModel,});
 
+  @override
   State<MainScreen> createState() => _MainScreenState();
 }
 

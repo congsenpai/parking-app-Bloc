@@ -47,7 +47,6 @@ class _CustomerManagementState extends State<CustomerManagement> {
                     setState(() {
                       searchUserName = value; // Cập nhật giá trị tìm kiếm
                     });
-                    print("Search value: $searchUserName");
                   },
                 ): Center(
                   child: Text('Customer List'),

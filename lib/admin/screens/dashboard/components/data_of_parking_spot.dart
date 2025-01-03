@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/repositories/parking_slot_repository.dart';
 
@@ -11,9 +9,9 @@ import '../../../constants.dart';
 
 class DataOfParkingSpot extends StatelessWidget {
   const DataOfParkingSpot({
-    Key? key,
+    super.key,
     required this.info,
-  }) : super(key: key);
+  });
 
   final ParkingSpotModel info;
 
@@ -156,13 +154,13 @@ class DataOfParkingSpot extends StatelessWidget {
 }
 
 class ProgressLine extends StatelessWidget {
-   ProgressLine({
-    Key? key, required this.occupiedSlotsPercentage,
+   const ProgressLine({
+    super.key, required this.occupiedSlotsPercentage,
      required this.bookingReservationPercentage,
      required this.parkingSectionPercentage,
 
 
-  }) : super(key: key);
+  });
 
   final double? occupiedSlotsPercentage;
   final double? bookingReservationPercentage;

@@ -1,7 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, deprecated_member_use
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+// ignore: unnecessary_import
 import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/detailOrder/detail_order_state.dart';
@@ -13,6 +16,7 @@ class OrderDetailsScreen extends StatefulWidget {
   const OrderDetailsScreen({super.key, required this.transactionID});
   final String transactionID;
 
+  @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
 
@@ -75,9 +79,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
 
   void initState() {
-    // TODO: implement initState
+   
     super.initState();
-    print(widget.transactionID);
     context.read<OrderDetailScreenBloc>().add(
         OrderDetailEvent(widget.transactionID)
     );
@@ -157,7 +160,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           TableCell(
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(':  ${_nameUser}', textAlign: TextAlign.left,
+                              child: Text(':  $_nameUser', textAlign: TextAlign.left,
                                 style: TextStyle(
                                     fontSize: Get.width/30,
                                     color: Colors.black45,

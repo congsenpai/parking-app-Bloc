@@ -67,7 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         if (isRemember) {
           // Save user ID (or relevant data) for "Remember Me"
-          await _rememberMeService.saveCredentials(user.email ?? '',
+          await _rememberMeService.saveCredentials(user.email,
               ''); // Google login usually doesn't include password
         }
         emit(AuthAuthenticated(user, isRemember: isRemember));

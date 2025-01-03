@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/screens/settingScreen/update_user_profile.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 import 'package:project_smart_parking_app/widget/footer_widget.dart';
@@ -40,7 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "${widget.userName}",
+                  widget.userName,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],

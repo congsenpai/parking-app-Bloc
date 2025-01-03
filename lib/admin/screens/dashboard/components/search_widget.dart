@@ -7,8 +7,8 @@ class SearchField extends StatefulWidget {
   final ValueChanged <String> ? onChanged;
   final ValueChanged<String>? onSearch; // Callback khi nhấn nút search
   const SearchField({
-    Key? key, required this.controllerText, this.onChanged, this.onSearch,
-  }) : super(key: key);
+    super.key, required this.controllerText, this.onChanged, this.onSearch,
+  });
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -20,7 +20,7 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void initState() {
-    // TODO: implement initState
+ 
     super.initState();
     _textEditingController = TextEditingController(text: widget.controllerText);
   }
@@ -31,6 +31,7 @@ class _SearchFieldState extends State<SearchField> {
   }
 
 
+  @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _textEditingController,

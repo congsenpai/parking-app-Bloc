@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
@@ -19,9 +21,10 @@ class InProgressParking extends StatefulWidget {
 }
 
 class _InProgressParkingState extends State<InProgressParking> {
-  ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
-  TransactionRepository _transactionRepository = TransactionRepository();
+  final ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
+  final TransactionRepository _transactionRepository = TransactionRepository();
 
+  @override
   void initState() {
     super.initState();
   }
@@ -76,7 +79,7 @@ class _InProgressParkingState extends State<InProgressParking> {
           )),
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: Get.width / 1.8,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

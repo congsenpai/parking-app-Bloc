@@ -1,4 +1,4 @@
-// ignore_for_file: body_might_complete_normally_nullable
+// ignore_for_file: body_might_complete_normally_nullable, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/parking_slot_model.dart';
@@ -127,11 +127,9 @@ Future<ParkingSlotData?> fetchSpotSlot(String documentId) async {
         bookingReservationMoto: bookingReservationMoto
       );
     } else {
-      print("Document không tồn tại.");
       return null;
     }
   } catch (e) {
-    print("Lỗi khi lấy dữ liệu parking_slot_rep: $e");
     return null;
   }
 
@@ -147,7 +145,6 @@ Future<ParkingSlotData?> updateStateSlot(
       Type = 'motoSlots';
     }
     String fieldName = '$Type.$slotName';
-    print(fieldName);
     // Cập nhật giá trị cho A1
     await docRef.update({
       fieldName: newState, // giá trị mới cho A1
@@ -156,7 +153,6 @@ Future<ParkingSlotData?> updateStateSlot(
 
     // Truy cập tài liệu của Wallet dựa trên userID và cập nhật budget
   } catch (e) {
-    print("Lỗi khi cập nhật trạng thái slot parking_slot_rep: $e");
     return null;
   }
 }

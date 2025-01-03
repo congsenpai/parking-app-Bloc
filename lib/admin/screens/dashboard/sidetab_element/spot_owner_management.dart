@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,7 +48,6 @@ class _SpotOwnerManagementState extends State<SpotOwnerManagement> {
                     setState(() {
                       searchSpotOwnerName = value; // Cập nhật giá trị tìm kiếm
                     });
-                    print("Search value: $searchSpotOwnerName");
                   },
                 ),
                 SizedBox(height: defaultPadding),

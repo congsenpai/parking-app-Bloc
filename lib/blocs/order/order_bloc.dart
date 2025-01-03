@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, non_constant_identifier_names
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/Order/Order_event.dart';
@@ -28,7 +28,6 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
         List<TransactionModel>Transactions =
         TransactionData.where((tran)
         => tran.spotName.toLowerCase().contains(event.searchText)).toList();
-        print(Transactions.length);
         emit(OrderScreenLoaded(Transactions));}
       else{
         emit(OrderScreenLoaded(TransactionData));}

@@ -80,7 +80,7 @@ void main() {
 
   group('OrderScreenBloc Tests', () {
     test('initial state is OrderScreenInitial', () {
-      expect: () => [
+      () => [
         isA<OrderScreenInitial>()
 
       ];

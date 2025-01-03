@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:project_smart_parking_app/screens/chatBotService/GeminiScreen.dart';
 import 'package:project_smart_parking_app/screens/managementConsumptionByCustomer/management_consumption_by_customer.dart';
 import 'package:project_smart_parking_app/screens/monthlyParkage/ChoosendSpots.dart';

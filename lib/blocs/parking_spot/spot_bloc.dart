@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_event.dart';
 import 'package:project_smart_parking_app/blocs/parking_spot/spot_state.dart';

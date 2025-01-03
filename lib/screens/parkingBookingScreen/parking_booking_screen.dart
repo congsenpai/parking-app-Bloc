@@ -1,10 +1,9 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:intl/intl.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_bloc.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_event.dart';
 import 'package:project_smart_parking_app/blocs/booking/booking_state.dart';
@@ -166,7 +165,7 @@ class _ParkingBookingDetailScreenState
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: Get.width / 25)),
-                            Text('${PriceBySelect_car_or_moto} VNĐ/hr',
+                            Text('$PriceBySelect_car_or_moto VNĐ/hr',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: Get.width / 25)),
@@ -504,7 +503,7 @@ class _ParkingBookingDetailScreenState
                                       child: Text(
                                         SelecteMonth.isEmpty
                                             ? 'Empty !'
-                                            : '$SelecteMonth',
+                                            : SelecteMonth,
                                         style:
                                         TextStyle(fontSize: Get.width / 23),
                                       ),
@@ -580,7 +579,7 @@ class _ParkingBookingDetailScreenState
                                       child: Text(
                                         SelecteVehicalLisence.isEmpty
                                             ? 'Empty !'
-                                            : '$SelecteVehicalLisence',
+                                            : SelecteVehicalLisence,
                                         style:
                                             TextStyle(fontSize: Get.width / 23),
                                       ),
@@ -649,7 +648,7 @@ class _ParkingBookingDetailScreenState
                                     ):
                                         Text(
                                           Month != '' && Budget != 0
-                                              ? '${Month}' // Hiển thị chỉ giờ
+                                              ? Month // Hiển thị chỉ giờ
                                               : 'EMPTY !',
                                           style: TextStyle(
                                               fontSize: Budget == 0 ? 14 : 16,

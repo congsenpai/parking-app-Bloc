@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: camel_case_types, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/screens/OrderScreen/order_screen.dart';
 import 'package:project_smart_parking_app/screens/homeScreen/home_screen.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';

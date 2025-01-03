@@ -47,7 +47,6 @@ class _SpotManagementState extends State<SpotManagement> {
                     setState(() {
                       searchspotName = value; // Cập nhật giá trị tìm kiếm
                     });
-                    print("Search value: $searchspotName");
                   },
                 ),
                 SizedBox(height: defaultPadding),

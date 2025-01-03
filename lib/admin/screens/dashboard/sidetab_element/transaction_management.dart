@@ -1,15 +1,12 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/models/spot_owner_model.dart';
 
 import '../../../constants.dart';
-import '../../../responsive.dart';
-import '../components/header.dart';
-import '../components/parking_spot_list.dart';
 import '../components/search_widget.dart';
 import '../components/transaction_list.dart';
-import '../components/income_details.dart';
 
 class TransactionManagement extends StatefulWidget {
   final SpotOwnerModel spotOwnerModel;
@@ -22,7 +19,6 @@ class TransactionManagement extends StatefulWidget {
 }
 
 class _TransactionManagementState extends State<TransactionManagement> {
-  @override
   String spotName = ""; // Biến để lưu giá trị tìm kiếm
 
   @override
@@ -48,7 +44,6 @@ class _TransactionManagementState extends State<TransactionManagement> {
                     setState(() {
                       spotName = value; // Cập nhật giá trị spotName
                     });
-                    print("Search value: $spotName");
                   },
                 ):Center(
                   child: Text(widget.spotOwnerModel.spotOwnerName),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
@@ -25,8 +27,8 @@ class _ChoosendSpotsState extends State<ChoosendSpots> {
   }
 
   Future<void> _loadParkingSpots() async {
-    ParkingSpotRepository _parkingSpotRepository = ParkingSpotRepository();
-    final spots = await _parkingSpotRepository.getAllParkingSpots();
+    ParkingSpotRepository parkingSpotRepository = ParkingSpotRepository();
+    final spots = await parkingSpotRepository.getAllParkingSpots();
     setState(() {
       _parkingSpots = spots;
       _isLoading = false; // Dữ liệu đã được tải xong.

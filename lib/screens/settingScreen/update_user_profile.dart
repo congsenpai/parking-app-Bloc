@@ -1,9 +1,10 @@
 
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/user/user_bloc.dart';
 import 'package:project_smart_parking_app/blocs/user/user_event.dart';
 import 'package:project_smart_parking_app/blocs/user/user_state.dart';
@@ -45,7 +46,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
   );
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     // Khởi tạo TextEditingController
     _userName = TextEditingController();
@@ -56,7 +57,6 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
     _userAddress = TextEditingController();
     _userVehicleLicense = TextEditingController();
     context.read<UserBloc>().add(InitstateEvent(widget.UserID));
-    print(widget.UserID);
   }
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,6 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
         builder: (context, state) {
           if (state is UserLoaded) {
             userModel = state.userModel;
-            print(userModel);
             // Gán dữ liệu cho TextEditingController
             _userName.text = userModel.username;
             _email.text = userModel.email;

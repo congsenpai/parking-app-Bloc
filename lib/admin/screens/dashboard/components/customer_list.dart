@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:project_smart_parking_app/models/user_model.dart';
@@ -11,10 +13,10 @@ class CustomerList extends StatefulWidget {
   final String spotID;
 
   const CustomerList({
-    Key? key,
+    super.key,
     required this.userName,
     required this.isAdmin, required this.spotID,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomerList> createState() => _CustomerListState();

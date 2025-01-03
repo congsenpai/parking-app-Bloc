@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +14,10 @@ class SpotOwnerList extends StatefulWidget {
   final bool isAdmin;
 
   const SpotOwnerList({
-    Key? key,
+    super.key,
     required this.SpotOwnerName,
     required this.isAdmin,
-  }) : super(key: key);
+  });
 
   @override
   State<SpotOwnerList> createState() => _SpotOwnerListState();
@@ -30,7 +32,6 @@ class _SpotOwnerListState extends State<SpotOwnerList> {
   void initState() {
     super.initState();
 
-    print(widget.SpotOwnerName);
     _loadData(); // Gọi hàm load dữ liệu ban đầu
   }
 
@@ -42,13 +43,11 @@ class _SpotOwnerListState extends State<SpotOwnerList> {
           _futureSpotOwners = SpotOwnerRepository().getAllSpotOwners();
         }
         else{
-          print('search data: ${widget.SpotOwnerName}');
           _futureSpotOwners = SpotOwnerRepository().getSpotOwnersByName(widget.SpotOwnerName);
         }
 
       }
       else{
-        print('search data: ${widget.SpotOwnerName}');
         _futureSpotOwners = SpotOwnerRepository().getSpotOwnersByName(widget.SpotOwnerName);
       }
     });
@@ -133,7 +132,6 @@ DataRow recentFileDataRowAdmin(SpotOwnerModel fileInfo, VoidCallback refreshData
           onPressed: () async {
             // Cập nhật trạng thái isActive
             bool newState = !fileInfo.isActive;
-            print('thông tin ${fileInfo.phoneNumber}');
             await SpotOwnerRepository.updateSpotOwnerStatus(fileInfo.spotOwnerID, newState);
             refreshData(); // Làm mới giao diện
           },

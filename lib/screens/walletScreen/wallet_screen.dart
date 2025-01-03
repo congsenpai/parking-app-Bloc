@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_event.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_state.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
@@ -50,20 +49,16 @@ class _WalletScreenState extends State<WalletScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                            Container(
-                              child: WalletSection(
-                                money: walletModel.balance,
-                                userName: walletModel.userName,
-                                creditID: walletModel.walletCode, userID: walletModel.userID,
-
-                            )
-                          ),
-                        ],
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          WalletSection(
+                            money: walletModel.balance,
+                            userName: walletModel.userName,
+                            creditID: walletModel.walletCode, userID: walletModel.userID,
+                                              
+                                                    ),
+                      ],
                     ),
                     transactionModel.isNotEmpty
                         ? SingleChildScrollView(
@@ -78,7 +73,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 iconColor: transaction.transactionType?Colors.green:Colors.red,
                               ),
                             );
-                          }).toList(),
+                          }),
                           SizedBox(height: Get.width/30,)
                         ],
                       ),

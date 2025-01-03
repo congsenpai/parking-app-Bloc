@@ -1,4 +1,5 @@
-import 'dart:ffi';
+// ignore_for_file: library_prefixes
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,7 +11,7 @@ class NearbyParkingSpotsWidget extends StatefulWidget {
   final String userName;
   final String userID;
 
-  NearbyParkingSpotsWidget({
+  const NearbyParkingSpotsWidget({
     super.key,
     required this.parkingSpots,
     required this.userID,
@@ -40,6 +41,7 @@ class _NearbyParkingSpotsWidgetState extends State<NearbyParkingSpotsWidget> {
 
       return distance;
     } catch (e) {
+      // ignore: avoid_print
       print("Lỗi khi tính khoảng cách: $e");
       return -1; // Trả về giá trị -1 nếu có lỗi
     }

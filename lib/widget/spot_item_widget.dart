@@ -1,19 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
-import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:project_smart_parking_app/models/user_model.dart';
-import 'package:project_smart_parking_app/screens/detailOrderScreen/detail_order_screen.dart';
 
 import '../screens/detailParkingSpotScreen/detail_parking_spot_screent.dart';
 
 class SpotItem extends StatefulWidget {
   final ParkingSpotModel data;
   final UserModel userModel;
-  SpotItem({
+  const SpotItem({super.key, 
     required this.data, required this.userModel,
   });
   @override
@@ -25,7 +20,6 @@ class _SpotItemState extends State<SpotItem> {
   Widget build(BuildContext context) {
     final String title = widget.data.spotName;
     final String imageUrl = widget.data.listImage[0];
-    print(imageUrl);
     return Container(
       margin: EdgeInsets.only(top: Get.width /25),
       width: Get.width/1.6,

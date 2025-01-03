@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -5,12 +7,12 @@ import '../../../constants.dart';
 
 class StorageInfoCard extends StatelessWidget {
   const StorageInfoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.svgSrc,
     required this.income,
 
-  }) : super(key: key);
+  });
 
   final String title, svgSrc, income;
 

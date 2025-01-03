@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, empty_catches
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
@@ -58,7 +60,6 @@ class TransactionRepository {
   ///
   Future<List<TransactionModel>> getTransactionsByUser(String userID) async {
     try {
-      print(userID);
       // Truy vấn collection `Transactions` với `userID`
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
@@ -72,7 +73,6 @@ class TransactionRepository {
 
       return transactions;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
@@ -92,7 +92,6 @@ class TransactionRepository {
       return transactionTimes;
     }
     catch(e){
-      print('getTimeAndTypeOfTransactionByUserID_tran_repos ${e}');
       return [];
     }
   }
@@ -100,7 +99,6 @@ class TransactionRepository {
     try {
       // Lấy danh sách giao dịch đã được xử lý từ getTimeAndTypeOfTransactionByUserID
       final transactionTimes = await getTimeAndTypeOfTransactionByUserID(userID);
-      print('transactionTimes: $transactionTimes');
 
       // Map để lưu tổng doanh thu theo năm và tháng, chia theo TransactionType (Up/Down)
       Map<int, Map<int, double>> upYearToMonthlyTotal = {}; // Lưu tổng theo năm và tháng (Up)
@@ -147,11 +145,9 @@ class TransactionRepository {
         cons.add(ConsumptionByMonth(year, upFlSpots, downFlSpots));
       }
 
-      print('cons: ${cons.length}');
 
       return cons; // Trả về danh sách ConsumptionByMonth
     } catch (e) {
-      print("getlistTransactionOfCustomerbyUserID_transactionRepo: $e");
       return [];
     }
   }
@@ -213,18 +209,15 @@ class TransactionRepository {
           consByDay.add(ConsumptionByDay(month, year, downFlSpots, upFlSpots));
         }
       }
-      print(consByDay.length);
 
       return consByDay; // Trả về danh sách ConsumptionByDay
     } catch (e) {
-      print("getlistTransactionOfCustomerByDay Error: $e");
       return [];
     }
   }
 
   Future<List<String>> getParkingSpotRecentlyTransactionsByUser(String userID) async {
     try {
-      print(userID);
       // Truy vấn collection `Transactions` với `userID` và sắp xếp theo thời gian giảm dần
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
@@ -233,7 +226,6 @@ class TransactionRepository {
           .orderBy('date', descending: true) // Sắp xếp giảm dần theo thời gian
           .limit(5) // Giới hạn 5 kết quả
           .get();
-      print(querySnapshot.docs);
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
           .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
@@ -250,13 +242,11 @@ class TransactionRepository {
 
       return uniqueNameSpots;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
   Future<List<TransactionModel>> getRecentlyTransactionsByUser(String userID) async {
     try {
-      print(userID);
       // Truy vấn collection `Transactions` với `userID` và sắp xếp theo thời gian giảm dần
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
@@ -264,27 +254,23 @@ class TransactionRepository {
           .orderBy('date', descending: true) // Sắp xếp giảm dần theo thời gian
           .limit(5) // Giới hạn 5 kết quả
           .get();
-      print(querySnapshot.docs);
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
           .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
       return transactions;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
   Future<List<TransactionModel>> getAllRecentlyTransactionsByUser(String userID) async {
     try {
-      print(userID);
       // Truy vấn collection `Transactions` với `userID` và sắp xếp theo thời gian giảm dần
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
           .where('userID', isEqualTo: userID)// Lọc theo loại giao dịch
           .orderBy('date', descending: true) // Sắp xếp giảm dần theo thời gian
           .get();
-      print(querySnapshot.docs);
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
           .map((doc) => TransactionModel.fromJson(doc.data() as Map<String, dynamic>))
@@ -292,7 +278,6 @@ class TransactionRepository {
 
       return transactions;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
@@ -303,7 +288,6 @@ class TransactionRepository {
       QuerySnapshot querySnapshot = await _firestore
           .collection('Transactions') // Tên collection trong Firestore
           .get();
-      print(querySnapshot.docs);
 
       // Chuyển đổi danh sách `QueryDocumentSnapshot` thành danh sách `TransactionModel`
       List<TransactionModel> transactions = querySnapshot.docs
@@ -312,7 +296,6 @@ class TransactionRepository {
 
       return transactions;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
@@ -323,10 +306,8 @@ class TransactionRepository {
       final filteredSpots = allSpots
           .where((spot) => spot.spotName.toLowerCase().contains(spotName.toLowerCase()))
           .toList();
-      print('Filtered spots: $filteredSpots');
       return filteredSpots;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
@@ -348,13 +329,11 @@ class TransactionRepository {
 
       return transactions;
     } catch (e) {
-      print('Error fetching transactions: $e');
       return [];
     }
   }
   Future<TransactionModel?> getTransactionsByID(String transactionID) async {
     try {
-      print('Transaction ID: $transactionID');
       // Chuyển đổi transactionID từ String sang int nếu cần thiết
       // Chuyển đổi từ String sang double trước
       double parsedDouble = double.tryParse(transactionID) ?? 0.0;
@@ -374,11 +353,9 @@ class TransactionRepository {
         );
         return transaction; // Trả về kết quả
       } else {
-        print('No transaction found with this ID');
         return null; // Không tìm thấy giao dịch
       }
     } catch (e) {
-      print('Error fetching transactions by id: $e');
       return null; // Trả về null trong trường hợp lỗi
     }
   }
@@ -408,9 +385,7 @@ class TransactionRepository {
         'transactionType': transaction.transactionType,
         'userID': transaction.userID,
       });
-      print('Transaction added successfully000');
     } catch (e) {
-      print('Error adding transaction: $e');
     }
   }
   // Lấy ra doanh thu từ toàn bộ các giao dịch
@@ -447,7 +422,6 @@ class TransactionRepository {
 
 
     } catch (e) {
-      print('Error fetching transactions: $e');
     }
     return null;
   }
@@ -490,7 +464,6 @@ class TransactionRepository {
 
 
     } catch (e) {
-      print('Error fetching transactions: $e');
     }
     return null;
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_import
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

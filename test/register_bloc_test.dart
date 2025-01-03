@@ -51,7 +51,7 @@ void main() {
 
     // Test initial state
     test('initial state is AuthInitial', () {
-      expect: () => [
+      () => [
         isA<AuthInitial>()
       ];
     });

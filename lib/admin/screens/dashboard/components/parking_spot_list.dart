@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:project_smart_parking_app/models/parking_spot_model.dart';
 import 'package:project_smart_parking_app/repositories/parking_spot_repository.dart';
@@ -15,7 +17,7 @@ class ParkingSpotList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Row(
@@ -37,7 +39,7 @@ class ParkingSpotList extends StatelessWidget {
           ),
           tablet: FileInfoCardGridView(isAdmin: isAdmin, spotID: spotID,),
           desktop: FileInfoCardGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            childAspectRatio: size.width < 1400 ? 1.1 : 1.4,
             isAdmin: isAdmin, spotID: spotID,
           ),
         ),

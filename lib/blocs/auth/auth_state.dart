@@ -11,7 +11,7 @@ abstract class AuthState {
 }
 
 class AuthInitial extends AuthState {
-  AuthInitial({bool isRemember = false}) : super(isRemember: isRemember);
+  AuthInitial({super.isRemember = false});
 
   @override
   AuthInitial copyWith({bool? isRemember}) {
@@ -20,7 +20,7 @@ class AuthInitial extends AuthState {
 }
 
 class AuthLoading extends AuthState {
-  AuthLoading({required bool isRemember}) : super(isRemember: isRemember);
+  AuthLoading({required super.isRemember});
 
   @override
   AuthLoading copyWith({bool? isRemember}) {
@@ -30,7 +30,7 @@ class AuthLoading extends AuthState {
 
 class AuthAuthenticated extends AuthState {
   final UserModel user;
-  AuthAuthenticated(this.user, {required bool isRemember}) : super(isRemember: isRemember);
+  AuthAuthenticated(this.user, {required super.isRemember});
 
   @override
   AuthAuthenticated copyWith({bool? isRemember}) {
@@ -40,7 +40,7 @@ class AuthAuthenticated extends AuthState {
 
 class AuthError extends AuthState {
   final String message;
-  AuthError(this.message, {required bool isRemember}) : super(isRemember: isRemember);
+  AuthError(this.message, {required super.isRemember});
 
   @override
   AuthError copyWith({bool? isRemember}) {

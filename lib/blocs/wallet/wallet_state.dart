@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:project_smart_parking_app/models/wallet_model.dart';
 
 import '../../models/transaction_model.dart';

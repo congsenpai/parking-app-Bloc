@@ -1,8 +1,8 @@
 
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: camel_case_types, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class appbar extends StatelessWidget {
   const appbar({
@@ -38,6 +38,7 @@ class appbar extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // ignore: avoid_unnecessary_containers
                             Container(
                               child: const CircleAvatar(
                                 minRadius: 20,
@@ -108,11 +109,9 @@ class appbar extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Container(
-                  child: Image.asset(
-                    "assets/images/AnhAppbar.png",
-                    width: Get.width / 2.5,
-                  ),
+                Image.asset(
+                  "assets/images/AnhAppbar.png",
+                  width: Get.width / 2.5,
                 ),
               ],
             ),

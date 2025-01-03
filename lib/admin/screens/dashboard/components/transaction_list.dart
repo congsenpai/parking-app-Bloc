@@ -1,9 +1,9 @@
 
 
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:project_smart_parking_app/models/transaction_model.dart';
 import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
@@ -18,8 +18,8 @@ class TransactionList extends StatelessWidget {
   final bool isAdmin;
   const TransactionList({
 
-    Key? key, required this.SpotName, required this.typeTab, required this.inOrOut, required this.isAdmin,
-  }) : super(key: key);
+    super.key, required this.SpotName, required this.typeTab, required this.inOrOut, required this.isAdmin,
+  });
 
   @override
   Widget build(BuildContext context) {

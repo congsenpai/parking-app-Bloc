@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, avoid_print, library_private_types_in_public_api
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -136,7 +138,7 @@ class MapWidget {
 class MapWidgetScreen extends StatefulWidget {
   final LatLng endPoint;
 
-  MapWidgetScreen({required this.endPoint});
+  const MapWidgetScreen({super.key, required this.endPoint});
 
   @override
   _MapWidgetScreenState createState() => _MapWidgetScreenState();

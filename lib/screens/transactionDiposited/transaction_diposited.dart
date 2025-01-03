@@ -1,12 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:project_smart_parking_app/models/transaction_model.dart';
-import 'package:project_smart_parking_app/repositories/transaction_repository.dart';
-import 'package:project_smart_parking_app/repositories/wallet_repository.dart';
 import 'package:project_smart_parking_app/screens/transactionDiposited/vnpay_flutter.dart';
 import 'package:project_smart_parking_app/screens/walletScreen/wallet_screen.dart';
 
-import '../OrderScreen/order_screen.dart';
 class TransferFormScreen extends StatefulWidget {
 
   final String userName;
@@ -56,6 +51,7 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
       }, budget: amount, userID: widget.userID
     );
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -194,9 +190,9 @@ class _TransferFormScreenState extends State<TransferFormScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              onPayment('${name} '
-                  'recharged ${amount} '
-                  'with note ${note}',
+              onPayment('$name '
+                  'recharged $amount '
+                  'with note $note',
                   double.parse(amount));
             },
             child: const Text('Xác nhận'),

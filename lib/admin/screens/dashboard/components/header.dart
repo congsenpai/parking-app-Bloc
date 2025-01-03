@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:project_smart_parking_app/admin/screens/dashboard/components/search_widget.dart';
 import 'package:project_smart_parking_app/admin/screens/dashboard/login/login.dart';
 import 'package:project_smart_parking_app/models/spot_owner_model.dart';
 
@@ -10,13 +8,12 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../controllers/menu_app_controller.dart';
-import '../../../responsive.dart';
 
 class Header extends StatelessWidget {
   final SpotOwnerModel spotOwnerModel;
   const Header({
-    Key? key, required this.spotOwnerModel,
-  }) : super(key: key);
+    super.key, required this.spotOwnerModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +34,8 @@ class Header extends StatelessWidget {
 class ProfileCard extends StatelessWidget {
   final SpotOwnerModel spotOwnerModel;
   const ProfileCard({
-    Key? key, required this.spotOwnerModel,
-  }) : super(key: key);
+    super.key, required this.spotOwnerModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +62,7 @@ class ProfileCard extends StatelessWidget {
                  EdgeInsets.symmetric(horizontal: defaultPadding / 2),
               child: Text(spotOwnerModel.spotOwnerName),
             ),
-          Container(
+          SizedBox(
             width: Get.width / 15,
               child: IconButton(onPressed: (){
                 Navigator.pushReplacement(context,

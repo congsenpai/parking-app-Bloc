@@ -1,7 +1,8 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:project_smart_parking_app/blocs/Order/Order_event.dart';
 import 'package:project_smart_parking_app/blocs/order/order_bloc.dart';
 import 'package:project_smart_parking_app/blocs/order/order_state.dart';
@@ -57,7 +58,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         Transactions = state.transactions;
 
 
-        print('WithdrawTransactions bao gom: ${Transactions}');
+        print('WithdrawTransactions bao gom: $Transactions');
 
       }
       return Scaffold(
@@ -109,7 +110,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                           iconColor: transaction.transactionType == true ?Colors.green:Colors.red,
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),

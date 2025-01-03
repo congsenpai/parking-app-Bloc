@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
@@ -72,7 +74,7 @@ class SpotOwnerRepository{
     try {
       final snapshot = await firestore.collection('SpotOwners').get();
       int count = snapshot.docs.length +1 ;
-      String spotOwnerID = 'spotOwnerID${count}';
+      String spotOwnerID = 'spotOwnerID$count';
 
 
       await firestore.collection('SpotOwners').doc(spotOwnerID).set({

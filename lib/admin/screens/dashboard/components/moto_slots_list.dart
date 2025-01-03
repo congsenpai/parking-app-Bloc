@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,10 +13,10 @@ class SpotMotosList extends StatefulWidget {
   final String spotId;
 
   const SpotMotosList({
-    Key? key,
+    super.key,
     required this.SpotMotosName,
     required this.isAdmin, required this.spotId,
-  }) : super(key: key);
+  });
 
   @override
   State<SpotMotosList> createState() => _SpotMotosListState();

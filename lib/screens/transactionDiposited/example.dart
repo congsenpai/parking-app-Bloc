@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_smart_parking_app/screens/transactionDiposited/vnpay_flutter.dart';
 class Example extends StatefulWidget {
-  const Example({Key? key}) : super(key: key);
+  const Example({super.key});
 
   @override
   State<Example> createState() => _ExampleState();

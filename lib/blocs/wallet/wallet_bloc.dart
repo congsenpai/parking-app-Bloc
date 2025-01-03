@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, non_constant_identifier_names
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project_smart_parking_app/blocs/wallet/wallet_event.dart';
